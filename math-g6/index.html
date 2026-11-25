@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="六上數學測驗" />
+  <title>國小六年級上學期（翰林版）數學重點互動測驗</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      -webkit-tap-highlight-color: transparent;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans TC", sans-serif;
+    }
+    .frac {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      vertical-align: middle;
+      margin: 0 3px;
+      font-size: 0.9em;
+      line-height: 1.05;
+    }
+    .frac-num {
+      border-bottom: 1.5px solid currentColor;
+      padding: 0 3px 1px 3px;
+    }
+    .frac-den {
+      padding: 1px 3px 0 3px;
+    }
+    .mixed-num {
+      display: inline-flex;
+      align-items: center;
+      vertical-align: middle;
+    }
+    .grid-paper {
+      background-color: #ffffff;
+      background-image:
+        linear-gradient(to right, #e2e8f0 1px, transparent 1px),
+        linear-gradient(to bottom, #e2e8f0 1px, transparent 1px);
+      background-size: 20px 20px;
+      touch-action: none;
+    }
+    .btn-press:active {
+      transform: scale(0.97);
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
+
+  <!-- 頂部導航列 -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-20 shadow-sm">
+    <div class="max-w-4xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-2">
+      <!-- 左側標題 -->
+      <div class="flex items-center gap-2.5">
+        <div class="w-9 h-9 rounded-xl bg-blue-600 text-white flex items-center justify-center font-bold text-lg shadow-sm shrink-0">
+          數
+        </div>
+        <div>
+          <h1 class="text-base sm:text-lg font-bold text-slate-900 leading-tight">六上數學重點互動測驗</h1>
+          <p class="text-xs text-slate-500">翰林版・核心 12 題詳解與草稿紙</p>
+        </div>
+      </div>
+
+      <!-- 右側功能與返回首頁按鈕 -->
+      <div class="flex items-center gap-2">
+        <button id="toggle-scratchpad-btn" onclick="toggleScratchpad()" class="btn-press inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs sm:text-sm font-semibold bg-amber-50 text-amber-700 border border-amber-200 hover:bg-amber-100 transition">
+          <span>✏️</span>
+          <span>草稿紙</span>
+        </button>
+
+        <button id="toggle-mode-btn" onclick="toggleViewMode()" class="btn-press inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs sm:text-sm font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition">
+          <span>📖</span>
+          <span id="mode-btn-text">公式與總覽</span>
+        </button>
+
+        <a href="../index.html" class="btn-press inline-flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs sm:text-sm font-semibold bg-indigo-50 text-indigo-700 border border-indigo-200 hover:bg-indigo-100 transition">
+          <span>🏠</span>
+          <span>返回首頁</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- 可收合手寫草稿紙（支援 iPad 觸控與 Apple Pencil） -->
+  <section id="scratchpad-panel" class="hidden bg-slate-100 border-b border-slate-300 shadow-inner">
+    <div class="max-w-4xl mx-auto px-4 py-3">
+      <div class="flex items-center justify-between mb-2">
+        <span class="text-xs font-semibold text-slate-600 flex items-center gap-1.5">
+          <span>📝 手寫計算草稿區（支援手指、Apple Pencil 與滑鼠）</span>
+        </span>
+        <div class="flex items-center gap-2">
+          <button onclick="setPenColor('#1e293b')" class="w-5 h-5 rounded-full bg-slate-800 border-2 border-white shadow" title="黑色筆"></button>
+          <button onclick="setPenColor('#2563eb')" class="w-5 h-5 rounded-full bg-blue-600 border-2 border-white shadow" title="藍色筆"></button>
+          <button onclick="setPenColor('#dc2626')" class="w-5 h-5 rounded-full bg-red-600 border-2 border-white shadow" title="紅色筆"></button>
+          <button onclick="clearCanvas()" class="ml-2 px-2.5 py-1 text-xs font-semibold bg-white text-slate-700 border border-slate-300 rounded-lg hover:bg-slate-50">
+            清除重寫
+          </button>
+          <button onclick="toggleScratchpad()" class="px-2.5 py-1 text-xs font-semibold bg-slate-700 text-white rounded-lg hover:bg-slate-800">
+            收起
+          </button>
+        </div>
+      </div>
+      <div class="w-full overflow-hidden rounded-xl border border-slate-300 bg-white shadow-sm">
+        <canvas id="scratch-canvas" class="grid-paper w-full h-56 block cursor-crosshair"></canvas>
+      </div>
+    </div>
+  </section>
+
+  <!-- 主要內容區 -->
+  <main class="flex-1 max-w-4xl w-full mx-auto px-4 py-6">
+
+    <!-- 模式一：逐題互動測驗 -->
+    <div id="quiz-view">
+      <!-- 進度條與題號指示 -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-4 mb-5 shadow-sm">
+        <div class="flex items-center justify-between text-xs sm:text-sm font-semibold text-slate-600 mb-2">
+          <span id="progress-label">第 1 題 / 共 12 題</span>
+          <span id="score-label" class="text-blue-600">目前答對：0 題</span>
+        </div>
+        <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden">
+          <div id="progress-bar" class="bg-blue-600 h-full transition-all duration-300" style="width: 8.33%"></div>
+        </div>
+        <!-- 快速跳題圓點 -->
+        <div id="question-dots" class="flex flex-wrap gap-1.5 mt-3 pt-3 border-t border-slate-100"></div>
+      </div>
+
+      <!-- 題目卡片 -->
+      <div id="question-card" class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-7 shadow-sm">
+        <div class="flex items-center gap-2 mb-3">
+          <span id="q-unit-badge" class="text-xs font-bold px-2.5 py-1 rounded-full bg-blue-50 text-blue-700 border border-blue-100">
+            單元名稱
+          </span>
+          <span id="q-type-badge" class="text-xs font-medium px-2.5 py-1 rounded-full bg-slate-100 text-slate-600">
+            基礎觀念
+          </span>
+        </div>
+
+        <h2 id="q-text" class="text-lg sm:text-xl font-bold text-slate-900 leading-relaxed mb-6"></h2>
+
+        <!-- 選項區 -->
+        <div id="options-container" class="space-y-3"></div>
+
+        <!-- 即時詳解解析區（作答後展開） -->
+        <div id="explanation-box" class="hidden mt-6 rounded-2xl p-5 border">
+          <div id="feedback-header" class="font-bold text-base sm:text-lg mb-2 flex items-center gap-2"></div>
+          <div class="space-y-2.5 text-sm sm:text-base text-slate-700 leading-relaxed">
+            <div class="bg-white/80 rounded-xl p-3.5 border border-slate-200/80">
+              <div class="font-bold text-slate-900 text-xs uppercase tracking-wider mb-1">💡 解題核心概念</div>
+              <p id="exp-concept"></p>
+            </div>
+            <div class="bg-white/80 rounded-xl p-3.5 border border-slate-200/80">
+              <div class="font-bold text-slate-900 text-xs uppercase tracking-wider mb-1">📝 詳細計算步驟</div>
+              <div id="exp-steps" class="space-y-1"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 底部上下題按鈕 -->
+        <div class="mt-6 pt-5 border-t border-slate-100 flex items-center justify-between">
+          <button id="prev-btn" onclick="prevQuestion()" class="btn-press px-4 py-2.5 rounded-xl text-sm font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 disabled:opacity-40 disabled:pointer-events-none transition">
+            ← 上一題
+          </button>
+          <button id="next-btn" onclick="nextQuestion()" class="btn-press px-5 py-2.5 rounded-xl text-sm font-semibold bg-blue-600 text-white hover:bg-blue-700 shadow-sm transition">
+            下一題 →
+          </button>
+        </div>
+      </div>
+
+      <!-- 測驗結算畫面 -->
+      <div id="result-card" class="hidden bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 shadow-sm text-center">
+        <div class="w-16 h-16 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-3xl mx-auto mb-4">
+          🏆
+        </div>
+        <h2 class="text-2xl font-bold text-slate-900 mb-1">測驗完成！</h2>
+        <p id="final-score-text" class="text-base text-slate-600 mb-6"></p>
+
+        <div id="unit-breakdown" class="text-left max-w-lg mx-auto bg-slate-50 rounded-2xl p-4 border border-slate-200 mb-6 space-y-2"></div>
+
+        <div class="flex flex-wrap justify-center gap-3">
+          <button id="retry-wrong-btn" onclick="retryWrongOnly()" class="btn-press px-5 py-2.5 rounded-xl text-sm font-bold bg-amber-500 text-white hover:bg-amber-600 shadow-sm transition">
+            針對錯題重新練習
+          </button>
+          <button onclick="resetAllQuiz()" class="btn-press px-5 py-2.5 rounded-xl text-sm font-bold bg-blue-600 text-white hover:bg-blue-700 shadow-sm transition">
+            全部重新測驗
+          </button>
+          <a href="../index.html" class="btn-press px-5 py-2.5 rounded-xl text-sm font-bold bg-slate-100 text-slate-700 hover:bg-slate-200 transition">
+            返回學習首頁
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 模式二：公式速查表與全題庫總覽 -->
+    <div id="overview-view" class="hidden space-y-6">
+      <!-- 公式速查卡片 -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm">
+        <h2 class="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+          <span>📌</span>
+          <span>翰林版六上數學・核心公式與易錯提醒</span>
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+          <div class="p-4 rounded-xl bg-blue-50/70 border border-blue-100">
+            <div class="font-bold text-blue-900 mb-1">1. 最大公因數與最小公倍數</div>
+            <p class="text-slate-700 leading-relaxed">公因數找「平分、最大」；公倍數找「同時相遇、分裝剩餘/不足」。不足問題先求公倍數再扣掉不足數。</p>
+          </div>
+          <div class="p-4 rounded-xl bg-emerald-50/70 border border-emerald-100">
+            <div class="font-bold text-emerald-900 mb-1">2. 分數除法</div>
+            <p class="text-slate-700 leading-relaxed">除以分數 ＝ 乘以倒數。除數 &lt; 1 時商變大；除數 &gt; 1 時商變小。已知部分求全部用除法。</p>
+          </div>
+          <div class="p-4 rounded-xl bg-purple-50/70 border border-purple-100">
+            <div class="font-bold text-purple-900 mb-1">3. 比、比值與比例尺</div>
+            <p class="text-slate-700 leading-relaxed">比值 ＝ 前項 ÷ 後項。比例尺 ＝ 圖上距離 ÷ 實際距離（計算前務必統一單位，1 公里 ＝ 100,000 公分）。</p>
+          </div>
+          <div class="p-4 rounded-xl bg-amber-50/70 border border-amber-100">
+            <div class="font-bold text-amber-900 mb-1">4. 圓與扇形的周長與面積</div>
+            <p class="text-slate-700 leading-relaxed">圓周長 ＝ 直徑 × 3.14；<b>扇形周長 ＝ 弧長 ＋ 半徑 × 2</b>（最常忘記加兩條半徑！）。圓面積 ＝ 半徑 × 半徑 × 3.14。</p>
+          </div>
+          <div class="p-4 rounded-xl bg-rose-50/70 border border-rose-100 md:col-span-2">
+            <div class="font-bold text-rose-900 mb-1">5. 速率與平均速率</div>
+            <p class="text-slate-700 leading-relaxed">距離 ＝ 速率 × 時間。時速轉分速除以 60，分速轉秒速再除以 60。<b>平均速率 ＝ 總距離 ÷ 總時間</b>（不可將去回速率直接相加除以 2）。</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 全部 12 題詳解列表 -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm">
+        <h2 class="text-lg font-bold text-slate-900 mb-4">📚 全部 12 題完整題庫與詳解</h2>
+        <div id="all-questions-list" class="space-y-4"></div>
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    // 輔助函式：產生漂亮的分數 HTML
+    const f = (n, d) => `<span class="frac"><span class="frac-num">${n}</span><span class="frac-den">${d}</span></span>`;
+    const mf = (w, n, d) => `<span class="mixed-num"><span>${w}</span>${f(n, d)}</span>`;
+
+    // 題庫資料（12 題）
+    const QUESTIONS = [
+      {
+        id: 1,
+        unit: "最大公因數與最小公倍數",
+        type: "基礎計算",
+        question: "求 54 和 72 的「最大公因數」與「最小公倍數」各是多少？",
+        options: [
+          "最大公因數：9；最小公倍數：108",
+          "最大公因數：18；最小公倍數：216",
+          "最大公因數：18；最小公倍數：144",
+          "最大公因數：6；最小公倍數：216"
+        ],
+        answer: 1,
+        concept: "利用短除法找出所有共同質因數。左側公因數相乘為最大公因數；左側公因數再乘以底部互質的商，即為最小公倍數。",
+        steps: [
+          "1. 用 2 除 54 和 72，得到 27 和 36。",
+          "2. 用 3 除 27 和 36，得到 9 和 12。",
+          "3. 再用 3 除 9 和 12，得到 3 和 4（3 與 4 互質，停止計算）。",
+          "4. 最大公因數 ＝ 2 × 3 × 3 ＝ <b>18</b>。",
+          "5. 最小公倍數 ＝ 18 × 3 × 4 ＝ <b>216</b>。"
+        ]
+      },
+      {
+        id: 2,
+        unit: "分數除法",
+        type: "基礎計算",
+        question: `計算並化成最簡分數：${mf(3, 1, 3)} ÷ ${mf(1, 2, 3)} ＝ ？`,
+        options: [
+          `${mf(1, 1, 2)}`,
+          "2",
+          `${mf(2, 1, 3)}`,
+          `${f(1, 2)}`
+        ],
+        answer: 1,
+        concept: "帶分數除法必須先全部轉換為「假分數」，再將「除號變乘號、除數變倒數」進行約分。",
+        steps: [
+          `1. 化為假分數：${mf(3, 1, 3)} ＝ ${f(10, 3)}；${mf(1, 2, 3)} ＝ ${f(5, 3)}。`,
+          `2. 倒數相乘：${f(10, 3)} ÷ ${f(5, 3)} ＝ ${f(10, 3)} × ${f(3, 5)}。`,
+          "3. 分子分母交叉約分（3 和 3 約掉，10 和 5 約分剩 2），得出答案為 <b>2</b>。"
+        ]
+      },
+      {
+        id: 3,
+        unit: "分數除法",
+        type: "觀念判斷",
+        question: `不計算，比較大小：${f(7, 9)} ÷ ${f(5, 6)} （ ） ${f(7, 9)}`,
+        options: [
+          "＞（大於）",
+          "＜（小於）",
+          "＝（等於）",
+          "無法比較"
+        ],
+        answer: 0,
+        concept: "判斷分數除法的大小時，只要看「除數」是否小於 1。除以小於 1 的真分數（代表每份分得更小），分出來的份數（商）會比原本的被除數大。",
+        steps: [
+          `1. 觀察除數為 ${f(5, 6)}，因為分子小於分母，所以 ${f(5, 6)} ＜ 1。`,
+          `2. 當除數小於 1 時，商會大於被除數，因此填入 <b>＞（大於）</b>。`
+        ]
+      },
+      {
+        id: 4,
+        unit: "比與比值",
+        type: "基礎計算",
+        question: `將 1.2 : ${mf(1, 4, 5)} 化為「最簡單整數比」，並求出「比值」。`,
+        options: [
+          `最簡單整數比 3 : 4；比值 ${f(3, 4)}`,
+          `最簡單整數比 2 : 3；比值 ${f(2, 3)}`,
+          `最簡單整數比 6 : 9；比值 ${f(2, 3)}`,
+          `最簡單整數比 4 : 5；比值 ${f(4, 5)}`
+        ],
+        answer: 1,
+        concept: "先將小數與帶分數統一化為「假分數」，再同乘分母的最小公倍數變成整數，最後除以最大公因數；比值則為前項 ÷ 後項。",
+        steps: [
+          `1. 統一化為分數：1.2 ＝ ${mf(1, 1, 5)} ＝ ${f(6, 5)}；${mf(1, 4, 5)} ＝ ${f(9, 5)}。`,
+          `2. 列出比並同乘 5：${f(6, 5)} : ${f(9, 5)} ＝ 6 : 9。`,
+          "3. 同除以公因數 3：6 : 9 ＝ <b>2 : 3</b>（最簡單整數比）。",
+          `4. 求比值（前項 ÷ 後項）：2 ÷ 3 ＝ <b>${f(2, 3)}</b>。`
+        ]
+      },
+      {
+        id: 5,
+        unit: "比與比值",
+        type: "基礎計算",
+        question: "若比例式 18 : 24 ＝ x : 20 成立，則 x 是多少？",
+        options: [
+          "12",
+          "14",
+          "15",
+          "16"
+        ],
+        answer: 2,
+        concept: "先將已知的比化簡為最簡單整數比，再觀察前後項的倍數擴分關係。",
+        steps: [
+          "1. 化簡左側比：18 : 24 同除以最大公因數 6，得到 3 : 4。",
+          "2. 比例式變成 3 : 4 ＝ x : 20。",
+          "3. 觀察後項從 4 變成 20（乘以 5 倍），因此前項也要乘以 5 倍：x ＝ 3 × 5 ＝ <b>15</b>。"
+        ]
+      },
+      {
+        id: 6,
+        unit: "速率",
+        type: "單位換算",
+        question: "高鐵時速 300 公里，換算成「分速」是多少公里？換算成「秒速」是多少公尺？",
+        options: [
+          `分速 5 公里；秒速 ${mf(83, 1, 3)} 公尺`,
+          "分速 50 公里；秒速 500 公尺",
+          "分速 5 公里；秒速 50 公尺",
+          `分速 18 公里；秒速 300 公尺`
+        ],
+        answer: 0,
+        concept: "時間單位變小（小時 → 分鐘 → 秒），代表在更短時間內移動，數字會變小（用除法）；距離單位從公里轉公尺則需乘以 1000。",
+        steps: [
+          "1. 時速轉分速（1 小時 ＝ 60 分鐘）：300 ÷ 60 ＝ <b>5（公里/分）</b>。",
+          "2. 分速 5 公里先轉成公尺：5 × 1000 ＝ 5000（公尺/分）。",
+          `3. 分速轉秒速（1 分鐘 ＝ 60 秒）：5000 ÷ 60 ＝ ${f(500, 6)} ＝ ${f(250, 3)} ＝ <b>${mf(83, 1, 3)}（公尺/秒）</b>。`
+        ]
+      },
+      {
+        id: 7,
+        unit: "最大公因數與最小公倍數",
+        type: "進階應用",
+        question: "有一箱蘋果數量在 100 到 150 顆之間，每 12 顆裝一袋或每 16 顆裝一袋，都剛好「不足 3 顆」，這箱蘋果共有幾顆？",
+        options: [
+          "147 顆",
+          "144 顆",
+          "141 顆",
+          "93 顆"
+        ],
+        answer: 2,
+        concept: "「都不足 3 顆」代表如果再多給它 3 顆，就剛好可以被 12 和 16 整除（即為公倍數）。先求出範圍內的公倍數，最後再把借來的 3 顆減掉。",
+        steps: [
+          "1. 求 12 和 16 的最小公倍數：[12, 16] ＝ 48。",
+          "2. 找出 48 在 100～150 之間的倍數：48 × 1 ＝ 48，48 × 2 ＝ 96，48 × 3 ＝ 144（符合範圍）。",
+          "3. 扣掉不足的 3 顆：144 － 3 ＝ <b>141（顆）</b>。"
+        ]
+      },
+      {
+        id: 8,
+        unit: "分數除法",
+        type: "進階應用",
+        question: `小華看一本故事書，已經看了全書的 ${f(3, 8)}，還剩下 75 頁沒看，這本故事書共有多少頁？`,
+        options: [
+          "200 頁",
+          "120 頁",
+          "105 頁",
+          "135 頁"
+        ],
+        answer: 1,
+        concept: "尋找「具體數量（75 頁）」對應的「比例（佔全書幾分之幾）」。已知部分數量求全部（基準量），要用除法。",
+        steps: [
+          `1. 算出「剩下的頁數」佔全書的幾分之幾：1 － ${f(3, 8)} ＝ ${f(5, 8)}。`,
+          `2. 全書的 ${f(5, 8)} 是 75 頁，用除法回推全書頁數：75 ÷ ${f(5, 8)} ＝ 75 × ${f(8, 5)} ＝ <b>120（頁）</b>。`
+        ]
+      },
+      {
+        id: 9,
+        unit: "比與比值",
+        type: "比例尺應用",
+        question: "在比例尺 1 : 25000 的地圖上，一條登山步道長 6 公分，實際長度是多少公里？",
+        options: [
+          "15 公里",
+          "0.15 公里",
+          "1.5 公里",
+          "2.5 公里"
+        ],
+        answer: 2,
+        concept: "比例尺 1 : 25000 代表圖上 1 公分等於實際 25000 公分。算出實際公分數後，再除以 100,000 換算成公里（小數點往左移 5 位）。",
+        steps: [
+          "1. 計算實際公分數：6 × 25000 ＝ 150000（公分）。",
+          "2. 換算成公尺（÷ 100）：150000 ÷ 100 ＝ 1500（公尺）。",
+          "3. 換算成公里（÷ 1000）：1500 ÷ 1000 ＝ <b>1.5（公里）</b>。"
+        ]
+      },
+      {
+        id: 10,
+        unit: "圓與扇形",
+        type: "進階應用",
+        question: `一個半徑 12 公分的 ${f(1, 6)} 圓扇形，它的「周長」和「面積」各是多少？（圓周率以 3.14 計算）`,
+        options: [
+          "周長 12.56 公分；面積 75.36 平方公分",
+          "周長 36.56 公分；面積 75.36 平方公分",
+          "周長 24.56 公分；面積 37.68 平方公分",
+          "周長 36.56 公分；面積 150.72 平方公分"
+        ],
+        answer: 1,
+        concept: "扇形周長包含「彎曲的弧長」加上「兩條直直的半徑」，考試時最容易漏加兩條半徑！",
+        steps: [
+          `1. 扇形弧長：直徑 × 3.14 × ${f(1, 6)} ＝ (12 × 2) × 3.14 × ${f(1, 6)} ＝ 4 × 3.14 ＝ 12.56（公分）。`,
+          "2. 扇形周長：弧長 ＋ 兩條半徑 ＝ 12.56 ＋ 12 ＋ 12 ＝ <b>36.56（公分）</b>。",
+          `3. 扇形面積：半徑 × 半徑 × 3.14 × ${f(1, 6)} ＝ 12 × 12 × 3.14 × ${f(1, 6)} ＝ 24 × 3.14 ＝ <b>75.36（平方公分）</b>。`
+        ]
+      },
+      {
+        id: 11,
+        unit: "圓與扇形",
+        type: "複合圖形",
+        question: "在一個長 20 公分、寬 10 公分的長方形紙板內，剪下兩個最大的圓，剩下的紙板面積大約是多少平方公分？",
+        options: [
+          "43 平方公分",
+          "86 平方公分",
+          "121.5 平方公分",
+          "157 平方公分"
+        ],
+        answer: 0,
+        concept: "長 20 公分、寬 10 公分的長方形，剛好可以並排切成兩個邊長 10 公分的正方形，因此每個最大圓的直徑是 10 公分（半徑 5 公分）。",
+        steps: [
+          "1. 長方形總面積：20 × 10 ＝ 200（平方公分）。",
+          "2. 單一最大圓面積：半徑 ＝ 10 ÷ 2 ＝ 5 公分；面積 ＝ 5 × 5 × 3.14 ＝ 78.5（平方公分）。",
+          "3. 兩個圓總面積：78.5 × 2 ＝ 157（平方公分）。",
+          "4. 剩下面積：200 － 157 ＝ <b>43（平方公分）</b>。"
+        ]
+      },
+      {
+        id: 12,
+        unit: "速率",
+        type: "平均速率",
+        question: "登山步道全長 6 公里，爸爸上山花了 3 小時，沿原路下山花了 2 小時，請問爸爸上山和下山的「平均時速」是多少公里？",
+        options: [
+          "2.5 公里",
+          "2.4 公里",
+          "3 公里",
+          "1.2 公里"
+        ],
+        answer: 1,
+        concept: "求平均速率一定要用「來回總距離 ÷ 來回總時間」，切勿先算上山時速（2 公里）和下山時速（3 公里）再平均成 2.5 公里，這是經典陷阱題！",
+        steps: [
+          "1. 來回總距離：6 ＋ 6 ＝ 12（公里）。",
+          "2. 來回總時間：3 ＋ 2 ＝ 5（小時）。",
+          "3. 平均時速：12 ÷ 5 ＝ <b>2.4（公里/小時）</b>。"
+        ]
+      }
+    ];
+
+    // 狀態管理
+    let activeQuestions = [...QUESTIONS];
+    let currentIndex = 0;
+    let userAnswers = {}; // { questionId: selectedOptionIndex }
+    let isOverviewMode = false;
+
+    // 初始化渲染
+    function init() {
+      renderDots();
+      renderQuestion();
+      renderOverviewList();
+      initCanvas();
+    }
+
+    // 渲染題號小圓點
+    function renderDots() {
+      const container = document.getElementById("question-dots");
+      container.innerHTML = "";
+      activeQuestions.forEach((q, idx) => {
+        const btn = document.createElement("button");
+        const ans = userAnswers[q.id];
+        let style = "bg-slate-100 text-slate-600 border-slate-200";
+        if (ans !== undefined) {
+          style = ans === q.answer
+            ? "bg-emerald-500 text-white border-emerald-600"
+            : "bg-rose-500 text-white border-rose-600";
+        }
+        if (idx === currentIndex) {
+          style += " ring-2 ring-blue-500 ring-offset-1";
+        }
+        btn.className = `w-7 h-7 rounded-lg text-xs font-bold border transition ${style}`;
+        btn.textContent = q.id;
+        btn.onclick = () => {
+          currentIndex = idx;
+          renderDots();
+          renderQuestion();
+        };
+        container.appendChild(btn);
+      });
+    }
+
+    // 渲染當前題目
+    function renderQuestion() {
+      const q = activeQuestions[currentIndex];
+      const total = activeQuestions.length;
+      const selected = userAnswers[q.id];
+
+      // 更新進度條與分數
+      document.getElementById("progress-label").textContent = `第 ${currentIndex + 1} 題 / 共 ${total} 題`;
+      const correctCount = activeQuestions.filter(item => userAnswers[item.id] === item.answer).length;
+      document.getElementById("score-label").textContent = `目前答對：${correctCount} 題`;
+      document.getElementById("progress-bar").style.width = `${((currentIndex + 1) / total) * 100}%`;
+
+      // 更新題目內容
+      document.getElementById("q-unit-badge").textContent = q.unit;
+      document.getElementById("q-type-badge").textContent = q.type;
+      document.getElementById("q-text").innerHTML = `${q.id}. ${q.question}`;
+
+      // 渲染選項
+      const optContainer = document.getElementById("options-container");
+      optContainer.innerHTML = "";
+      const labels = ["A", "B", "C", "D"];
+
+      q.options.forEach((optText, idx) => {
+        const btn = document.createElement("button");
+        btn.disabled = selected !== undefined;
+
+        let cardStyle = "bg-white border-slate-200 hover:border-blue-400 hover:bg-blue-50/30 text-slate-800";
+        let badgeStyle = "bg-slate-100 text-slate-600";
+
+        if (selected !== undefined) {
+          if (idx === q.answer) {
+            cardStyle = "bg-emerald-50 border-emerald-500 text-emerald-950 font-semibold";
+            badgeStyle = "bg-emerald-600 text-white";
+          } else if (idx === selected) {
+            cardStyle = "bg-rose-50 border-rose-500 text-rose-950";
+            badgeStyle = "bg-rose-600 text-white";
+          } else {
+            cardStyle = "bg-slate-50 border-slate-200 text-slate-400 opacity-70";
+          }
+        }
+
+        btn.className = `btn-press w-full text-left p-4 rounded-xl border-2 transition flex items-center gap-3.5 ${cardStyle}`;
+        btn.innerHTML = `
+          <span class="w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold shrink-0 ${badgeStyle}">
+            ${labels[idx]}
+          </span>
+          <span class="text-base leading-snug">${optText}</span>
+        `;
+        btn.onclick = () => selectOption(idx);
+        optContainer.appendChild(btn);
+      });
+
+      // 顯示或隱藏詳解
+      const expBox = document.getElementById("explanation-box");
+      if (selected !== undefined) {
+        const isCorrect = selected === q.answer;
+        expBox.classList.remove("hidden", "bg-emerald-50/80", "border-emerald-200", "bg-rose-50/80", "border-rose-200");
+        if (isCorrect) {
+          expBox.classList.add("bg-emerald-50/80", "border-emerald-200");
+          document.getElementById("feedback-header").innerHTML = `<span class="text-emerald-700">✅ 答對了！觀念非常清楚！</span>`;
+        } else {
+          expBox.classList.add("bg-rose-50/80", "border-rose-200");
+          document.getElementById("feedback-header").innerHTML = `<span class="text-rose-700">❌ 再想一下喔！正確答案是 (${labels[q.answer]})</span>`;
+        }
+        document.getElementById("exp-concept").innerHTML = q.concept;
+        document.getElementById("exp-steps").innerHTML = q.steps.map(s => `<p>${s}</p>`).join("");
+      } else {
+        expBox.classList.add("hidden");
+      }
+
+      // 更新底部按鈕狀態
+      document.getElementById("prev-btn").disabled = currentIndex === 0;
+      const nextBtn = document.getElementById("next-btn");
+      if (currentIndex === total - 1) {
+        nextBtn.textContent = "查看測驗成績 →";
+      } else {
+        nextBtn.textContent = "下一題 →";
+      }
+    }
+
+    // 選擇答案
+    function selectOption(optionIdx) {
+      const q = activeQuestions[currentIndex];
+      userAnswers[q.id] = optionIdx;
+      renderDots();
+      renderQuestion();
+    }
+
+    function prevQuestion() {
+      if (currentIndex > 0) {
+        currentIndex--;
+        renderDots();
+        renderQuestion();
+      }
+    }
+
+    function nextQuestion() {
+      if (currentIndex < activeQuestions.length - 1) {
+        currentIndex++;
+        renderDots();
+        renderQuestion();
+      } else {
+        showResults();
+      }
+    }
+
+    // 顯示結算報告
+    function showResults() {
+      document.getElementById("question-card").classList.add("hidden");
+      const resultCard = document.getElementById("result-card");
+      resultCard.classList.remove("hidden");
+
+      const total = activeQuestions.length;
+      const correctCount = activeQuestions.filter(q => userAnswers[q.id] === q.answer).length;
+      const wrongCount = total - correctCount;
+
+      document.getElementById("final-score-text").textContent =
+        `本次共練習 ${total} 題，答對 ${correctCount} 題（正確率 ${Math.round((correctCount / total) * 100)}%）`;
+
+      // 單元統計
+      const unitStats = {};
+      activeQuestions.forEach(q => {
+        if (!unitStats[q.unit]) unitStats[q.unit] = { total: 0, correct: 0 };
+        unitStats[q.unit].total++;
+        if (userAnswers[q.id] === q.answer) unitStats[q.unit].correct++;
+      });
+
+      const breakdown = document.getElementById("unit-breakdown");
+      breakdown.innerHTML = `<div class="text-xs font-bold text-slate-500 uppercase mb-2">各單元答對狀況</div>`;
+      Object.entries(unitStats).forEach(([unit, stat]) => {
+        const isAllRight = stat.correct === stat.total;
+        breakdown.innerHTML += `
+          <div class="flex items-center justify-between text-sm py-1 border-b border-slate-200/60 last:border-0">
+            <span class="font-medium text-slate-700">${unit}</span>
+            <span class="font-bold ${isAllRight ? "text-emerald-600" : "text-amber-600"}">
+              ${stat.correct} / ${stat.total} 題
+            </span>
+          </div>
+        `;
+      });
+
+      const retryWrongBtn = document.getElementById("retry-wrong-btn");
+      if (wrongCount > 0) {
+        retryWrongBtn.classList.remove("hidden");
+        retryWrongBtn.textContent = `針對錯題重新練習（${wrongCount} 題）`;
+      } else {
+        retryWrongBtn.classList.add("hidden");
+      }
+    }
+
+    function retryWrongOnly() {
+      const wrongList = activeQuestions.filter(q => userAnswers[q.id] !== q.answer);
+      if (wrongList.length === 0) return;
+      wrongList.forEach(q => delete userAnswers[q.id]);
+      activeQuestions = wrongList;
+      currentIndex = 0;
+      document.getElementById("result-card").classList.add("hidden");
+      document.getElementById("question-card").classList.remove("hidden");
+      renderDots();
+      renderQuestion();
+    }
+
+    function resetAllQuiz() {
+      userAnswers = {};
+      activeQuestions = [...QUESTIONS];
+      currentIndex = 0;
+      document.getElementById("result-card").classList.add("hidden");
+      document.getElementById("question-card").classList.remove("hidden");
+      renderDots();
+      renderQuestion();
+    }
+
+    // 切換「測驗模式」與「公式總覽模式」
+    function toggleViewMode() {
+      isOverviewMode = !isOverviewMode;
+      const quizView = document.getElementById("quiz-view");
+      const overviewView = document.getElementById("overview-view");
+      const btnText = document.getElementById("mode-btn-text");
+
+      if (isOverviewMode) {
+        quizView.classList.add("hidden");
+        overviewView.classList.remove("hidden");
+        btnText.textContent = "返回測驗";
+      } else {
+        overviewView.classList.add("hidden");
+        quizView.classList.remove("hidden");
+        btnText.textContent = "公式與總覽";
+      }
+    }
+
+    // 渲染總覽頁面全部題目與詳解
+    function renderOverviewList() {
+      const list = document.getElementById("all-questions-list");
+      const labels = ["A", "B", "C", "D"];
+      QUESTIONS.forEach(q => {
+        const div = document.createElement("div");
+        div.className = "p-4 sm:p-5 rounded-2xl border border-slate-200 bg-slate-50/50";
+        div.innerHTML = `
+          <div class="flex items-center gap-2 mb-2">
+            <span class="text-xs font-bold px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-700">${q.unit}</span>
+          </div>
+          <div class="font-bold text-slate-900 text-base mb-3">${q.id}. ${q.question}</div>
+          <div class="text-sm font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-xl px-3.5 py-2 mb-3">
+            正解：(${labels[q.answer]}) ${q.options[q.answer]}
+          </div>
+          <div class="text-sm text-slate-700 space-y-1.5">
+            <div><span class="font-bold text-slate-900">💡 觀念：</span>${q.concept}</div>
+            <div><span class="font-bold text-slate-900">📝 算式：</span>${q.steps.join("<br>")}</div>
+          </div>
+        `;
+        list.appendChild(div);
+      });
+    }
+
+    // ==========================================
+    // 手寫草稿紙（Canvas）功能
+    // ==========================================
+    let canvas, ctx, isDrawing = false, penColor = "#1e293b";
+
+    function toggleScratchpad() {
+      const panel = document.getElementById("scratchpad-panel");
+      panel.classList.toggle("hidden");
+      if (!panel.classList.contains("hidden")) {
+        resizeCanvas();
+      }
+    }
+
+    function setPenColor(color) {
+      penColor = color;
+    }
+
+    function clearCanvas() {
+      if (!canvas || !ctx) return;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+
+    function resizeCanvas() {
+      if (!canvas) return;
+      const rect = canvas.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      ctx.scale(dpr, dpr);
+      ctx.lineCap = "round";
+      ctx.lineJoin = "round";
+      ctx.lineWidth = 2.5;
+    }
+
+    function initCanvas() {
+      canvas = document.getElementById("scratch-canvas");
+      ctx = canvas.getContext("2d");
+
+      const getPos = (e) => {
+        const rect = canvas.getBoundingClientRect();
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        return { x: clientX - rect.left, y: clientY - rect.top };
+      };
+
+      const startDraw = (e) => {
+        isDrawing = true;
+        const pos = getPos(e);
+        ctx.beginPath();
+        ctx.moveTo(pos.x, pos.y);
+      };
+
+      const draw = (e) => {
+        if (!isDrawing) return;
+        e.preventDefault();
+        const pos = getPos(e);
+        ctx.strokeStyle = penColor;
+        ctx.lineTo(pos.x, pos.y);
+        ctx.stroke();
+      };
+
+      const endDraw = () => {
+        isDrawing = false;
+      };
+
+      canvas.addEventListener("mousedown", startDraw);
+      canvas.addEventListener("mousemove", draw);
+      window.addEventListener("mouseup", endDraw);
+
+      canvas.addEventListener("touchstart", startDraw, { passive: false });
+      canvas.addEventListener("touchmove", draw, { passive: false });
+      window.addEventListener("touchend", endDraw);
+    }
+
+    window.addEventListener("load", init);
+  </script>
+</body>
+</html>
