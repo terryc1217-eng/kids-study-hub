@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-  <meta name="apple-mobile-web-app-title" content="六上數學測驗" />
-  <title>國小六年級上學期（翰林版）數學重點互動測驗</title>
+  <meta name="apple-mobile-web-app-title" content="六上數學題庫" />
+  <title>國小六年級上學期（翰林版）數學分章節複習與模擬考</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     body {
@@ -19,7 +19,7 @@
       align-items: center;
       vertical-align: middle;
       margin: 0 3px;
-      font-size: 0.9em;
+      font-size: 0.92em;
       line-height: 1.05;
     }
     .frac-num {
@@ -52,27 +52,20 @@
   <!-- 頂部導航列 -->
   <header class="bg-white border-b border-slate-200 sticky top-0 z-20 shadow-sm">
     <div class="max-w-4xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-2">
-      <!-- 左側標題 -->
       <div class="flex items-center gap-2.5">
         <div class="w-9 h-9 rounded-xl bg-blue-600 text-white flex items-center justify-center font-bold text-lg shadow-sm shrink-0">
           數
         </div>
         <div>
-          <h1 class="text-base sm:text-lg font-bold text-slate-900 leading-tight">六上數學重點互動測驗</h1>
-          <p class="text-xs text-slate-500">翰林版・核心 12 題詳解與草稿紙</p>
+          <h1 class="text-base sm:text-lg font-bold text-slate-900 leading-tight">六上數學・分章節與模擬考</h1>
+          <p class="text-xs text-slate-500">翰林版全冊 8 單元・無限動態生成題庫</p>
         </div>
       </div>
 
-      <!-- 右側功能與返回首頁按鈕 -->
       <div class="flex items-center gap-2">
-        <button id="toggle-scratchpad-btn" onclick="toggleScratchpad()" class="btn-press inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs sm:text-sm font-semibold bg-amber-50 text-amber-700 border border-amber-200 hover:bg-amber-100 transition">
+        <button onclick="toggleScratchpad()" class="btn-press inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs sm:text-sm font-semibold bg-amber-50 text-amber-700 border border-amber-200 hover:bg-amber-100 transition">
           <span>✏️</span>
           <span>草稿紙</span>
-        </button>
-
-        <button id="toggle-mode-btn" onclick="toggleViewMode()" class="btn-press inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs sm:text-sm font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition">
-          <span>📖</span>
-          <span id="mode-btn-text">公式與總覽</span>
         </button>
 
         <a href="../index.html" class="btn-press inline-flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs sm:text-sm font-semibold bg-indigo-50 text-indigo-700 border border-indigo-200 hover:bg-indigo-100 transition">
@@ -81,25 +74,31 @@
         </a>
       </div>
     </div>
+
+    <!-- 主模式切換列 -->
+    <div class="bg-slate-50 border-t border-slate-200/80">
+      <div class="max-w-4xl mx-auto px-4 py-2 flex gap-2">
+        <button id="tab-chapters" onclick="switchTopMode('chapters')" class="flex-1 py-2 px-3 rounded-xl text-xs sm:text-sm font-bold transition bg-blue-600 text-white shadow-sm">
+          📚 分章節重點與練習（U1～U8）
+        </button>
+        <button id="tab-exams" onclick="switchTopMode('exams')" class="flex-1 py-2 px-3 rounded-xl text-xs sm:text-sm font-bold transition bg-white text-slate-600 border border-slate-200 hover:bg-slate-100">
+          📝 期中／期末考總複習
+        </button>
+      </div>
+    </div>
   </header>
 
-  <!-- 可收合手寫草稿紙（支援 iPad 觸控與 Apple Pencil） -->
+  <!-- 可收合手寫草稿紙（支援 iPad Apple Pencil） -->
   <section id="scratchpad-panel" class="hidden bg-slate-100 border-b border-slate-300 shadow-inner">
     <div class="max-w-4xl mx-auto px-4 py-3">
       <div class="flex items-center justify-between mb-2">
-        <span class="text-xs font-semibold text-slate-600 flex items-center gap-1.5">
-          <span>📝 手寫計算草稿區（支援手指、Apple Pencil 與滑鼠）</span>
-        </span>
+        <span class="text-xs font-semibold text-slate-600">📝 手寫計算草稿區（支援手指、Apple Pencil 與滑鼠）</span>
         <div class="flex items-center gap-2">
           <button onclick="setPenColor('#1e293b')" class="w-5 h-5 rounded-full bg-slate-800 border-2 border-white shadow" title="黑色筆"></button>
           <button onclick="setPenColor('#2563eb')" class="w-5 h-5 rounded-full bg-blue-600 border-2 border-white shadow" title="藍色筆"></button>
           <button onclick="setPenColor('#dc2626')" class="w-5 h-5 rounded-full bg-red-600 border-2 border-white shadow" title="紅色筆"></button>
-          <button onclick="clearCanvas()" class="ml-2 px-2.5 py-1 text-xs font-semibold bg-white text-slate-700 border border-slate-300 rounded-lg hover:bg-slate-50">
-            清除重寫
-          </button>
-          <button onclick="toggleScratchpad()" class="px-2.5 py-1 text-xs font-semibold bg-slate-700 text-white rounded-lg hover:bg-slate-800">
-            收起
-          </button>
+          <button onclick="clearCanvas()" class="ml-2 px-2.5 py-1 text-xs font-semibold bg-white text-slate-700 border border-slate-300 rounded-lg hover:bg-slate-50">清除</button>
+          <button onclick="toggleScratchpad()" class="px-2.5 py-1 text-xs font-semibold bg-slate-700 text-white rounded-lg hover:bg-slate-800">收起</button>
         </div>
       </div>
       <div class="w-full overflow-hidden rounded-xl border border-slate-300 bg-white shadow-sm">
@@ -109,55 +108,133 @@
   </section>
 
   <!-- 主要內容區 -->
-  <main class="flex-1 max-w-4xl w-full mx-auto px-4 py-6">
+  <main class="flex-1 max-w-4xl w-full mx-auto px-4 py-5 space-y-5">
 
-    <!-- 模式一：逐題互動測驗 -->
-    <div id="quiz-view">
-      <!-- 進度條與題號指示 -->
-      <div class="bg-white rounded-2xl border border-slate-200 p-4 mb-5 shadow-sm">
-        <div class="flex items-center justify-between text-xs sm:text-sm font-semibold text-slate-600 mb-2">
-          <span id="progress-label">第 1 題 / 共 12 題</span>
+    <!-- 【區域 A】分章節選擇器 + 單元重點與解題技巧卡片 -->
+    <section id="chapter-section" class="space-y-4">
+      <!-- 單元選擇按鈕網格 -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm">
+        <div class="flex items-center justify-between mb-2.5">
+          <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">選擇單元（點擊切換章節）</span>
+          <span class="text-xs text-slate-400">U1–U4 期中｜U5–U8 期末</span>
+        </div>
+        <div id="unit-selector" class="grid grid-cols-2 sm:grid-cols-4 gap-2"></div>
+      </div>
+
+      <!-- 當前單元的「重點」與「解題技巧」 -->
+      <div id="unit-guide-card" class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-3 pb-3 border-b border-slate-100">
+          <div>
+            <span id="guide-term-badge" class="text-xs font-bold px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-700 mr-1.5">期中範圍</span>
+            <h2 id="guide-title" class="inline text-lg font-bold text-slate-900">單元標題</h2>
+          </div>
+          <button onclick="regenerateCurrentQuiz()" class="btn-press inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold bg-emerald-600 text-white hover:bg-emerald-700 shadow-sm transition">
+            <span>🔄</span>
+            <span>重新生成本單元 5 題新題目</span>
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+          <div class="bg-blue-50/70 border border-blue-100 rounded-xl p-4">
+            <div class="font-bold text-blue-900 mb-1.5 flex items-center gap-1.5">
+              <span>📌</span>
+              <span>單元核心重點與公式</span>
+            </div>
+            <ul id="guide-points" class="list-disc list-inside space-y-1.5 text-slate-700 leading-relaxed"></ul>
+          </div>
+
+          <div class="bg-amber-50/70 border border-amber-100 rounded-xl p-4">
+            <div class="font-bold text-amber-900 mb-1.5 flex items-center gap-1.5">
+              <span>💡</span>
+              <span>解題技巧與防錯提醒</span>
+            </div>
+            <ul id="guide-tips" class="list-disc list-inside space-y-1.5 text-slate-700 leading-relaxed"></ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 【區域 B】期中／期末考總複習選擇器 -->
+    <section id="exam-section" class="hidden space-y-4">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div class="bg-white rounded-2xl border-2 border-slate-200 p-5 shadow-sm flex flex-col justify-between" id="card-midterm">
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-bold px-2.5 py-1 rounded-full bg-indigo-100 text-indigo-700">第 1～4 單元</span>
+              <span class="text-xs font-semibold text-slate-400">共 12 題綜合卷</span>
+            </div>
+            <h2 class="text-lg font-bold text-slate-900 mb-1">期中考總複習模擬卷</h2>
+            <p class="text-xs sm:text-sm text-slate-500 mb-4 leading-relaxed">
+              涵蓋：最大公因數與最小公倍數、分數除法、數量關係、小數除法。每次點擊都會重新生成全新數字考題。
+            </p>
+          </div>
+          <button onclick="startExam('midterm')" class="btn-press w-full py-2.5 px-4 rounded-xl text-sm font-bold bg-indigo-600 text-white hover:bg-indigo-700 shadow-sm transition">
+            🔄 生成期中考新試卷（12 題）
+          </button>
+        </div>
+
+        <div class="bg-white rounded-2xl border-2 border-slate-200 p-5 shadow-sm flex flex-col justify-between" id="card-final">
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-bold px-2.5 py-1 rounded-full bg-rose-100 text-rose-700">第 5～8 單元</span>
+              <span class="text-xs font-semibold text-slate-400">共 12 題綜合卷</span>
+            </div>
+            <h2 class="text-lg font-bold text-slate-900 mb-1">期末考總複習模擬卷</h2>
+            <p class="text-xs sm:text-sm text-slate-500 mb-4 leading-relaxed">
+              涵蓋：比與比值、圓周長與扇形周長、圓面積與扇形面積、速率。每次點擊都會重新生成全新數字考題。
+            </p>
+          </div>
+          <button onclick="startExam('final')" class="btn-press w-full py-2.5 px-4 rounded-xl text-sm font-bold bg-rose-600 text-white hover:bg-rose-700 shadow-sm transition">
+            🔄 生成期末考新試卷（12 題）
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 【區域 C】互動測驗答題區（分章節與模擬考共用） -->
+    <section id="quiz-container" class="space-y-4">
+      <!-- 進度列 -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm">
+        <div class="flex flex-wrap items-center justify-between gap-2 text-xs sm:text-sm font-semibold text-slate-600 mb-2">
+          <div class="flex items-center gap-2">
+            <span id="quiz-mode-label" class="px-2 py-0.5 rounded-md bg-slate-100 text-slate-700 font-bold">U1 練習</span>
+            <span id="progress-label">第 1 題 / 共 5 題</span>
+          </div>
           <span id="score-label" class="text-blue-600">目前答對：0 題</span>
         </div>
         <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden">
-          <div id="progress-bar" class="bg-blue-600 h-full transition-all duration-300" style="width: 8.33%"></div>
+          <div id="progress-bar" class="bg-blue-600 h-full transition-all duration-300" style="width: 20%"></div>
         </div>
-        <!-- 快速跳題圓點 -->
         <div id="question-dots" class="flex flex-wrap gap-1.5 mt-3 pt-3 border-t border-slate-100"></div>
       </div>
 
-      <!-- 題目卡片 -->
+      <!-- 單題作答卡片 -->
       <div id="question-card" class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-7 shadow-sm">
         <div class="flex items-center gap-2 mb-3">
-          <span id="q-unit-badge" class="text-xs font-bold px-2.5 py-1 rounded-full bg-blue-50 text-blue-700 border border-blue-100">
-            單元名稱
-          </span>
-          <span id="q-type-badge" class="text-xs font-medium px-2.5 py-1 rounded-full bg-slate-100 text-slate-600">
-            基礎觀念
-          </span>
+          <span id="q-unit-badge" class="text-xs font-bold px-2.5 py-1 rounded-full bg-blue-50 text-blue-700 border border-blue-100">單元</span>
+          <span id="q-type-badge" class="text-xs font-medium px-2.5 py-1 rounded-full bg-slate-100 text-slate-600">題型</span>
         </div>
 
-        <h2 id="q-text" class="text-lg sm:text-xl font-bold text-slate-900 leading-relaxed mb-6"></h2>
+        <h3 id="q-text" class="text-lg sm:text-xl font-bold text-slate-900 leading-relaxed mb-6"></h3>
 
-        <!-- 選項區 -->
         <div id="options-container" class="space-y-3"></div>
 
-        <!-- 即時詳解解析區（作答後展開） -->
+        <!-- 作答後即時詳解 -->
         <div id="explanation-box" class="hidden mt-6 rounded-2xl p-5 border">
-          <div id="feedback-header" class="font-bold text-base sm:text-lg mb-2 flex items-center gap-2"></div>
+          <div id="feedback-header" class="font-bold text-base sm:text-lg mb-2"></div>
           <div class="space-y-2.5 text-sm sm:text-base text-slate-700 leading-relaxed">
-            <div class="bg-white/80 rounded-xl p-3.5 border border-slate-200/80">
+            <div class="bg-white/90 rounded-xl p-3.5 border border-slate-200/80">
               <div class="font-bold text-slate-900 text-xs uppercase tracking-wider mb-1">💡 解題核心概念</div>
               <p id="exp-concept"></p>
             </div>
-            <div class="bg-white/80 rounded-xl p-3.5 border border-slate-200/80">
+            <div class="bg-white/90 rounded-xl p-3.5 border border-slate-200/80">
               <div class="font-bold text-slate-900 text-xs uppercase tracking-wider mb-1">📝 詳細計算步驟</div>
               <div id="exp-steps" class="space-y-1"></div>
             </div>
           </div>
         </div>
 
-        <!-- 底部上下題按鈕 -->
+        <!-- 上下題控制 -->
         <div class="mt-6 pt-5 border-t border-slate-100 flex items-center justify-between">
           <button id="prev-btn" onclick="prevQuestion()" class="btn-press px-4 py-2.5 rounded-xl text-sm font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 disabled:opacity-40 disabled:pointer-events-none transition">
             ← 上一題
@@ -168,12 +245,10 @@
         </div>
       </div>
 
-      <!-- 測驗結算畫面 -->
+      <!-- 測驗結算成績卡 -->
       <div id="result-card" class="hidden bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 shadow-sm text-center">
-        <div class="w-16 h-16 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-3xl mx-auto mb-4">
-          🏆
-        </div>
-        <h2 class="text-2xl font-bold text-slate-900 mb-1">測驗完成！</h2>
+        <div class="w-16 h-16 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-3xl mx-auto mb-4">🏆</div>
+        <h3 class="text-2xl font-bold text-slate-900 mb-1">練習完成！</h3>
         <p id="final-score-text" class="text-base text-slate-600 mb-6"></p>
 
         <div id="unit-breakdown" class="text-left max-w-lg mx-auto bg-slate-50 rounded-2xl p-4 border border-slate-200 mb-6 space-y-2"></div>
@@ -182,626 +257,727 @@
           <button id="retry-wrong-btn" onclick="retryWrongOnly()" class="btn-press px-5 py-2.5 rounded-xl text-sm font-bold bg-amber-500 text-white hover:bg-amber-600 shadow-sm transition">
             針對錯題重新練習
           </button>
-          <button onclick="resetAllQuiz()" class="btn-press px-5 py-2.5 rounded-xl text-sm font-bold bg-blue-600 text-white hover:bg-blue-700 shadow-sm transition">
-            全部重新測驗
+          <button onclick="regenerateCurrentQuiz()" class="btn-press px-5 py-2.5 rounded-xl text-sm font-bold bg-emerald-600 text-white hover:bg-emerald-700 shadow-sm transition">
+            🔄 生成全新數字再練一次
           </button>
-          <a href="../index.html" class="btn-press px-5 py-2.5 rounded-xl text-sm font-bold bg-slate-100 text-slate-700 hover:bg-slate-200 transition">
-            返回學習首頁
-          </a>
         </div>
       </div>
-    </div>
-
-    <!-- 模式二：公式速查表與全題庫總覽 -->
-    <div id="overview-view" class="hidden space-y-6">
-      <!-- 公式速查卡片 -->
-      <div class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm">
-        <h2 class="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
-          <span>📌</span>
-          <span>翰林版六上數學・核心公式與易錯提醒</span>
-        </h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-          <div class="p-4 rounded-xl bg-blue-50/70 border border-blue-100">
-            <div class="font-bold text-blue-900 mb-1">1. 最大公因數與最小公倍數</div>
-            <p class="text-slate-700 leading-relaxed">公因數找「平分、最大」；公倍數找「同時相遇、分裝剩餘/不足」。不足問題先求公倍數再扣掉不足數。</p>
-          </div>
-          <div class="p-4 rounded-xl bg-emerald-50/70 border border-emerald-100">
-            <div class="font-bold text-emerald-900 mb-1">2. 分數除法</div>
-            <p class="text-slate-700 leading-relaxed">除以分數 ＝ 乘以倒數。除數 &lt; 1 時商變大；除數 &gt; 1 時商變小。已知部分求全部用除法。</p>
-          </div>
-          <div class="p-4 rounded-xl bg-purple-50/70 border border-purple-100">
-            <div class="font-bold text-purple-900 mb-1">3. 比、比值與比例尺</div>
-            <p class="text-slate-700 leading-relaxed">比值 ＝ 前項 ÷ 後項。比例尺 ＝ 圖上距離 ÷ 實際距離（計算前務必統一單位，1 公里 ＝ 100,000 公分）。</p>
-          </div>
-          <div class="p-4 rounded-xl bg-amber-50/70 border border-amber-100">
-            <div class="font-bold text-amber-900 mb-1">4. 圓與扇形的周長與面積</div>
-            <p class="text-slate-700 leading-relaxed">圓周長 ＝ 直徑 × 3.14；<b>扇形周長 ＝ 弧長 ＋ 半徑 × 2</b>（最常忘記加兩條半徑！）。圓面積 ＝ 半徑 × 半徑 × 3.14。</p>
-          </div>
-          <div class="p-4 rounded-xl bg-rose-50/70 border border-rose-100 md:col-span-2">
-            <div class="font-bold text-rose-900 mb-1">5. 速率與平均速率</div>
-            <p class="text-slate-700 leading-relaxed">距離 ＝ 速率 × 時間。時速轉分速除以 60，分速轉秒速再除以 60。<b>平均速率 ＝ 總距離 ÷ 總時間</b>（不可將去回速率直接相加除以 2）。</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- 全部 12 題詳解列表 -->
-      <div class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm">
-        <h2 class="text-lg font-bold text-slate-900 mb-4">📚 全部 12 題完整題庫與詳解</h2>
-        <div id="all-questions-list" class="space-y-4"></div>
-      </div>
-    </div>
+    </section>
 
   </main>
 
   <script>
-    // 輔助函式：產生漂亮的分數 HTML
+    // =========================================================
+    // 1. 數學排版與運算工具函式
+    // =========================================================
     const f = (n, d) => `<span class="frac"><span class="frac-num">${n}</span><span class="frac-den">${d}</span></span>`;
     const mf = (w, n, d) => `<span class="mixed-num"><span>${w}</span>${f(n, d)}</span>`;
+    const randInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+    const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
+    const gcd = (a, b) => b === 0 ? a : gcd(b, a % b);
+    const lcm = (a, b) => (a * b) / gcd(a, b);
+    const round2 = (num) => Math.round(num * 100) / 100;
 
-    // 題庫資料（12 題）
-    const QUESTIONS = [
-      {
-        id: 1,
-        unit: "最大公因數與最小公倍數",
-        type: "基礎計算",
-        question: "求 54 和 72 的「最大公因數」與「最小公倍數」各是多少？",
-        options: [
-          "最大公因數：9；最小公倍數：108",
-          "最大公因數：18；最小公倍數：216",
-          "最大公因數：18；最小公倍數：144",
-          "最大公因數：6；最小公倍數：216"
-        ],
-        answer: 1,
-        concept: "利用短除法找出所有共同質因數。左側公因數相乘為最大公因數；左側公因數再乘以底部互質的商，即為最小公倍數。",
-        steps: [
-          "1. 用 2 除 54 和 72，得到 27 和 36。",
-          "2. 用 3 除 27 和 36，得到 9 和 12。",
-          "3. 再用 3 除 9 和 12，得到 3 和 4（3 與 4 互質，停止計算）。",
-          "4. 最大公因數 ＝ 2 × 3 × 3 ＝ <b>18</b>。",
-          "5. 最小公倍數 ＝ 18 × 3 × 4 ＝ <b>216</b>。"
-        ]
-      },
-      {
-        id: 2,
-        unit: "分數除法",
-        type: "基礎計算",
-        question: `計算並化成最簡分數：${mf(3, 1, 3)} ÷ ${mf(1, 2, 3)} ＝ ？`,
-        options: [
-          `${mf(1, 1, 2)}`,
-          "2",
-          `${mf(2, 1, 3)}`,
-          `${f(1, 2)}`
-        ],
-        answer: 1,
-        concept: "帶分數除法必須先全部轉換為「假分數」，再將「除號變乘號、除數變倒數」進行約分。",
-        steps: [
-          `1. 化為假分數：${mf(3, 1, 3)} ＝ ${f(10, 3)}；${mf(1, 2, 3)} ＝ ${f(5, 3)}。`,
-          `2. 倒數相乘：${f(10, 3)} ÷ ${f(5, 3)} ＝ ${f(10, 3)} × ${f(3, 5)}。`,
-          "3. 分子分母交叉約分（3 和 3 約掉，10 和 5 約分剩 2），得出答案為 <b>2</b>。"
-        ]
-      },
-      {
-        id: 3,
-        unit: "分數除法",
-        type: "觀念判斷",
-        question: `不計算，比較大小：${f(7, 9)} ÷ ${f(5, 6)} （ ） ${f(7, 9)}`,
-        options: [
-          "＞（大於）",
-          "＜（小於）",
-          "＝（等於）",
-          "無法比較"
-        ],
-        answer: 0,
-        concept: "判斷分數除法的大小時，只要看「除數」是否小於 1。除以小於 1 的真分數（代表每份分得更小），分出來的份數（商）會比原本的被除數大。",
-        steps: [
-          `1. 觀察除數為 ${f(5, 6)}，因為分子小於分母，所以 ${f(5, 6)} ＜ 1。`,
-          `2. 當除數小於 1 時，商會大於被除數，因此填入 <b>＞（大於）</b>。`
-        ]
-      },
-      {
-        id: 4,
-        unit: "比與比值",
-        type: "基礎計算",
-        question: `將 1.2 : ${mf(1, 4, 5)} 化為「最簡單整數比」，並求出「比值」。`,
-        options: [
-          `最簡單整數比 3 : 4；比值 ${f(3, 4)}`,
-          `最簡單整數比 2 : 3；比值 ${f(2, 3)}`,
-          `最簡單整數比 6 : 9；比值 ${f(2, 3)}`,
-          `最簡單整數比 4 : 5；比值 ${f(4, 5)}`
-        ],
-        answer: 1,
-        concept: "先將小數與帶分數統一化為「假分數」，再同乘分母的最小公倍數變成整數，最後除以最大公因數；比值則為前項 ÷ 後項。",
-        steps: [
-          `1. 統一化為分數：1.2 ＝ ${mf(1, 1, 5)} ＝ ${f(6, 5)}；${mf(1, 4, 5)} ＝ ${f(9, 5)}。`,
-          `2. 列出比並同乘 5：${f(6, 5)} : ${f(9, 5)} ＝ 6 : 9。`,
-          "3. 同除以公因數 3：6 : 9 ＝ <b>2 : 3</b>（最簡單整數比）。",
-          `4. 求比值（前項 ÷ 後項）：2 ÷ 3 ＝ <b>${f(2, 3)}</b>。`
-        ]
-      },
-      {
-        id: 5,
-        unit: "比與比值",
-        type: "基礎計算",
-        question: "若比例式 18 : 24 ＝ x : 20 成立，則 x 是多少？",
-        options: [
-          "12",
-          "14",
-          "15",
-          "16"
-        ],
-        answer: 2,
-        concept: "先將已知的比化簡為最簡單整數比，再觀察前後項的倍數擴分關係。",
-        steps: [
-          "1. 化簡左側比：18 : 24 同除以最大公因數 6，得到 3 : 4。",
-          "2. 比例式變成 3 : 4 ＝ x : 20。",
-          "3. 觀察後項從 4 變成 20（乘以 5 倍），因此前項也要乘以 5 倍：x ＝ 3 × 5 ＝ <b>15</b>。"
-        ]
-      },
-      {
-        id: 6,
-        unit: "速率",
-        type: "單位換算",
-        question: "高鐵時速 300 公里，換算成「分速」是多少公里？換算成「秒速」是多少公尺？",
-        options: [
-          `分速 5 公里；秒速 ${mf(83, 1, 3)} 公尺`,
-          "分速 50 公里；秒速 500 公尺",
-          "分速 5 公里；秒速 50 公尺",
-          `分速 18 公里；秒速 300 公尺`
-        ],
-        answer: 0,
-        concept: "時間單位變小（小時 → 分鐘 → 秒），代表在更短時間內移動，數字會變小（用除法）；距離單位從公里轉公尺則需乘以 1000。",
-        steps: [
-          "1. 時速轉分速（1 小時 ＝ 60 分鐘）：300 ÷ 60 ＝ <b>5（公里/分）</b>。",
-          "2. 分速 5 公里先轉成公尺：5 × 1000 ＝ 5000（公尺/分）。",
-          `3. 分速轉秒速（1 分鐘 ＝ 60 秒）：5000 ÷ 60 ＝ ${f(500, 6)} ＝ ${f(250, 3)} ＝ <b>${mf(83, 1, 3)}（公尺/秒）</b>。`
-        ]
-      },
-      {
-        id: 7,
-        unit: "最大公因數與最小公倍數",
-        type: "進階應用",
-        question: "有一箱蘋果數量在 100 到 150 顆之間，每 12 顆裝一袋或每 16 顆裝一袋，都剛好「不足 3 顆」，這箱蘋果共有幾顆？",
-        options: [
-          "147 顆",
-          "144 顆",
-          "141 顆",
-          "93 顆"
-        ],
-        answer: 2,
-        concept: "「都不足 3 顆」代表如果再多給它 3 顆，就剛好可以被 12 和 16 整除（即為公倍數）。先求出範圍內的公倍數，最後再把借來的 3 顆減掉。",
-        steps: [
-          "1. 求 12 和 16 的最小公倍數：[12, 16] ＝ 48。",
-          "2. 找出 48 在 100～150 之間的倍數：48 × 1 ＝ 48，48 × 2 ＝ 96，48 × 3 ＝ 144（符合範圍）。",
-          "3. 扣掉不足的 3 顆：144 － 3 ＝ <b>141（顆）</b>。"
-        ]
-      },
-      {
-        id: 8,
-        unit: "分數除法",
-        type: "進階應用",
-        question: `小華看一本故事書，已經看了全書的 ${f(3, 8)}，還剩下 75 頁沒看，這本故事書共有多少頁？`,
-        options: [
-          "200 頁",
-          "120 頁",
-          "105 頁",
-          "135 頁"
-        ],
-        answer: 1,
-        concept: "尋找「具體數量（75 頁）」對應的「比例（佔全書幾分之幾）」。已知部分數量求全部（基準量），要用除法。",
-        steps: [
-          `1. 算出「剩下的頁數」佔全書的幾分之幾：1 － ${f(3, 8)} ＝ ${f(5, 8)}。`,
-          `2. 全書的 ${f(5, 8)} 是 75 頁，用除法回推全書頁數：75 ÷ ${f(5, 8)} ＝ 75 × ${f(8, 5)} ＝ <b>120（頁）</b>。`
-        ]
-      },
-      {
-        id: 9,
-        unit: "比與比值",
-        type: "比例尺應用",
-        question: "在比例尺 1 : 25000 的地圖上，一條登山步道長 6 公分，實際長度是多少公里？",
-        options: [
-          "15 公里",
-          "0.15 公里",
-          "1.5 公里",
-          "2.5 公里"
-        ],
-        answer: 2,
-        concept: "比例尺 1 : 25000 代表圖上 1 公分等於實際 25000 公分。算出實際公分數後，再除以 100,000 換算成公里（小數點往左移 5 位）。",
-        steps: [
-          "1. 計算實際公分數：6 × 25000 ＝ 150000（公分）。",
-          "2. 換算成公尺（÷ 100）：150000 ÷ 100 ＝ 1500（公尺）。",
-          "3. 換算成公里（÷ 1000）：1500 ÷ 1000 ＝ <b>1.5（公里）</b>。"
-        ]
-      },
-      {
-        id: 10,
-        unit: "圓與扇形",
-        type: "進階應用",
-        question: `一個半徑 12 公分的 ${f(1, 6)} 圓扇形，它的「周長」和「面積」各是多少？（圓周率以 3.14 計算）`,
-        options: [
-          "周長 12.56 公分；面積 75.36 平方公分",
-          "周長 36.56 公分；面積 75.36 平方公分",
-          "周長 24.56 公分；面積 37.68 平方公分",
-          "周長 36.56 公分；面積 150.72 平方公分"
-        ],
-        answer: 1,
-        concept: "扇形周長包含「彎曲的弧長」加上「兩條直直的半徑」，考試時最容易漏加兩條半徑！",
-        steps: [
-          `1. 扇形弧長：直徑 × 3.14 × ${f(1, 6)} ＝ (12 × 2) × 3.14 × ${f(1, 6)} ＝ 4 × 3.14 ＝ 12.56（公分）。`,
-          "2. 扇形周長：弧長 ＋ 兩條半徑 ＝ 12.56 ＋ 12 ＋ 12 ＝ <b>36.56（公分）</b>。",
-          `3. 扇形面積：半徑 × 半徑 × 3.14 × ${f(1, 6)} ＝ 12 × 12 × 3.14 × ${f(1, 6)} ＝ 24 × 3.14 ＝ <b>75.36（平方公分）</b>。`
-        ]
-      },
-      {
-        id: 11,
-        unit: "圓與扇形",
-        type: "複合圖形",
-        question: "在一個長 20 公分、寬 10 公分的長方形紙板內，剪下兩個最大的圓，剩下的紙板面積大約是多少平方公分？",
-        options: [
-          "43 平方公分",
-          "86 平方公分",
-          "121.5 平方公分",
-          "157 平方公分"
-        ],
-        answer: 0,
-        concept: "長 20 公分、寬 10 公分的長方形，剛好可以並排切成兩個邊長 10 公分的正方形，因此每個最大圓的直徑是 10 公分（半徑 5 公分）。",
-        steps: [
-          "1. 長方形總面積：20 × 10 ＝ 200（平方公分）。",
-          "2. 單一最大圓面積：半徑 ＝ 10 ÷ 2 ＝ 5 公分；面積 ＝ 5 × 5 × 3.14 ＝ 78.5（平方公分）。",
-          "3. 兩個圓總面積：78.5 × 2 ＝ 157（平方公分）。",
-          "4. 剩下面積：200 － 157 ＝ <b>43（平方公分）</b>。"
-        ]
-      },
-      {
-        id: 12,
-        unit: "速率",
-        type: "平均速率",
-        question: "登山步道全長 6 公里，爸爸上山花了 3 小時，沿原路下山花了 2 小時，請問爸爸上山和下山的「平均時速」是多少公里？",
-        options: [
-          "2.5 公里",
-          "2.4 公里",
-          "3 公里",
-          "1.2 公里"
-        ],
-        answer: 1,
-        concept: "求平均速率一定要用「來回總距離 ÷ 來回總時間」，切勿先算上山時速（2 公里）和下山時速（3 公里）再平均成 2.5 公里，這是經典陷阱題！",
-        steps: [
-          "1. 來回總距離：6 ＋ 6 ＝ 12（公里）。",
-          "2. 來回總時間：3 ＋ 2 ＝ 5（小時）。",
-          "3. 平均時速：12 ÷ 5 ＝ <b>2.4（公里/小時）</b>。"
-        ]
+    function formatFrac(num, den) {
+      const g = gcd(num, den);
+      num /= g; den /= g;
+      if (den === 1) return `${num}`;
+      if (num > den) {
+        const w = Math.floor(num / den);
+        const r = num % den;
+        return r === 0 ? `${w}` : mf(w, r, den);
       }
-    ];
-
-    // 狀態管理
-    let activeQuestions = [...QUESTIONS];
-    let currentIndex = 0;
-    let userAnswers = {}; // { questionId: selectedOptionIndex }
-    let isOverviewMode = false;
-
-    // 初始化渲染
-    function init() {
-      renderDots();
-      renderQuestion();
-      renderOverviewList();
-      initCanvas();
+      return f(num, den);
     }
 
-    // 渲染題號小圓點
-    function renderDots() {
-      const container = document.getElementById("question-dots");
-      container.innerHTML = "";
-      activeQuestions.forEach((q, idx) => {
-        const btn = document.createElement("button");
-        const ans = userAnswers[q.id];
-        let style = "bg-slate-100 text-slate-600 border-slate-200";
-        if (ans !== undefined) {
-          style = ans === q.answer
-            ? "bg-emerald-500 text-white border-emerald-600"
-            : "bg-rose-500 text-white border-rose-600";
+    function buildQuestionObj(unitId, unitName, type, questionHtml, correctHtml, distractorsHtml, concept, steps) {
+      // 確保 4 個選項不重複
+      const uniqueDistractors = [];
+      for (const d of distractorsHtml) {
+        if (d !== correctHtml && !uniqueDistractors.includes(d)) {
+          uniqueDistractors.push(d);
         }
-        if (idx === currentIndex) {
-          style += " ring-2 ring-blue-500 ring-offset-1";
-        }
-        btn.className = `w-7 h-7 rounded-lg text-xs font-bold border transition ${style}`;
-        btn.textContent = q.id;
-        btn.onclick = () => {
-          currentIndex = idx;
-          renderDots();
-          renderQuestion();
-        };
-        container.appendChild(btn);
-      });
+        if (uniqueDistractors.length === 3) break;
+      }
+      const options = [correctHtml, ...uniqueDistractors];
+      // 洗牌選項
+      for (let i = options.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [options[i], options[j]] = [options[j], options[i]];
+      }
+      return {
+        unitId,
+        unit: unitName,
+        type,
+        question: questionHtml,
+        options,
+        answer: options.indexOf(correctHtml),
+        concept,
+        steps
+      };
     }
 
-    // 渲染當前題目
-    function renderQuestion() {
-      const q = activeQuestions[currentIndex];
-      const total = activeQuestions.length;
-      const selected = userAnswers[q.id];
-
-      // 更新進度條與分數
-      document.getElementById("progress-label").textContent = `第 ${currentIndex + 1} 題 / 共 ${total} 題`;
-      const correctCount = activeQuestions.filter(item => userAnswers[item.id] === item.answer).length;
-      document.getElementById("score-label").textContent = `目前答對：${correctCount} 題`;
-      document.getElementById("progress-bar").style.width = `${((currentIndex + 1) / total) * 100}%`;
-
-      // 更新題目內容
-      document.getElementById("q-unit-badge").textContent = q.unit;
-      document.getElementById("q-type-badge").textContent = q.type;
-      document.getElementById("q-text").innerHTML = `${q.id}. ${q.question}`;
-
-      // 渲染選項
-      const optContainer = document.getElementById("options-container");
-      optContainer.innerHTML = "";
-      const labels = ["A", "B", "C", "D"];
-
-      q.options.forEach((optText, idx) => {
-        const btn = document.createElement("button");
-        btn.disabled = selected !== undefined;
-
-        let cardStyle = "bg-white border-slate-200 hover:border-blue-400 hover:bg-blue-50/30 text-slate-800";
-        let badgeStyle = "bg-slate-100 text-slate-600";
-
-        if (selected !== undefined) {
-          if (idx === q.answer) {
-            cardStyle = "bg-emerald-50 border-emerald-500 text-emerald-950 font-semibold";
-            badgeStyle = "bg-emerald-600 text-white";
-          } else if (idx === selected) {
-            cardStyle = "bg-rose-50 border-rose-500 text-rose-950";
-            badgeStyle = "bg-rose-600 text-white";
-          } else {
-            cardStyle = "bg-slate-50 border-slate-200 text-slate-400 opacity-70";
+    // =========================================================
+    // 2. 翰林版六上 8 單元教材庫（重點、解題技巧、動態題目生成器）
+    // =========================================================
+    const UNITS = [
+      {
+        id: "u1",
+        code: "U1",
+        shortName: "最大公因數與最小公倍數",
+        title: "第 1 單元：最大公因數與最小公倍數",
+        term: "midterm",
+        termLabel: "期中範圍",
+        points: [
+          "質數：除了 1 和自己以外沒有其他因數（最小的質數是 2，1 不是質數）。",
+          "最大公因數（GCF）：短除法左側「所有共同質因數」的乘積。",
+          "最小公倍數（LCM）：短除法左側公因數 × 底部「互質的商」。"
+        ],
+        tips: [
+          "看到「平分、分裝、剪成一樣長、最大」→ 用【最大公因數】。",
+          "看到「同時相遇、排成正方形、分裝剩幾顆/不足幾顆」→ 用【最小公倍數】。",
+          "分裝「剩餘」要先求公倍數再「加」餘數；「不足」則要先求公倍數再「減」不足數。"
+        ],
+        generators: [
+          // 題型 1：求兩數的最大公因數與最小公倍數
+          () => {
+            const g = pick([6, 8, 9, 12, 14, 15, 18]);
+            const pairs = [[2, 3], [3, 4], [2, 5], [3, 5], [4, 5]];
+            const [m1, m2] = pick(pairs);
+            const a = g * m1, b = g * m2;
+            const l = g * m1 * m2;
+            return buildQuestionObj(
+              "u1", "U1 最大公因數與最小公倍數", "基礎計算",
+              `求 ${a} 和 ${b} 的「最大公因數」與「最小公倍數」各是多少？`,
+              `最大公因數：${g}；最小公倍數：${l}`,
+              [
+                `最大公因數：${g / 2 || 3}；最小公倍數：${l}`,
+                `最大公因數：${g}；最小公倍數：${l * 2}`,
+                `最大公因數：${m1 * m2}；最小公倍數：${a * b}`
+              ],
+              "利用短除法找出兩數所有共同的質因數，相乘即為最大公因數；再乘以底部互質的兩個商即為最小公倍數。",
+              [
+                `1. 找出 ${a} 和 ${b} 的最大公因數為 <b>${g}</b>（${a}＝${g}×${m1}，${b}＝${g}×${m2}）。`,
+                `2. ${m1} 與 ${m2} 已互質，最小公倍數 ＝ ${g} × ${m1} × ${m2} ＝ <b>${l}</b>。`
+              ]
+            );
+          },
+          // 題型 2：最小公倍數應用（分裝剩餘或不足）
+          () => {
+            const [n1, n2] = pick([[12, 18], [15, 20], [12, 16], [14, 21], [16, 24]]);
+            const baseLcm = lcm(n1, n2);
+            const mult = randInt(2, 3);
+            const targetBase = baseLcm * mult;
+            const isShort = Math.random() > 0.5;
+            const diff = randInt(2, 5);
+            const ans = isShort ? targetBase - diff : targetBase + diff;
+            const minRange = Math.floor((ans - 20) / 10) * 10;
+            const maxRange = minRange + 50;
+            return buildQuestionObj(
+              "u1", "U1 最大公因數與最小公倍數", "進階應用",
+              `有一箱糖果數量在 ${minRange} 到 ${maxRange} 顆之間，每 ${n1} 顆裝一袋或每 ${n2} 顆裝一袋，都剛好「${isShort ? "不足" : "剩下"} ${diff} 顆」，這箱糖果共有幾顆？`,
+              `${ans} 顆`,
+              [
+                `${targetBase} 顆`,
+                `${isShort ? targetBase + diff : targetBase - diff} 顆`,
+                `${baseLcm * (mult - 1) + (isShort ? -diff : diff)} 顆`
+              ],
+              isShort
+                ? `「不足 ${diff} 顆」代表再補 ${diff} 顆就能整除，所以先求公倍數再「減掉 ${diff}」。`
+                : `「剩下 ${diff} 顆」代表先扣掉多出來的 ${diff} 顆就能整除，所以先求公倍數再「加上 ${diff}」。`,
+              [
+                `1. 先求 ${n1} 和 ${n2} 的最小公倍數：[${n1}, ${n2}] ＝ ${baseLcm}。`,
+                `2. 找出 ${baseLcm} 在 ${minRange}～${maxRange} 之間的倍數：${baseLcm} × ${mult} ＝ ${targetBase}。`,
+                `3. ${isShort ? `減去不足的 ${diff} 顆：${targetBase} － ${diff}` : `加上剩下的 ${diff} 顆：${targetBase} ＋ ${diff}`} ＝ <b>${ans}（顆）</b>。`
+              ]
+            );
+          },
+          // 題型 3：最大公因數應用（長方形剪成最大正方形）
+          () => {
+            const side = pick([6, 8, 9, 12, 15]);
+            const [wMult, hMult] = pick([[3, 4], [2, 5], [3, 5], [4, 5]]);
+            const w = side * wMult, h = side * hMult;
+            const count = wMult * hMult;
+            return buildQuestionObj(
+              "u1", "U1 最大公因數與最小公倍數", "幾何應用",
+              `一張長 ${h} 公分、寬 ${w} 公分的長方形紙板，要全部剪成一樣大的正方形且沒有剩下，正方形的邊長「最大」是幾公分？共可剪成幾張？`,
+              `邊長 ${side} 公分；共 ${count} 張`,
+              [
+                `邊長 ${side} 公分；共 ${wMult + hMult} 張`,
+                `邊長 ${side / 2 || 3} 公分；共 ${count * 4} 張`,
+                `邊長 ${w} 公分；共 ${hMult} 張`
+              ],
+              "要沒有剩下且正方形邊長最大，邊長必須是長和寬的「最大公因數」；張數則是（長÷邊長）×（寬÷邊長）。",
+              [
+                `1. 求 ${h} 和 ${w} 的最大公因數：(${h}, ${w}) ＝ <b>${side}（公分）</b>。`,
+                `2. 長邊可剪 ${h} ÷ ${side} ＝ ${hMult} 份，寬邊可剪 ${w} ÷ ${side} ＝ ${wMult} 份。`,
+                `3. 總張數 ＝ ${hMult} × ${wMult} ＝ <b>${count}（張）</b>。`
+              ]
+            );
           }
-        }
-
-        btn.className = `btn-press w-full text-left p-4 rounded-xl border-2 transition flex items-center gap-3.5 ${cardStyle}`;
-        btn.innerHTML = `
-          <span class="w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold shrink-0 ${badgeStyle}">
-            ${labels[idx]}
-          </span>
-          <span class="text-base leading-snug">${optText}</span>
-        `;
-        btn.onclick = () => selectOption(idx);
-        optContainer.appendChild(btn);
-      });
-
-      // 顯示或隱藏詳解
-      const expBox = document.getElementById("explanation-box");
-      if (selected !== undefined) {
-        const isCorrect = selected === q.answer;
-        expBox.classList.remove("hidden", "bg-emerald-50/80", "border-emerald-200", "bg-rose-50/80", "border-rose-200");
-        if (isCorrect) {
-          expBox.classList.add("bg-emerald-50/80", "border-emerald-200");
-          document.getElementById("feedback-header").innerHTML = `<span class="text-emerald-700">✅ 答對了！觀念非常清楚！</span>`;
-        } else {
-          expBox.classList.add("bg-rose-50/80", "border-rose-200");
-          document.getElementById("feedback-header").innerHTML = `<span class="text-rose-700">❌ 再想一下喔！正確答案是 (${labels[q.answer]})</span>`;
-        }
-        document.getElementById("exp-concept").innerHTML = q.concept;
-        document.getElementById("exp-steps").innerHTML = q.steps.map(s => `<p>${s}</p>`).join("");
-      } else {
-        expBox.classList.add("hidden");
-      }
-
-      // 更新底部按鈕狀態
-      document.getElementById("prev-btn").disabled = currentIndex === 0;
-      const nextBtn = document.getElementById("next-btn");
-      if (currentIndex === total - 1) {
-        nextBtn.textContent = "查看測驗成績 →";
-      } else {
-        nextBtn.textContent = "下一題 →";
-      }
-    }
-
-    // 選擇答案
-    function selectOption(optionIdx) {
-      const q = activeQuestions[currentIndex];
-      userAnswers[q.id] = optionIdx;
-      renderDots();
-      renderQuestion();
-    }
-
-    function prevQuestion() {
-      if (currentIndex > 0) {
-        currentIndex--;
-        renderDots();
-        renderQuestion();
-      }
-    }
-
-    function nextQuestion() {
-      if (currentIndex < activeQuestions.length - 1) {
-        currentIndex++;
-        renderDots();
-        renderQuestion();
-      } else {
-        showResults();
-      }
-    }
-
-    // 顯示結算報告
-    function showResults() {
-      document.getElementById("question-card").classList.add("hidden");
-      const resultCard = document.getElementById("result-card");
-      resultCard.classList.remove("hidden");
-
-      const total = activeQuestions.length;
-      const correctCount = activeQuestions.filter(q => userAnswers[q.id] === q.answer).length;
-      const wrongCount = total - correctCount;
-
-      document.getElementById("final-score-text").textContent =
-        `本次共練習 ${total} 題，答對 ${correctCount} 題（正確率 ${Math.round((correctCount / total) * 100)}%）`;
-
-      // 單元統計
-      const unitStats = {};
-      activeQuestions.forEach(q => {
-        if (!unitStats[q.unit]) unitStats[q.unit] = { total: 0, correct: 0 };
-        unitStats[q.unit].total++;
-        if (userAnswers[q.id] === q.answer) unitStats[q.unit].correct++;
-      });
-
-      const breakdown = document.getElementById("unit-breakdown");
-      breakdown.innerHTML = `<div class="text-xs font-bold text-slate-500 uppercase mb-2">各單元答對狀況</div>`;
-      Object.entries(unitStats).forEach(([unit, stat]) => {
-        const isAllRight = stat.correct === stat.total;
-        breakdown.innerHTML += `
-          <div class="flex items-center justify-between text-sm py-1 border-b border-slate-200/60 last:border-0">
-            <span class="font-medium text-slate-700">${unit}</span>
-            <span class="font-bold ${isAllRight ? "text-emerald-600" : "text-amber-600"}">
-              ${stat.correct} / ${stat.total} 題
-            </span>
-          </div>
-        `;
-      });
-
-      const retryWrongBtn = document.getElementById("retry-wrong-btn");
-      if (wrongCount > 0) {
-        retryWrongBtn.classList.remove("hidden");
-        retryWrongBtn.textContent = `針對錯題重新練習（${wrongCount} 題）`;
-      } else {
-        retryWrongBtn.classList.add("hidden");
-      }
-    }
-
-    function retryWrongOnly() {
-      const wrongList = activeQuestions.filter(q => userAnswers[q.id] !== q.answer);
-      if (wrongList.length === 0) return;
-      wrongList.forEach(q => delete userAnswers[q.id]);
-      activeQuestions = wrongList;
-      currentIndex = 0;
-      document.getElementById("result-card").classList.add("hidden");
-      document.getElementById("question-card").classList.remove("hidden");
-      renderDots();
-      renderQuestion();
-    }
-
-    function resetAllQuiz() {
-      userAnswers = {};
-      activeQuestions = [...QUESTIONS];
-      currentIndex = 0;
-      document.getElementById("result-card").classList.add("hidden");
-      document.getElementById("question-card").classList.remove("hidden");
-      renderDots();
-      renderQuestion();
-    }
-
-    // 切換「測驗模式」與「公式總覽模式」
-    function toggleViewMode() {
-      isOverviewMode = !isOverviewMode;
-      const quizView = document.getElementById("quiz-view");
-      const overviewView = document.getElementById("overview-view");
-      const btnText = document.getElementById("mode-btn-text");
-
-      if (isOverviewMode) {
-        quizView.classList.add("hidden");
-        overviewView.classList.remove("hidden");
-        btnText.textContent = "返回測驗";
-      } else {
-        overviewView.classList.add("hidden");
-        quizView.classList.remove("hidden");
-        btnText.textContent = "公式與總覽";
-      }
-    }
-
-    // 渲染總覽頁面全部題目與詳解
-    function renderOverviewList() {
-      const list = document.getElementById("all-questions-list");
-      const labels = ["A", "B", "C", "D"];
-      QUESTIONS.forEach(q => {
-        const div = document.createElement("div");
-        div.className = "p-4 sm:p-5 rounded-2xl border border-slate-200 bg-slate-50/50";
-        div.innerHTML = `
-          <div class="flex items-center gap-2 mb-2">
-            <span class="text-xs font-bold px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-700">${q.unit}</span>
-          </div>
-          <div class="font-bold text-slate-900 text-base mb-3">${q.id}. ${q.question}</div>
-          <div class="text-sm font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-xl px-3.5 py-2 mb-3">
-            正解：(${labels[q.answer]}) ${q.options[q.answer]}
-          </div>
-          <div class="text-sm text-slate-700 space-y-1.5">
-            <div><span class="font-bold text-slate-900">💡 觀念：</span>${q.concept}</div>
-            <div><span class="font-bold text-slate-900">📝 算式：</span>${q.steps.join("<br>")}</div>
-          </div>
-        `;
-        list.appendChild(div);
-      });
-    }
-
-    // ==========================================
-    // 手寫草稿紙（Canvas）功能
-    // ==========================================
-    let canvas, ctx, isDrawing = false, penColor = "#1e293b";
-
-    function toggleScratchpad() {
-      const panel = document.getElementById("scratchpad-panel");
-      panel.classList.toggle("hidden");
-      if (!panel.classList.contains("hidden")) {
-        resizeCanvas();
-      }
-    }
-
-    function setPenColor(color) {
-      penColor = color;
-    }
-
-    function clearCanvas() {
-      if (!canvas || !ctx) return;
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-    }
-
-    function resizeCanvas() {
-      if (!canvas) return;
-      const rect = canvas.getBoundingClientRect();
-      const dpr = window.devicePixelRatio || 1;
-      canvas.width = rect.width * dpr;
-      canvas.height = rect.height * dpr;
-      ctx.scale(dpr, dpr);
-      ctx.lineCap = "round";
-      ctx.lineJoin = "round";
-      ctx.lineWidth = 2.5;
-    }
-
-    function initCanvas() {
-      canvas = document.getElementById("scratch-canvas");
-      ctx = canvas.getContext("2d");
-
-      const getPos = (e) => {
-        const rect = canvas.getBoundingClientRect();
-        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-        return { x: clientX - rect.left, y: clientY - rect.top };
-      };
-
-      const startDraw = (e) => {
-        isDrawing = true;
-        const pos = getPos(e);
-        ctx.beginPath();
-        ctx.moveTo(pos.x, pos.y);
-      };
-
-      const draw = (e) => {
-        if (!isDrawing) return;
-        e.preventDefault();
-        const pos = getPos(e);
-        ctx.strokeStyle = penColor;
-        ctx.lineTo(pos.x, pos.y);
-        ctx.stroke();
-      };
-
-      const endDraw = () => {
-        isDrawing = false;
-      };
-
-      canvas.addEventListener("mousedown", startDraw);
-      canvas.addEventListener("mousemove", draw);
-      window.addEventListener("mouseup", endDraw);
-
-      canvas.addEventListener("touchstart", startDraw, { passive: false });
-      canvas.addEventListener("touchmove", draw, { passive: false });
-      window.addEventListener("touchend", endDraw);
-    }
-
-    window.addEventListener("load", init);
-  </script>
-</body>
-</html>
+        ]
+      },
+      {
+        id: "u2",
+        code: "U2",
+        shortName: "分數除法",
+        title: "第 2 單元：分數除法",
+        term: "midterm",
+        termLabel: "期中範圍",
+        points: [
+          "最簡分數：分子和分母互質（最大公因數為 1）。",
+          "分數除法法則：除以一個分數 ＝ 乘以這個分數的「倒數」。",
+          "商與被除數關係：除數 ＜ 1，商 ＞ 被除數；除數 ＞ 1，商 ＜ 被除數。"
+        ],
+        tips: [
+          "遇到「帶分數」一定要先全部化成「假分數」，再做倒數相乘。",
+          "能交叉約分就先約分，數字變小才不會算錯。",
+          "應用題看到「剩下的佔幾分之幾、已知部分求全部」→ 用【部分量 ÷ 對應分數】。"
+        ],
+        generators: [
+          // 題型 1：帶分數除以帶分數
+          () => {
+            const d1 = pick([3, 4, 5]), w1 = randInt(1, 3), r1 = randInt(1, d1 - 1);
+            const n1 = w1 * d1 + r1;
+            const d2 = pick([3, 4, 6]), w2 = randInt(1, 2), r2 = randInt(1, d2 - 1);
+            const n2 = w2 * d2 + r2;
+            const ansHtml = formatFrac(n1 * d2, d1 * n2);
+            const wrong1 = formatFrac(n1 * n2, d1 * d2);
+            const wrong2 = formatFrac(d1 * n2, n1 * d2);
+            const wrong3 = formatFrac((n1 + d1) * d2, d1 * n2);
+            return buildQuestionObj(
+              "u2", "U2 分數除法", "基礎計算",
+              `計算並化成最簡分數：${mf(w1, r1, d1)} ÷ ${mf(w2, r2, d2)} ＝ ？`,
+              ansHtml,
+              [wrong1, wrong2, wrong3],
+              "先將帶分數化成假分數，再將除號變乘號、除數變倒數後約分相乘。",
+              [
+                `1. 化為假分數：${mf(w1, r1, d1)} ＝ ${f(n1, d1)}；${mf(w2, r2, d2)} ＝ ${f(n2, d2)}。`,
+                `2. 除數變倒數相乘：${f(n1, d1)} × ${f(d2, n2)} ＝ ${f(n1 * d2, d1 * n2)}。`,
+                `3. 約分並化為最簡分數得到 <b>${ansHtml}</b>。`
+              ]
+            );
+          },
+          // 題型 2：不計算比較商與被除數大小
+          () => {
+            const baseN = randInt(4, 7), baseD = randInt(8, 11);
+            const isSmaller = Math.random() > 0.5;
+            const divN = isSmaller ? randInt(3, 5) : randInt(7, 9);
+            const divD = 6;
+            return buildQuestionObj(
+              "u2", "U2 分數除法", "觀念判斷",
+              `不計算，比較大小：${f(baseN, baseD)} ÷ ${f(divN, divD)} （ ） ${f(baseN, baseD)}`,
+              isSmaller ? "＞（大於）" : "＜（小於）",
+              [
+                isSmaller ? "＜（小於）" : "＞（大於）",
+                "＝（等於）",
+                "無法比較"
+              ],
+              "除以小於 1 的真分數，代表每份分得更小，份數（商）會比原本大；除以大於 1 的假分數，商會比原本小。",
+              [
+                `1. 觀察除數 ${f(divN, divD)}，它${isSmaller ? "小於 1（真分數）" : "大於 1（假分數）"}。`,
+                `2. 因為除數 ${isSmaller ? "＜ 1，所以商會變大，填入 <b>＞（大於）</b>" : "＞ 1，所以商會變小，填入 <b>＜（小於）</b>"}。`
+              ]
+            );
+          },
+          // 題型 3：基準量應用（看了幾分之幾，剩下幾頁）
+          () => {
+            const den = pick([5, 7, 8, 9]);
+            const num = randInt(2, den - 2);
+            const remNum = den - num;
+            const mult = randInt(12, 25);
+            const remPages = remNum * mult;
+            const totalPages = den * mult;
+            return buildQuestionObj(
+              "u2", "U2 分數除法", "進階應用",
+              `小華看一本故事書，已經看了全書的 ${f(num, den)}，還剩下 ${remPages} 頁沒看，這本故事書共有多少頁？`,
+              `${totalPages} 頁`,
+              [
+                `${Math.round(remPages * num / den) + remPages} 頁`,
+                `${num * mult} 頁`,
+                `${totalPages + remPages} 頁`
+              ],
+              "先算出「剩下的頁數」佔全書的幾分之幾，再用「剩下頁數 ÷ 剩下比例」回推全書總頁數。",
+              [
+                `1. 剩下的頁數佔全書的：1 － ${f(num, den)} ＝ ${f(remNum, den)}。`,
+                `2. 全書的 ${f(remNum, den)} 是 ${remPages} 頁，所以全書 ＝ ${remPages} ÷ ${f(remNum, den)} ＝${remPages} × ${f(den, remNum)} ＝ <b>${totalPages}（頁）</b>。`
+              ]
+            );
+          }
+        ]
+      },
+      {
+        id: "u3",
+        code: "U3",
+        shortName: "數量關係",
+        title: "第 3 單元：數量關係（規律與間隔問題）",
+        term: "midterm",
+        termLabel: "期中範圍",
+        points: [
+          "間隔問題（植樹）：兩端都種（樹 ＝ 間隔 ＋ 1）；一端種一端不種或封閉圓形（樹 ＝ 間隔）；兩端都不種（樹 ＝ 間隔 － 1）。",
+          "和差問題：大數 ＝ (和 ＋ 差) ÷ 2；小數 ＝ (和 － 差) ÷ 2。",
+          "年齡問題：兩人的「年齡差」永遠不變。"
+        ],
+        tips: [
+          "遇到排圖形找規律（例如用火柴棒排正方形），先看第 1 個圖用幾根，之後「每增加 1 個圖多幾根」。",
+          "算間隔數時，先用「總長度 ÷ 間隔長 ＝ 間隔數」，再根據題目確認兩端有沒有種樹。"
+        ],
+        generators: [
+          // 題型 1：間隔問題（兩端都種 vs 兩端不種）
+          () => {
+            const gap = pick([5, 8, 10, 12, 15]);
+            const intervals = randInt(12, 25);
+            const totalLen = gap * intervals;
+            const bothEnds = Math.random() > 0.5;
+            const trees = bothEnds ? intervals + 1 : intervals - 1;
+            return buildQuestionObj(
+              "u3", "U3 數量關係", "間隔問題",
+              `在一條長 ${totalLen} 公尺的筆直道路一旁種樹，每隔 ${gap} 公尺種一棵，如果「${bothEnds ? "頭尾兩端都要種" : "頭尾兩端都不種"}」，一共要種幾棵樹？`,
+              `${trees} 棵`,
+              [
+                `${intervals} 棵`,
+                `${bothEnds ? intervals - 1 : intervals + 1} 棵`,
+                `${trees * 2} 棵`
+              ],
+              bothEnds
+                ? "頭尾兩端都種時，樹的數量會比間隔數「多 1」。"
+                : "頭尾兩端都不種時，樹的數量會比間隔數「少 1」。",
+              [
+                `1. 先算間隔數：${totalLen} ÷ ${gap} ＝${intervals}（個間隔）。`,
+                `2. 因為${bothEnds ? `兩端都種，樹的數量 ＝ ${intervals} ＋ 1` : `兩端都不種，樹的數量 ＝ ${intervals} － 1`} ＝ <b>${trees}（棵）</b>。`
+              ]
+            );
+          },
+          // 題型 2：圖形規律（相連正方形火柴棒）
+          () => {
+            const n = randInt(15, 30);
+            const ans = 1 + 3 * n;
+            return buildQuestionObj(
+              "u3", "U3 數量關係", "圖形規律",
+              `用棉花棒橫向排出一排相連的正方形：排 1 個正方形需要 4 根，排 2 個需要 7 根，排 3 個需要 10 根。照這樣排下去，排 ${n} 個相連的正方形需要幾根棉花棒？`,
+              `${ans} 根`,
+              [
+                `${4 * n} 根`,
+                `${3 * n} 根`,
+                `${4 + 3 * n} 根`
+              ],
+              "把最左邊第 1 根獨立出來看，每多排 1 個正方形就會增加 3 根棉花棒，公式為「1 ＋ 3 × 個數」。",
+              [
+                `1. 觀察規律：1 個用 4 根（1＋3×1），2 個用 7 根（1＋3×2），每增加 1 個多 3 根。`,
+                `2. 排 ${n} 個正方形需要：1 ＋ 3 × ${n} ＝ <b>${ans}（根）</b>。`
+              ]
+            );
+          },
+          // 題型 3：年齡差不變問題
+          () => {
+            const diff = randInt(24, 32);
+            const mult = pick([3, 4, 5]);
+            const childAge = diff / (mult - 1);
+            if (!Number.isInteger(childAge)) {
+              // 確保整除
+              const cleanChild = randInt(8, 12);
+              const cleanDiff = cleanChild * (mult - 1);
+              const parentAge = cleanChild + cleanDiff;
+              const yearsLater = randInt(3, 6);
+              return buildQuestionObj(
+                "u3", "U3 數量關係", "年齡問題",
+                `今年爸爸 ${parentAge - yearsLater} 歲，小美 ${cleanChild - yearsLater} 歲，請問「${yearsLater} 年後」，爸爸的年齡剛好是小美的幾倍？`,
+                `${mult} 倍`,
+                [`${mult + 1} 倍`, `${mult - 1} 倍`, `2 倍`],
+                "無論經過幾年，兩人的年齡差永遠不會改變。先算出幾年後兩人的各自年齡，再相除即可。",
+                [
+                  `1. ${yearsLater} 年後爸爸的年齡：(${parentAge - yearsLater}) ＋ ${yearsLater} ＝${parentAge} 歲。`,
+                  `2. ${yearsLater} 年後小美的年齡：(${cleanChild - yearsLater}) ＋ ${yearsLater} ＝${cleanChild} 歲。`,
+                  `3. 倍數關係：${parentAge} ÷${cleanChild} ＝ <b>${mult}（倍）</b>。`
+                ]
+              );
+            }
+            const parentAge = childAge + diff;
+            const yearsLater = randInt(3, 5);
+            return buildQuestionObj(
+              "u3", "U3 數量關係", "年齡問題",
+              `今年爸爸 ${parentAge - yearsLater} 歲，小美 ${childAge - yearsLater} 歲，請問「${yearsLater} 年後」，爸爸的年齡剛好是小美的幾倍？`,
+              `${mult} 倍`,
+              [`${mult + 1} 倍`, `${mult - 1} 倍`, `2 倍`],
+              "先算出幾年後兩人的實際年齡，再用爸爸的年齡除以小美的年齡。",
+              [
+                `1. ${yearsLater} 年後爸爸：${parentAge} 歲；小美：${childAge} 歲。`,
+                `2. ${parentAge} ÷${childAge} ＝ <b>${mult}（倍）</b>。`
+              ]
+            );
+          }
+        ]
+      },
+      {
+        id: "u4",
+        code: "U4",
+        shortName: "小數除法",
+        title: "第 4 單元：小數除法（含四捨五入概數）",
+        term: "midterm",
+        termLabel: "期中範圍",
+        points: [
+          "直式計算步驟：先把「除數」的小數點往右移變成整數，被除數的小數點也跟著往右移相同位數。",
+          "商的小數點要對齊被除數「移動後」的新小數點位置；餘數的小數點則要對齊「原本」的舊小數點位置！",
+          "用四捨五入法求商到小數第一位，直式必須算到「小數第二位」再判斷。"
+        ],
+        tips: [
+          "【超級大陷阱】求「商到整數位，並寫出餘數」時，餘數一定要把原本的小數點垂直點下來（例如 3.5 ÷ 1.2 ＝ 2 ... 0.1，不是餘 1）！",
+          "除數 ＜ 1 時，商會比被除數大。"
+        ],
+        generators: [
+          // 題型 1：有餘數的小數除法（最常考陷阱）
+          () => {
+            const div = pick([1.2, 1.4, 1.5, 1.6, 2.4]);
+            const q = randInt(3, 6);
+            const rem = pick([0.2, 0.3, 0.4, 0.5]);
+            const dividend = round2(div * q + rem);
+            return buildQuestionObj(
+              "u4", "U4 小數除法", "經典陷阱題",
+              `一桶果汁有 ${dividend} 公升，每 ${div} 公升裝成一瓶，最多可以裝滿幾瓶？還剩下多少公升？`,
+              `裝滿 ${q} 瓶；剩下 ${rem} 公升`,
+              [
+                `裝滿 ${q} 瓶；剩下 ${Math.round(rem * 10)} 公升`,
+                `裝滿 ${q + 1} 瓶；剩下 ${rem} 公升`,
+                `裝滿 ${q} 瓶；剩下 ${round2(rem / 10)} 公升`
+              ],
+              "餘數的小數點必須對齊被除數「原本」的小數點位置！把 3.5 變成 35 計算後，剩下的 1 代表 0.1 公升。",
+              [
+                `1. 計算 ${dividend} ÷ ${div}，將除數與被除數小數點同向右移一位，變成 ${Math.round(dividend * 10)} ÷ ${Math.round(div * 10)}。`,
+                `2. 商為 <b>${q}（瓶）</b>，直式最下方剩餘 ${Math.round(rem * 10)}。`,
+                `3. 對齊原本的小數點，餘數為 <b>${rem}（公升）</b>。`
+              ]
+            );
+          },
+          // 題型 2：小數除法基礎計算
+          () => {
+            const div = pick([0.25, 0.4, 0.8, 1.25, 1.5]);
+            const ans = pick([2.4, 3.2, 3.6, 4.5, 4.8, 6.4]);
+            const dividend = round2(div * ans);
+            return buildQuestionObj(
+              "u4", "U4 小數除法", "基礎計算",
+              `計算：${dividend} ÷${div} ＝ ？`,
+              `${ans}`,
+              [
+                `${round2(ans / 10)}`,
+                `${round2(ans * 10)}`,
+                `${round2(ans + 0.4)}`
+              ],
+              "將除數的小數點往右移變成整數，被除數也向右移相同位數（位數不夠要補 0），再進行整數除法。",
+              [
+                `1. 觀察除數 ${div}，將小數點向右移變成整數，被除數 ${dividend} 也同步向右移相同位數。`,
+                `2. 計算得出商為 <b>${ans}</b>。`
+              ]
+            );
+          },
+          // 題型 3：四捨五入求概數
+          () => {
+            const a = randInt(14, 29);
+            const b = pick([3, 6, 7, 9]);
+            if (a % b === 0) return buildQuestionObj(
+              "u4", "U4 小數除法", "概數應用",
+              `一條彩帶長 20 公尺，平分剪成 6 段，每段大約長多少公尺？（用四捨五入法求商到小數第一位）`,
+              `3.3 公尺`,
+              [`3.4 公尺`, `3.0 公尺`, `3.33 公尺`],
+              "求商到小數第一位，直式必須計算到小數第二位，再看第二位的數字是否滿 5 進位。",
+              [
+                `1. 20 ÷ 6 ＝ 3.333...`,
+                `2. 看小數第二位是 3（未滿 5 捨去），因此約為 <b>3.3 公尺</b>。`
+              ]
+            );
+            const exact = a / b;
+            const ans = Math.round(exact * 10) / 10;
+            return buildQuestionObj(
+              "u4", "U4 小數除法", "概數應用",
+              `把 ${a} 公斤的米平分裝成 ${b} 包，每包大約重多少公斤？（用四捨五入法求商到小數第一位）`,
+              `${ans.toFixed(1)} 公斤`,
+              [
+                `${(ans + 0.1).toFixed(1)} 公斤`,
+                `${(ans - 0.1).toFixed(1)} 公斤`,
+                `${exact.toFixed(2)} 公斤`
+              ],
+              "題目要求「求商到小數第一位」，直式要算到小數第二位，再依四捨五入法進位或捨去。",
+              [
+                `1. 計算 ${a} ÷ ${b} ＝${exact.toFixed(3)}...`,
+                `2. 觀察小數第二位數字，四捨五入到小數第一位得到 <b>${ans.toFixed(1)} 公斤</b>。`
+              ]
+            );
+          }
+        ]
+      },
+      {
+        id: "u5",
+        code: "U5",
+        shortName: "比與比值",
+        title: "第 5 單元：比、比值與比例尺",
+        term: "final",
+        termLabel: "期末範圍",
+        points: [
+          "比值 ＝ 前項 ÷ 後項（通常用最簡分數或整數表示）。",
+          "最簡單整數比：前項和後項都是整數，且兩數互質。",
+          "比例尺 ＝ 圖上距離 ÷ 實際距離（計算前「單位必須統一」，1 公里 ＝ 100,000 公分）。"
+        ],
+        tips: [
+          "小數與分數混合的比，先全部統一換成「假分數」，再同乘分母的最小公倍數變成整數。",
+          "比例尺換算成公里時，直接把公分數「去掉 5 個 0（小數點往左移 5 位）」最快！"
+        ],
+        generators: [
+          // 題型 1：小數與分數化為最簡單整數比
+          () => {
+            const [dec, w, n, d, ansRatio, ansVal] = pick([
+              ["1.2", 1, 4, 5, "2 : 3", f(2, 3)],
+              ["0.75", 1, 1, 8, "2 : 3", f(2, 3)],
+              ["1.5", 2, 1, 4, "2 : 3", f(2, 3)],
+              ["0.6", 1, 1, 5, "1 : 2", f(1, 2)],
+              ["1.6", 1, 1, 5, "4 : 3", mf(1, 1, 3)]
+            ]);
+            return buildQuestionObj(
+              "u5", "U5 比與比值", "基礎計算",
+              `將 ${dec} : ${mf(w, n, d)} 化為「最簡單整數比」，並求出「比值」。`,
+              `最簡單整數比 ${ansRatio}；比值 ${ansVal}`,
+              [
+                `最簡單整數比 3 : 4；比值 ${f(3, 4)}`,
+                `最簡單整數比 6 : 9；比值 ${f(2, 3)}`,
+                `最簡單整數比 4 : 5；比值 ${f(4, 5)}`
+              ],
+              "先將小數與帶分數統一化為假分數，同乘分母最小公倍數變成整數，再同除以最大公因數。",
+              [
+                `1. 把 ${dec} 和 ${mf(w, n, d)} 統一化為假分數並同乘分母公倍數。`,
+                `2. 約分至前後項互質，得到最簡單整數比 <b>${ansRatio}</b>。`,
+                `3. 前項 ÷ 後項，得到比值 <b>${ansVal}</b>。`
+              ]
+            );
+          },
+          // 題型 2：比例式求未知數
+          () => {
+            const [a, b] = pick([[2, 3], [3, 4], [3, 5], [4, 5], [5, 6]]);
+            const m1 = randInt(2, 4), m2 = randInt(5, 8);
+            const left1 = a * m1, left2 = b * m1;
+            const right2 = b * m2;
+            const ansX = a * m2;
+            return buildQuestionObj(
+              "u5", "U5 比與比值", "比例式",
+              `若比例式 ${left1} :${left2} ＝ x : ${right2} 成立，則 x 是多少？`,
+              `${ansX}`,
+              [
+                `${ansX + a}`,
+                `${b * m1}`,
+                `${ansX - a}`
+              ],
+              "先將已知的比化簡為最簡單整數比，再觀察後項擴分了幾倍，前項就跟著乘以幾倍。",
+              [
+                `1. 將 ${left1} : ${left2} 同除以 ${m1}，化簡為 ${a} :${b}。`,
+                `2. 比例式變成 ${a} :${b} ＝ x : ${right2}。`,
+                `3. 後項從 ${b} 變成 ${right2}（乘以 ${m2} 倍），所以 x ＝ ${a} ×${m2} ＝ <b>${ansX}</b>。`
+              ]
+            );
+          },
+          // 題型 3：比例尺換算實際距離
+          () => {
+            const scale = pick([20000, 25000, 50000, 100000]);
+            const cm = randInt(3, 8);
+            const actualKm = (cm * scale) / 100000;
+            return buildQuestionObj(
+              "u5", "U5 比與比值", "比例尺應用",
+              `在比例尺 1 : ${scale} 的地圖上，一條步道長 ${cm} 公分，實際長度是多少公里？`,
+              `${actualKm} 公里`,
+              [
+                `${actualKm * 10} 公里`,
+                `${round2(actualKm / 10)} 公里`,
+                `${cm * (scale / 1000)} 公里`
+              ],
+              "比例尺 1 : N 代表圖上 1 公分等於實際 N 公分。算出實際公分數後，除以 100,000（小數點左移 5 位）即為公里。",
+              [
+                `1. 實際公分數 ＝ ${cm} × ${scale} ＝${cm * scale}（公分）。`,
+                `2. 換算成公里（÷ 100,000）：${cm * scale} ÷ 100000 ＝ <b>${actualKm}（公里）</b>。`
+              ]
+            );
+          }
+        ]
+      },
+      {
+        id: "u6",
+        code: "U6",
+        shortName: "圓周長與扇形周長",
+        title: "第 6 單元：圓周長與扇形周長",
+        term: "final",
+        termLabel: "期末範圍",
+        points: [
+          "圓周率（π）約為 3.14。",
+          "圓周長 ＝ 直徑 × 3.14 ＝ 半徑 × 2 × 3.14。",
+          "扇形周長 ＝ 圓周長 × 幾分之幾圓 ＋ 半徑 × 2。"
+        ],
+        tips: [
+          "【全冊第一大陷阱】算「扇形周長」時，算完彎曲的弧長後，千萬記得加上「兩條直直的半徑」！",
+          "題目給「圓周長」反求直徑或半徑時，用「圓周長 ÷ 3.14 ＝ 直徑」。"
+        ],
+        generators: [
+          // 題型 1：扇形周長計算
+          () => {
+            const [r, den] = pick([[10, 4], [12, 6], [8, 4], [15, 3], [20, 4]]);
+            const d = r * 2;
+            const arc = round2((d * 3.14) / den);
+            const peri = round2(arc + d);
+            return buildQuestionObj(
+              "u6", "U6 圓周長與扇形周長", "經典必考題",
+              `一個半徑 ${r} 公分的 ${f(1, den)} 圓扇形，它的「周長」大約是多少公分？（圓周率以 3.14 計算）`,
+              `${peri} 公分`,
+              [
+                `${arc} 公分`,
+                `${round2(arc + r)} 公分`,
+                `${round2(r * r * 3.14 / den)} 公分`
+              ],
+              "扇形周長包含「彎曲的弧長」加上「兩條直直的半徑」，漏加半徑是考試最常見的失分原因。",
+              [
+                `1. 先算扇形弧長：(${r} × 2) × 3.14 ×${f(1, den)} ＝ ${arc}（公分）。`,
+                `2. 再加上兩條半徑：${arc} ＋ ${r} ＋${r} ＝ <b>${peri}（公分）</b>。`
+              ]
+            );
+          },
+          // 題型 2：已知圓周長反求半徑
+          () => {
+            const r = pick([4, 5, 6, 8, 10, 12]);
+            const d = r * 2;
+            const c = round2(d * 3.14);
+            return buildQuestionObj(
+              "u6", "U6 圓周長與扇形周長", "逆推計算",
+              `用一條長 ${c} 公分的繩子剛好圍成一個圓形，這個圓形的「半徑」大約是多少公分？（圓周率以 3.14 計算）`,
+              `${r} 公分`,
+              [
+                `${d} 公分`,
+                `${r * 4} 公分`,
+                `${round2(r / 2)} 公分`
+              ],
+              "圓周長除以 3.14 得到的是「直徑」，題目問「半徑」時，記得最後還要再除以 2！",
+              [
+                `1. 先求直徑：${c} ÷ 3.14 ＝${d}（公分）。`,
+                `2. 再求半徑：${d} ÷ 2 ＝ <b>${r}（公分）</b>。`
+              ]
+            );
+          }
+        ]
+      },
+      {
+        id: "u7",
+        code: "U7",
+        shortName: "圓面積與扇形面積",
+        title: "第 7 單元：圓面積與扇形面積",
+        term: "final",
+        termLabel: "期末範圍",
+        points: [
+          "圓面積 ＝ 半徑 × 半徑 × 3.14。",
+          "扇形面積 ＝ 圓面積 × 幾分之幾圓（或是圓心角 ÷ 360°）。",
+          "複合圖形面積常用「大圖形面積 － 小圖形面積」或「切割重組法」。"
+        ],
+        tips: [
+          "看清楚題目給的是「直徑」還是「半徑」，若是直徑要先除以 2 變成半徑才能代公式！",
+          "在正方形內剪下最大的圓，圓面積大約佔正方形面積的 78.5%（剩餘面積約為正方形的 21.5%）。"
+        ],
+        generators: [
+          // 題型 1：正方形內剪最大圓的剩餘面積
+          () => {
+            const side = pick([10, 20, 30, 40]);
+            const r = side / 2;
+            const sqArea = side * side;
+            const cirArea = round2(r * r * 3.14);
+            const remArea = round2(sqArea - cirArea);
+            return buildQuestionObj(
+              "u7", "U7 圓面積與扇形面積", "複合圖形",
+              `在一個邊長 ${side} 公分的正方形紙板上，剪下一個最大的圓，剩下的紙板面積大約是多少平方公分？`,
+              `${remArea} 平方公分`,
+              [
+                `${cirArea} 平方公分`,
+                `${round2(sqArea - side * side * 3.14)} 平方公分`,
+                `${round2(sqArea - side * 3.14)} 平方公分`
+              ],
+              "正方形內最大圓的「直徑」等於正方形邊長，因此半徑是邊長的一半。用正方形面積扣掉圓面積即為所求。",
+              [
+                `1. 正方形面積：${side} × ${side} ＝${sqArea}（平方公分）。`,
+                `2. 最大圓的半徑 ＝ ${side} ÷ 2 ＝${r} 公分；圓面積 ＝ ${r} ×${r} × 3.14 ＝ ${cirArea}（平方公分）。`,
+                `3. 剩下面積：${sqArea} － ${cirArea} ＝ <b>${remArea}（平方公分）</b>。`
+              ]
+            );
+          },
+          // 題型 2：給圓心角的扇形面積
+          () => {
+            const [angle, den] = pick([[60, 6], [90, 4], [120, 3], [72, 5], [45, 8]]);
+            const r = pick([6, 10, 12]);
+            const area = round2((r * r * 3.14) / den);
+            return buildQuestionObj(
+              "u7", "U7 圓面積與扇形面積", "扇形計算",
+              `一個半徑 ${r} 公分、圓心角 ${angle}° 的扇形，面積大約是多少平方公分？`,
+              `${area} 平方公分`,
+              [
+                `${round2(area * 2)} 平方公分`,
+                `${round2((r * 2 * 3.14) / den)} 平方公分`,
+                `${round2(r * r * 3.14)} 平方公分`
+              ],
+              `先用「圓心角 ÷ 360°」算出這個扇形是幾分之幾圓（${angle}° ÷ 360° ＝${f(1, den)} 圓），再乘以整圓面積。`,
+              [
+                `1. 扇形佔整圓的：${angle} ÷ 360 ＝${f(1, den)}。`,
+                `2. 扇形面積：${r} ×${r} × 3.14 × ${f(1, den)} ＝ <b>${area}（平方公分）</b>。`
+              ]
+            );
+          }
+        ]
+      },
+      {
+        id: "u8",
+        code: "U8",
+        shortName: "速率",
+        title: "第 8 單元：速率與平均速率",
+        term: "final",
+        termLabel: "期末範圍",
+        points: [
+          "距離 ＝ 速率 × 時間；速率 ＝ 距離 ÷ 時間；時間 ＝ 距離 ÷ 速率。",
+          "單位換算：時速 → 分速（÷ 60）；分速 → 秒速（÷ 60）。",
+          "平均速率 ＝ 總距離 ÷ 總時間。"
+        ],
+        tips: [
+          "【經典陷阱】算來回「平均速率」時，絕對不能把去程速率跟回程速率直接相加除以 2，一定要用「來回總距離 ÷ 來回總時間」！",
+          "順流速率 ＝ 船速 ＋ 水速；逆流速率 ＝ 船速 － 水速。"
+        ],
+        generators: [
+          // 題型 1：來回平均速率陷阱題
+          () => {
+            const [dist, t1, t2, avgSpd] = pick([
+              [180, 2.5, 3.5, 60],
+              [120, 2, 3, 48],
+              [6, 3, 2, 2.4],
+              [150, 2, 3, 60],
+              [90, 1.5, 3, 40]
+            ]);
+            const totalDist = dist * 2;
+            const totalTime = t1 + t2;
+            return buildQuestionObj(
+              "u8", "U8 速率", "經典必考陷阱",
+              `甲、乙兩地相距 ${dist} 公里，爸爸開車去程花了 ${t1} 小時，回程因為塞車花了 ${t2} 小時，請問爸爸來回一趟的「平均時速」是多少公里？`,
+              `${avgSpd} 公里`,
+              [
+                `${round2((dist / t1 + dist / t2) / 2)} 公里`,
+                `${round2(dist / totalTime)} 公里`,
+                `${round2(totalDist / t1)} 公里`
+              ],
+              "求平均速率必須使用「來回總距離 ÷ 來回總時間」，切勿將去程時速與回程時速直接平均。",
+              [
+                `1. 來回總距離：${dist} × 2 ＝ ${totalDist}（公里）。`,
+                `2. 來回總時間：${t1} ＋ ${t2} ＝${totalTime}（小時）。`,
+                `3. 平均時速：${totalDist} ÷${totalTime} ＝ <b>${avgSpd}（公里/小時）</b>。`
+              ]
+            );
+          },
+          // 題型 2：時速、分速、秒速單位換算
+          () => {
+            const [kmH, mMin, mSec] = pick([
+              [72, 1200, 20],
+              [54, 900, 15],
+              [90, 1500, 25],
+              [108, 1800, 30],
+              [36, 600, 10]
+            ]);
+            return buildQuestionObj(
+              "u8", "U8 速率", "單位換算",
+              `汽車時速 ${kmH} 公里，換算成「分速」是多少公尺？換算成「秒速」是多少公尺？`,
+              `分速 ${mMin} 公尺；秒速 ${mSec} 公尺`,
+              [
+                `分速 ${mSec} 公尺；秒速 ${mMin} 公尺`,
+                `分速 ${kmH * 100} 公尺；秒速 ${m
