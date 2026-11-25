@@ -73,6 +73,12 @@
           </button>
         </div>
 
+        <button type="button" onclick="toggleHistoryModal()" class="btn-press inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs sm:text-sm font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100 transition">
+          <span>📊</span>
+          <span>學習紀錄</span>
+          <span id="history-count-badge" class="px-1.5 py-0.2 text-[11px] font-extrabold rounded-full bg-emerald-600 text-white">0</span>
+        </button>
+
         <button type="button" onclick="toggleScratchpad()" class="btn-press inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs sm:text-sm font-semibold bg-amber-50 text-amber-700 border border-amber-200 hover:bg-amber-100 transition">
           <span>✏️</span>
           <span>計算紙</span>
@@ -294,6 +300,42 @@
     </section>
 
   </main>
+
+  <!-- 即時刷新與存檔提示 Toast -->
+  <div id="toast-banner" class="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 hidden px-4 py-2.5 rounded-full bg-slate-900/95 text-white text-xs sm:text-sm font-bold shadow-lg transition-all">
+    ✅ 已更新題目！
+  </div>
+
+  <!-- 學習成績歷史紀錄彈窗 (localStorage) -->
+  <div id="history-modal" class="fixed inset-0 z-40 hidden bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl border border-slate-200 max-w-2xl w-full max-h-[85vh] flex flex-col shadow-2xl overflow-hidden">
+      <div class="px-5 py-4 border-b border-slate-200 flex items-center justify-between bg-slate-50">
+        <div class="flex items-center gap-2">
+          <span class="text-xl">📊</span>
+          <div>
+            <h3 class="text-base sm:text-lg font-bold text-slate-900">本機學習成績紀錄</h3>
+            <p class="text-xs text-slate-500">自動保存在此 iPad / 電腦瀏覽器中（最多保留最近 50 筆）</p>
+          </div>
+        </div>
+        <button type="button" onclick="toggleHistoryModal()" class="w-8 h-8 rounded-full bg-slate-200/80 hover:bg-slate-300 text-slate-700 font-bold flex items-center justify-center">✕</button>
+      </div>
+
+      <!-- 統計摘要列 -->
+      <div id="history-summary" class="grid grid-cols-3 gap-2 p-4 bg-blue-50/50 border-b border-slate-200 text-center"></div>
+
+      <!-- 紀錄列表區 -->
+      <div id="history-list" class="flex-1 overflow-y-auto p-4 space-y-2.5"></div>
+
+      <div class="px-5 py-3.5 border-t border-slate-200 bg-slate-50 flex items-center justify-between gap-2">
+        <button type="button" onclick="clearAllHistory()" class="px-3.5 py-2 rounded-xl text-xs font-bold text-rose-600 bg-rose-50 border border-rose-200 hover:bg-rose-100 transition">
+          🗑️ 清除全部紀錄
+        </button>
+        <button type="button" onclick="toggleHistoryModal()" class="px-5 py-2 rounded-xl text-xs sm:text-sm font-bold bg-slate-800 text-white hover:bg-slate-900 transition">
+          關閉視窗
+        </button>
+      </div>
+    </div>
+  </div>
 
   <script>
     // =========================================================
@@ -1933,9 +1975,120 @@
       return list;
     }
 
+    // =========================================================
+    // 6. localStorage 學習成績自動紀錄系統
+    // =========================================================
+    const HISTORY_KEY = "kids_math_quiz_history_v1";
+
+    function loadQuizHistory() {
+      try {
+        const raw = localStorage.getItem(HISTORY_KEY);
+        const arr = raw ? JSON.parse(raw) : [];
+        return Array.isArray(arr) ? arr : [];
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function saveQuizHistory(entry) {
+      try {
+        const list = loadQuizHistory();
+        const now = new Date();
+        const pad = (n) => String(n).padStart(2, "0");
+        const dateStr = `${now.getFullYear()}/${pad(now.getMonth() + 1)}/${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}`;
+        list.unshift({
+          id: Date.now(),
+          date: dateStr,
+          grade: entry.grade,
+          modeLabel: entry.modeLabel,
+          correct: entry.correct,
+          total: entry.total,
+          pct: entry.pct
+        });
+        if (list.length > 50) list.length = 50;
+        localStorage.setItem(HISTORY_KEY, JSON.stringify(list));
+        updateHistoryBadge();
+        showToast("💾 成績已自動儲存至本機學習紀錄！");
+      } catch (e) {}
+    }
+
+    function updateHistoryBadge() {
+      const badge = document.getElementById("history-count-badge");
+      if (badge) badge.textContent = loadQuizHistory().length;
+    }
+
+    function toggleHistoryModal() {
+      const modal = document.getElementById("history-modal");
+      modal.classList.toggle("hidden");
+      if (!modal.classList.contains("hidden")) {
+        renderHistoryModal();
+      }
+    }
+
+    function renderHistoryModal() {
+      const list = loadQuizHistory();
+      const summaryEl = document.getElementById("history-summary");
+      const listEl = document.getElementById("history-list");
+
+      const totalRuns = list.length;
+      const totalQs = list.reduce((acc, item) => acc + item.total, 0);
+      const avgPct = totalRuns ? Math.round(list.reduce((acc, item) => acc + item.pct, 0) / totalRuns) : 0;
+
+      summaryEl.innerHTML = `
+        <div class="bg-white rounded-xl p-2.5 border border-blue-100">
+          <div class="text-[11px] font-bold text-slate-500">累計練習次數</div>
+          <div class="text-lg font-extrabold text-blue-700">${totalRuns} 次</div>
+        </div>
+        <div class="bg-white rounded-xl p-2.5 border border-blue-100">
+          <div class="text-[11px] font-bold text-slate-500">累計作答題數</div>
+          <div class="text-lg font-extrabold text-slate-800">${totalQs} 題</div>
+        </div>
+        <div class="bg-white rounded-xl p-2.5 border border-blue-100">
+          <div class="text-[11px] font-bold text-slate-500">平均正確率</div>
+          <div class="text-lg font-extrabold text-emerald-600">${avgPct}%</div>
+        </div>
+      `;
+
+      if (list.length === 0) {
+        listEl.innerHTML = `<div class="text-center py-10 text-sm text-slate-400">目前還沒有練習紀錄喔！完成一次單元練習或模擬考後，系統會自動把成績存在這裡。</div>`;
+        return;
+      }
+
+      listEl.innerHTML = list.map(item => {
+        const isG3 = item.grade.includes("三上");
+        const gradeBadge = isG3 ? "bg-emerald-100 text-emerald-700" : "bg-blue-100 text-blue-700";
+        const scoreColor = item.pct >= 80 ? "text-emerald-600" : (item.pct >= 60 ? "text-amber-600" : "text-rose-600");
+        return `
+          <div class="flex items-center justify-between gap-3 p-3.5 rounded-2xl border border-slate-200 bg-white hover:bg-slate-50/60 transition">
+            <div class="min-w-0">
+              <div class="flex items-center gap-2 mb-1">
+                <span class="text-[11px] font-bold px-2 py-0.5 rounded-md ${gradeBadge}">${item.grade}</span>
+                <span class="text-xs text-slate-400 font-medium">${item.date}</span>
+              </div>
+              <div class="text-sm font-bold text-slate-800 truncate">${item.modeLabel}</div>
+            </div>
+            <div class="text-right shrink-0">
+              <div class="text-base font-extrabold ${scoreColor}">${item.correct} / ${item.total} 題</div>
+              <div class="text-xs font-bold text-slate-500">得分率 ${item.pct}%</div>
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function clearAllHistory() {
+      if (confirm("確定要清除這台裝置上的所有數學練習紀錄嗎？清除後無法復原。")) {
+        localStorage.removeItem(HISTORY_KEY);
+        updateHistoryBadge();
+        renderHistoryModal();
+        showToast("🗑️ 已清除全部學習紀錄");
+      }
+    }
+
     function init() {
       switchGrade("g6");
       initCanvas("scratch-canvas");
+      updateHistoryBadge();
     }
 
     function renderUnitButtons() {
@@ -1984,7 +2137,7 @@
       }
     }
 
-    function selectUnit(unitId) {
+    function selectUnit(unitId, isRegen = false) {
       currentUnitId = unitId;
       renderUnitButtons();
 
@@ -2000,7 +2153,7 @@
       resetQuizView();
     }
 
-    function startExam(termType) {
+    function startExam(termType, isRegen = false) {
       currentExamType = termType;
       const cardMid = document.getElementById("card-midterm");
       const cardFin = document.getElementById("card-final");
@@ -2021,15 +2174,44 @@
       resetQuizView();
     }
 
+    let toastTimer = null;
+    function showToast(msg) {
+      const el = document.getElementById("toast-banner");
+      if (!el) return;
+      el.textContent = msg;
+      el.classList.remove("hidden");
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        el.classList.add("hidden");
+      }, 2400);
+    }
+
     function regenerateCurrentQuiz() {
-      if (topMode === "chapters") {
-        selectUnit(currentUnitId);
-      } else {
-        startExam(currentExamType);
+      const prevFirstQ = activeQuestions[0]?.question || "";
+      let attempts = 0;
+      do {
+        if (topMode === "chapters") {
+          selectUnit(currentUnitId, true);
+        } else {
+          startExam(currentExamType, true);
+        }
+        attempts++;
+      } while (activeQuestions[0]?.question === prevFirstQ && attempts < 6);
+
+      const qCard = document.getElementById("question-card");
+      if (qCard) {
+        qCard.classList.add("ring-2", "ring-emerald-400");
+        setTimeout(() => qCard.classList.remove("ring-2", "ring-emerald-400"), 600);
       }
+      const quizSec = document.getElementById("quiz-container");
+      if (quizSec) {
+        quizSec.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      }
+      showToast("🔄 已為你重新生成全新題目！");
     }
 
     function resetQuizView() {
+      hasSavedCurrentRun = false;
       userRecords = {};
       currentIndex = 0;
       document.getElementById("result-card").classList.add("hidden");
@@ -2303,6 +2485,7 @@
       }
     }
 
+    let hasSavedCurrentRun = false;
     function showResults() {
       document.getElementById("question-card").classList.add("hidden");
       const resultCard = document.getElementById("result-card");
@@ -2311,6 +2494,18 @@
       const total = activeQuestions.length;
       const correctCount = activeQuestions.filter(q => userRecords[q.id]?.isCorrect).length;
       const wrongCount = total - correctCount;
+      const pct = Math.round((correctCount / total) * 100);
+
+      if (!hasSavedCurrentRun) {
+        hasSavedCurrentRun = true;
+        saveQuizHistory({
+          grade: currentGrade === "g3" ? "三上康軒" : "六上翰林",
+          modeLabel: document.getElementById("quiz-mode-label").textContent,
+          correct: correctCount,
+          total: total,
+          pct: pct
+        });
+      }
 
       document.getElementById("final-score-text").textContent =
         `本次共測驗 ${total} 題，答對 ${correctCount} 題（總得分率 ${Math.round((correctCount / total) * 100)}%）`;
