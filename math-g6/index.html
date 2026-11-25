@@ -6,7 +6,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="apple-mobile-web-app-title" content="國小數學題庫" />
-  <title>國小數學（三年級康軒版／六年級翰林版）分章節複習與模擬考</title>
+  <title>國小數學（三年級康軒版／六年級翰林版）多元題型與模擬考</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     body {
@@ -58,7 +58,7 @@
         </div>
         <div>
           <h1 id="main-title" class="text-base sm:text-lg font-bold text-slate-900 leading-tight">六上數學（翰林版）・分章節與模擬考</h1>
-          <p id="sub-title" class="text-xs text-slate-500">全冊 8 單元重點技巧・無限動態生成應用題庫</p>
+          <p id="sub-title" class="text-xs text-slate-500">是非、選擇、比大小、填充、應用計算五大題型・自訂題數</p>
         </div>
       </div>
 
@@ -75,7 +75,7 @@
 
         <button type="button" onclick="toggleScratchpad()" class="btn-press inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs sm:text-sm font-semibold bg-amber-50 text-amber-700 border border-amber-200 hover:bg-amber-100 transition">
           <span>✏️</span>
-          <span>草稿紙</span>
+          <span>計算紙</span>
         </button>
 
         <a href="../index.html" class="btn-press inline-flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs sm:text-sm font-semibold bg-indigo-50 text-indigo-700 border border-indigo-200 hover:bg-indigo-100 transition">
@@ -92,22 +92,22 @@
           📚 分章節重點與練習
         </button>
         <button type="button" id="tab-exams" onclick="switchTopMode('exams')" class="flex-1 py-2 px-3 rounded-xl text-xs sm:text-sm font-bold transition bg-white text-slate-600 border border-slate-200 hover:bg-slate-100">
-          📝 期中／期末考總複習
+          📝 期中／期末考模擬卷
         </button>
       </div>
     </div>
   </header>
 
-  <!-- 可收合手寫草稿紙 -->
+  <!-- 可收合全螢幕手寫計算紙 -->
   <section id="scratchpad-panel" class="hidden bg-slate-100 border-b border-slate-300 shadow-inner">
     <div class="max-w-4xl mx-auto px-4 py-3">
       <div class="flex items-center justify-between mb-2">
-        <span class="text-xs font-semibold text-slate-600">📝 手寫計算草稿區（支援手指、Apple Pencil 與滑鼠）</span>
+        <span class="text-xs font-semibold text-slate-600">📝 直式與短除法計算草稿區（支援手指、Apple Pencil 與滑鼠）</span>
         <div class="flex items-center gap-2">
           <button type="button" onclick="setPenColor('#1e293b')" class="w-5 h-5 rounded-full bg-slate-800 border-2 border-white shadow" title="黑色筆"></button>
           <button type="button" onclick="setPenColor('#2563eb')" class="w-5 h-5 rounded-full bg-blue-600 border-2 border-white shadow" title="藍色筆"></button>
           <button type="button" onclick="setPenColor('#dc2626')" class="w-5 h-5 rounded-full bg-red-600 border-2 border-white shadow" title="紅色筆"></button>
-          <button type="button" onclick="clearCanvas()" class="ml-2 px-2.5 py-1 text-xs font-semibold bg-white text-slate-700 border border-slate-300 rounded-lg hover:bg-slate-50">清除</button>
+          <button type="button" onclick="clearCanvas('scratch-canvas')" class="ml-2 px-2.5 py-1 text-xs font-semibold bg-white text-slate-700 border border-slate-300 rounded-lg hover:bg-slate-50">清除</button>
           <button type="button" onclick="toggleScratchpad()" class="px-2.5 py-1 text-xs font-semibold bg-slate-700 text-white rounded-lg hover:bg-slate-800">收起</button>
         </div>
       </div>
@@ -137,10 +137,21 @@
             <span id="guide-term-badge" class="text-xs font-bold px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-700 mr-1.5">期中範圍</span>
             <h2 id="guide-title" class="inline text-lg font-bold text-slate-900">單元標題</h2>
           </div>
-          <button type="button" onclick="regenerateCurrentQuiz()" class="btn-press inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold bg-emerald-600 text-white hover:bg-emerald-700 shadow-sm transition">
-            <span>🔄</span>
-            <span>重新生成本單元 6 題新題目</span>
-          </button>
+
+          <!-- 單元題數選擇與重新生成 -->
+          <div class="flex items-center gap-2 flex-wrap">
+            <div class="inline-flex items-center bg-slate-100 p-0.5 rounded-xl border border-slate-200 text-xs font-bold">
+              <span class="px-2 text-slate-500">題數：</span>
+              <button type="button" onclick="setChapterCount(6)" id="chap-cnt-6" class="px-2.5 py-1 rounded-lg bg-white text-blue-700 shadow-sm">6題</button>
+              <button type="button" onclick="setChapterCount(10)" id="chap-cnt-10" class="px-2.5 py-1 rounded-lg text-slate-600 hover:text-slate-900">10題</button>
+              <button type="button" onclick="setChapterCount(15)" id="chap-cnt-15" class="px-2.5 py-1 rounded-lg text-slate-600 hover:text-slate-900">15題</button>
+            </div>
+
+            <button type="button" onclick="regenerateCurrentQuiz()" class="btn-press inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold bg-emerald-600 text-white hover:bg-emerald-700 shadow-sm transition">
+              <span>🔄</span>
+              <span>重新生成新題目</span>
+            </button>
+          </div>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
@@ -165,18 +176,28 @@
 
     <!-- 【區域 B】期中／期末考總複習選擇器 -->
     <section id="exam-section" class="hidden space-y-4">
+      <!-- 模擬考題數選擇列 -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-3.5 shadow-sm flex flex-wrap items-center justify-between gap-2">
+        <span class="text-xs sm:text-sm font-bold text-slate-700">📋 選擇模擬考卷總題數（含是非、選擇、比大小、填充、應用計算）：</span>
+        <div class="inline-flex bg-slate-100 p-1 rounded-xl border border-slate-200 text-xs sm:text-sm font-bold">
+          <button type="button" onclick="setExamCount(15)" id="exam-cnt-15" class="px-3 py-1 rounded-lg text-slate-600 hover:text-slate-900">15 題（小考卷）</button>
+          <button type="button" onclick="setExamCount(20)" id="exam-cnt-20" class="px-3 py-1 rounded-lg bg-blue-600 text-white shadow-sm">20 題（標準段考）</button>
+          <button type="button" onclick="setExamCount(25)" id="exam-cnt-25" class="px-3 py-1 rounded-lg text-slate-600 hover:text-slate-900">25 題（完整大考）</button>
+        </div>
+      </div>
+
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div class="bg-white rounded-2xl border-2 border-slate-200 p-5 shadow-sm flex flex-col justify-between" id="card-midterm">
           <div>
             <div class="flex items-center justify-between mb-2">
               <span id="midterm-badge" class="text-xs font-bold px-2.5 py-1 rounded-full bg-indigo-100 text-indigo-700">第 1～4 單元</span>
-              <span class="text-xs font-semibold text-slate-400">共 12 題綜合卷</span>
+              <span class="text-xs font-semibold text-slate-400">五大題型完整配置</span>
             </div>
-            <h2 class="text-lg font-bold text-slate-900 mb-1">期中考總複習模擬卷</h2>
+            <h2 class="text-lg font-bold text-slate-900 mb-1">期中考真實題型模擬卷</h2>
             <p id="midterm-desc" class="text-xs sm:text-sm text-slate-500 mb-4 leading-relaxed"></p>
           </div>
           <button type="button" onclick="startExam('midterm')" class="btn-press w-full py-2.5 px-4 rounded-xl text-sm font-bold bg-indigo-600 text-white hover:bg-indigo-700 shadow-sm transition">
-            🔄 生成期中考新試卷（12 題）
+            🔄 生成期中考新試卷
           </button>
         </div>
 
@@ -184,13 +205,13 @@
           <div>
             <div class="flex items-center justify-between mb-2">
               <span id="final-badge" class="text-xs font-bold px-2.5 py-1 rounded-full bg-rose-100 text-rose-700">第 5～8 單元</span>
-              <span class="text-xs font-semibold text-slate-400">共 12 題綜合卷</span>
+              <span class="text-xs font-semibold text-slate-400">五大題型完整配置</span>
             </div>
-            <h2 class="text-lg font-bold text-slate-900 mb-1">期末考總複習模擬卷</h2>
+            <h2 class="text-lg font-bold text-slate-900 mb-1">期末考真實題型模擬卷</h2>
             <p id="final-desc" class="text-xs sm:text-sm text-slate-500 mb-4 leading-relaxed"></p>
           </div>
           <button type="button" onclick="startExam('final')" class="btn-press w-full py-2.5 px-4 rounded-xl text-sm font-bold bg-rose-600 text-white hover:bg-rose-700 shadow-sm transition">
-            🔄 生成期末考新試卷（12 題）
+            🔄 生成期末考新試卷
           </button>
         </div>
       </div>
@@ -202,25 +223,28 @@
         <div class="flex flex-wrap items-center justify-between gap-2 text-xs sm:text-sm font-semibold text-slate-600 mb-2">
           <div class="flex items-center gap-2">
             <span id="quiz-mode-label" class="px-2 py-0.5 rounded-md bg-slate-100 text-slate-700 font-bold">U1 練習</span>
-            <span id="progress-label">第 1 題 / 共 6 題</span>
+            <span id="progress-label">第 1 題 / 共 10 題</span>
           </div>
           <span id="score-label" class="text-blue-600">目前答對：0 題</span>
         </div>
         <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden">
-          <div id="progress-bar" class="bg-blue-600 h-full transition-all duration-300" style="width: 16.66%"></div>
+          <div id="progress-bar" class="bg-blue-600 h-full transition-all duration-300" style="width: 10%"></div>
         </div>
         <div id="question-dots" class="flex flex-wrap gap-1.5 mt-3 pt-3 border-t border-slate-100"></div>
       </div>
 
       <div id="question-card" class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-7 shadow-sm">
-        <div class="flex items-center gap-2 mb-3">
+        <!-- 五大題型標籤列 -->
+        <div class="flex flex-wrap items-center gap-2 mb-3">
+          <span id="q-format-badge" class="text-xs font-extrabold px-2.5 py-1 rounded-lg bg-purple-600 text-white">一、是非題</span>
           <span id="q-unit-badge" class="text-xs font-bold px-2.5 py-1 rounded-full bg-blue-50 text-blue-700 border border-blue-100">單元</span>
           <span id="q-type-badge" class="text-xs font-medium px-2.5 py-1 rounded-full bg-slate-100 text-slate-600">題型</span>
         </div>
 
-        <h3 id="q-text" class="text-lg sm:text-xl font-bold text-slate-900 leading-relaxed mb-6"></h3>
+        <h3 id="q-text" class="text-lg sm:text-xl font-bold text-slate-900 leading-relaxed mb-5"></h3>
 
-        <div id="options-container" class="space-y-3"></div>
+        <!-- 動態作答區（依據 tf / choice / compare / fill / word 自動切換） -->
+        <div id="answer-area"></div>
 
         <!-- 作答後即時詳解 -->
         <div id="explanation-box" class="hidden mt-6 rounded-2xl p-5 border">
@@ -231,7 +255,7 @@
               <p id="exp-concept"></p>
             </div>
             <div class="bg-white/90 rounded-xl p-3.5 border border-slate-200/80">
-              <div class="font-bold text-slate-900 text-xs uppercase tracking-wider mb-1">📝 詳細計算步驟</div>
+              <div class="font-bold text-slate-900 text-xs uppercase tracking-wider mb-1">📝 標準算式與計算步驟</div>
               <div id="exp-steps" class="space-y-1"></div>
             </div>
           </div>
@@ -250,10 +274,13 @@
       <!-- 測驗結算成績卡 -->
       <div id="result-card" class="hidden bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 shadow-sm text-center">
         <div class="w-16 h-16 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-3xl mx-auto mb-4">🏆</div>
-        <h3 class="text-2xl font-bold text-slate-900 mb-1">練習完成！</h3>
+        <h3 class="text-2xl font-bold text-slate-900 mb-1">測驗完成！</h3>
         <p id="final-score-text" class="text-base text-slate-600 mb-6"></p>
 
-        <div id="unit-breakdown" class="text-left max-w-lg mx-auto bg-slate-50 rounded-2xl p-4 border border-slate-200 mb-6 space-y-2"></div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-2xl mx-auto mb-6 text-left">
+          <div id="format-breakdown" class="bg-slate-50 rounded-2xl p-4 border border-slate-200 space-y-2"></div>
+          <div id="unit-breakdown" class="bg-slate-50 rounded-2xl p-4 border border-slate-200 space-y-2"></div>
+        </div>
 
         <div class="flex flex-wrap justify-center gap-3">
           <button type="button" id="retry-wrong-btn" onclick="retryWrongOnly()" class="btn-press px-5 py-2.5 rounded-xl text-sm font-bold bg-amber-500 text-white hover:bg-amber-600 shadow-sm transition">
@@ -269,7 +296,9 @@
   </main>
 
   <script>
+    // =========================================================
     // 1. 數學排版與運算工具函式
+    // =========================================================
     const f = (n, d) => `<span class="frac"><span class="frac-num">${n}</span><span class="frac-den">${d}</span></span>`;
     const mf = (w, n, d) => `<span class="mixed-num"><span>${w}</span>${f(n, d)}</span>`;
     const randInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
@@ -278,7 +307,7 @@
     const lcm = (a, b) => (a * b) / gcd(a, b);
     const round2 = (num) => Math.round(num * 100) / 100;
 
-    function formatFrac(num, den) {
+    function formatFracHtml(num, den) {
       const g = gcd(num, den);
       num /= g; den /= g;
       if (den === 1) return `${num}`;
@@ -290,12 +319,33 @@
       return f(num, den);
     }
 
-    function buildQuestionObj(unitId, unitName, type, questionHtml, correctHtml, distractorsHtml, concept, steps) {
+    function formatFracPlain(num, den) {
+      const g = gcd(num, den);
+      num /= g; den /= g;
+      if (den === 1) return `${num}`;
+      return `${num}/${den}`;
+    }
+
+    // 建構【是非題】物件 (answer: true | false)
+    function makeTF(unitId, unitName, subType, statementHtml, isTrue, concept, steps) {
+      return {
+        format: "tf",
+        unitId,
+        unit: unitName,
+        subType,
+        question: statementHtml,
+        options: ["⭕ （ ○ ）正確", "❌ （ ✕ ）錯誤"],
+        answer: isTrue ? 0 : 1,
+        concept,
+        steps
+      };
+    }
+
+    // 建構【選擇題】物件
+    function makeChoice(unitId, unitName, subType, questionHtml, correctHtml, distractorsHtml, concept, steps) {
       const uniqueDistractors = [];
       for (const d of distractorsHtml) {
-        if (d !== correctHtml && !uniqueDistractors.includes(d)) {
-          uniqueDistractors.push(d);
-        }
+        if (d !== correctHtml && !uniqueDistractors.includes(d)) uniqueDistractors.push(d);
         if (uniqueDistractors.length === 3) break;
       }
       const options = [correctHtml, ...uniqueDistractors];
@@ -304,9 +354,10 @@
         [options[i], options[j]] = [options[j], options[i]];
       }
       return {
+        format: "choice",
         unitId,
         unit: unitName,
-        type,
+        subType,
         question: questionHtml,
         options,
         answer: options.indexOf(correctHtml),
@@ -315,16 +366,88 @@
       };
     }
 
-    // 2. 雙年級完整教材庫：三年級上學期（康軒版） & 六年級上學期（翰林版）
+    // 建構【比大小題】物件 (symbol: ">" | "<" | "=")
+    function makeCompare(unitId, unitName, subType, leftHtml, rightHtml, symbol, concept, steps) {
+      const opts = ["＞（大於）", "＜（小於）", "＝（等於）"];
+      const ansIdx = symbol === ">" ? 0 : (symbol === "<" ? 1 : 2);
+      return {
+        format: "compare",
+        unitId,
+        unit: unitName,
+        subType,
+        question: `在（　　）裡填入 ＞、＜ 或 ＝：<div class="mt-3 p-3.5 bg-slate-50 rounded-xl border border-slate-200 text-center text-xl sm:text-2xl font-extrabold text-slate-900">${leftHtml} <span class="mx-3 px-3 py-0.5 rounded-lg bg-amber-100 text-amber-800 border border-amber-300">（ ？ ）</span> ${rightHtml}</div>`,
+        options: opts,
+        answer: ansIdx,
+        concept,
+        steps
+      };
+    }
+
+    // 建構【填充題】物件
+    function makeFill(unitId, unitName, subType, questionHtml, fields, concept, steps) {
+      return {
+        format: "fill",
+        unitId,
+        unit: unitName,
+        subType,
+        question: questionHtml,
+        fields,
+        concept,
+        steps
+      };
+    }
+
+    // 建構【應用計算題】物件（含手寫算式畫布）
+    function makeWord(unitId, unitName, subType, questionHtml, fields, concept, steps) {
+      return {
+        format: "word",
+        unitId,
+        unit: unitName,
+        subType,
+        question: questionHtml,
+        fields,
+        concept,
+        steps
+      };
+    }
+
+    function normalizeAns(str) {
+      return String(str || "")
+        .trim()
+        .replace(/\s+/g, "")
+        .replace(/：/g, ":")
+        .replace(/／/g, "/")
+        .replace(/．/g, ".")
+        .toLowerCase();
+    }
+
+    function checkFieldMatch(userVal, expectedVal) {
+      const u = normalizeAns(userVal);
+      if (!u) return false;
+      const validList = String(expectedVal).split("|").map(normalizeAns);
+      if (validList.includes(u)) return true;
+      const uNum = Number(u);
+      if (!isNaN(uNum)) {
+        for (const v of validList) {
+          const vNum = Number(v);
+          if (!isNaN(vNum) && Math.abs(uNum - vNum) < 1e-6) return true;
+        }
+      }
+      return false;
+    }
+
+    // =========================================================
+    // 2. 雙年級完整教材庫（每單元皆含 tf / choice / compare / fill / word 五大題型）
+    // =========================================================
     const CURRICULUM = {
       g3: {
-        title: "三上數學（康軒版）・分章節與模擬考",
-        subtitle: "全冊 9 單元重點技巧・無限動態生成應用題庫",
+        title: "三上數學（康軒版）・五大題型完整練習",
+        subtitle: "是非、選擇、比大小、填充、應用計算・全冊 9 單元動態出題",
         rangeHint: "U1–U5 期中｜U6–U9 期末",
         midtermBadge: "第 1～5 單元",
-        midtermDesc: "涵蓋：10000以內的數、四位數的加減、公升和毫升、乘法、角。每次點擊都會重新生成全新生活應用考題。",
+        midtermDesc: "涵蓋：10000以內的數、四位數加減、公升和毫升、乘法、角。完整模擬真實段考五大題型。",
         finalBadge: "第 6～9 單元",
-        finalDesc: "涵蓋：面積、除法、公斤和公克、分數。每次點擊都會重新生成全新生活應用考題。",
+        finalDesc: "涵蓋：面積、除法、公斤和公克、分數。完整模擬真實段考五大題型。",
         units: [
           {
             id: "g3_u1",
@@ -334,77 +457,78 @@
             term: "midterm",
             termLabel: "期中範圍",
             points: [
-              "認識「千位」：10 個百是 1000，10 個千是 10000（一萬）。",
+              "10 個百是 1000，10 個千是 10000（一萬）。",
               "位值表順序由右到左：個位、十位、百位、千位、萬位。",
               "比大小口訣：先比位數多寡；位數相同時，從最左邊（最高位）開始比。"
             ],
             tips: [
-              "讀數時，中間連續有幾個 0 都只讀一個「零」，末尾的 0 不讀（例如 4008 讀作四千零八）。",
-              "用 4 張數字卡排「最大的四位數」由大排到小；排「最小的四位數」時，0 不能放在千位！"
+              "讀數時，中間連續有幾個 0 都只讀一個「零」，末尾的 0 不讀。",
+              "排「最小的四位數」時，0 不能放在千位，必須放在百位！"
             ],
-            generators: [
+            tf: [
+              () => {
+                const isT = Math.random() > 0.5;
+                return makeTF(
+                  "g3_u1", "U1 10000以內的數", "位值與讀寫觀念",
+                  isT
+                    ? `「3008」讀作「三千零八」，中間兩個 0 只需要讀一個零。`
+                    : `用 0、2、5、8 排出的最小四位數是「0258」。`,
+                  isT,
+                  isT ? "數字中間連續有幾個 0 都只讀一個零。" : "四位數的千位不能放 0，最小四位數應該是 2058。",
+                  [isT ? "1. 3008 的百位和十位都是 0，合起來只讀一個「零」，敘述正確。" : "1. 0 不能放在千位，最小四位數應為 2058，故敘述錯誤。"]
+                );
+              }
+            ],
+            choice: [
+              () => {
+                const start = pick([2980, 3970, 5990, 7960]), ans = start + 30;
+                return makeChoice(
+                  "g3_u1", "U1 10000以內的數", "數線與進位",
+                  `10 個一數：${start} → ${start + 10} → ${start + 20} → （　　），括號裡應該填哪一個數？`,
+                  `${ans}`, [`${start + 21}`, `${ans - 1000}`, `${ans + 10}`],
+                  "10 個一數就是每次加 10，注意百位是 9 時，滿十進一會讓千位也跟著進位！",
+                  [`1. ${start + 20} ＋ 10 ＝ <b>${ans}</b>。`]
+                );
+              }
+            ],
+            compare: [
+              () => {
+                const th = randInt(4, 8), b = randInt(2, 6), u = randInt(1, 9);
+                const leftVal = th * 1000 + b * 10 + u;
+                const rightVal = th * 1000 + b * 100 + u;
+                return makeCompare(
+                  "g3_u1", "U1 10000以內的數", "四位數比大小",
+                  `${leftVal}`, `${rightVal}`, "<",
+                  "位數都是四位數，千位相同時，接著比較百位數字的大小。",
+                  [`1. 千位都是 ${th}，但 ${leftVal} 的百位是 0，${rightVal} 的百位是 ${b}，所以 ${leftVal} ＜ ${rightVal}。`]
+                );
+              }
+            ],
+            fill: [
+              () => {
+                const th = randInt(2, 8), h = randInt(12, 24), total = th * 1000 + h * 100;
+                return makeFill(
+                  "g3_u1", "U1 10000以內的數", "錢幣化聚",
+                  `存錢筒裡有 ${th} 張一千元鈔票和 ${h} 個一百元硬幣，合起來總共有（　　）元。`,
+                  [{ label: "總金額", answer: `${total}`, unit: "元", placeholder: "輸入數字" }],
+                  "10 個一百是 1000，先把百元換成千元再相加。",
+                  [`1. ${th * 1000} ＋ ${h * 100} ＝ <b>${total} 元</b>。`]
+                );
+              }
+            ],
+            word: [
               () => {
                 const digits = [randInt(1, 3), randInt(4, 6), randInt(7, 9), 0];
-                const sortedDesc = [...digits].sort((a, b) => b - a);
-                const maxNum = Number(sortedDesc.join(""));
-                const nonZeroAsc = digits.filter(d => d !== 0).sort((a, b) => a - b);
-                const minNum = Number(`${nonZeroAsc[0]}0${nonZeroAsc[1]}${nonZeroAsc[2]}`);
+                const maxNum = Number([...digits].sort((a, b) => b - a).join(""));
+                const asc = digits.filter(d => d !== 0).sort((a, b) => a - b);
+                const minNum = Number(`${asc[0]}0${asc[1]}${asc[2]}`);
                 const diff = maxNum - minNum;
-                return buildQuestionObj(
-                  "g3_u1", "U1 10000以內的數", "組數與位值應用",
+                return makeWord(
+                  "g3_u1", "U1 10000以內的數", "組數相差應用題",
                   `用 ${digits[0]}、${digits[1]}、${digits[2]}、${digits[3]} 四張數字卡，排出「最大的四位數」和「最小的四位數」，這兩個數相差多少？`,
-                  `${diff}`,
-                  [
-                    `${maxNum - Number(`0${nonZeroAsc.join("")}`)}`,
-                    `${maxNum + minNum}`,
-                    `${diff - 90}`
-                  ],
-                  "排最大的四位數要把數字由大排到小；排最小的四位數時，0 不能放在最前面的千位，必須放在百位！",
-                  [
-                    `1. 最大的四位數（由大排到小）：<b>${maxNum}</b>。`,
-                    `2. 最小的四位數（千位放最小非零數字 ${nonZeroAsc[0]}，百位放 0）：<b>${minNum}</b>。`,
-                    `3. 兩數相差：${maxNum} － ${minNum} ＝ <b>${diff}</b>。`
-                  ]
-                );
-              },
-              () => {
-                const th = randInt(2, 8);
-                const h = randInt(12, 25);
-                const total = th * 1000 + h * 100;
-                return buildQuestionObj(
-                  "g3_u1", "U1 10000以內的數", "化聚應用",
-                  `存錢筒裡有 ${th} 張一千元鈔票和 ${h} 個一百元硬幣，合起來總共有多少元？`,
-                  `${total} 元`,
-                  [
-                    `${th * 1000 + h * 10} 元`,
-                    `${(th + h) * 100} 元`,
-                    `${total + 1000} 元`
-                  ],
-                  "10 個一百是 1000，先把超過 10 個的百元換成千元，再和原本的千元相加。",
-                  [
-                    `1. ${th} 張一千元 ＝ ${th * 1000} 元。`,
-                    `2. ${h} 個一百元 ＝ ${h * 100} 元。`,
-                    `3. 合起來共有：${th * 1000} ＋ ${h * 100} ＝ <b>${total}（元）</b>。`
-                  ]
-                );
-              },
-              () => {
-                const start = pick([2980, 3970, 5990, 7960]);
-                const ans = start + 30;
-                return buildQuestionObj(
-                  "g3_u1", "U1 10000以內的數", "數線與進位",
-                  `數數看，10 個一數：${start} → ${start + 10} → ${start + 20} → （  ），括號裡應該填多少？`,
-                  `${ans}`,
-                  [
-                    `${start + 21}`,
-                    `${ans - 1000}`,
-                    `${ans + 10}`
-                  ],
-                  "10 個一數就是每次加 10，注意百位是 9 時，滿十進一會讓千位也跟著進位！",
-                  [
-                    `1. 每次增加 10：${start + 20} 再加 10。`,
-                    `2. 十位與百位滿十進一到千位，得到 <b>${ans}</b>。`
-                  ]
+                  [{ label: "兩數相差", answer: `${diff}`, unit: "", placeholder: "輸入計算結果" }],
+                  "先分別找出最大四位數與最小四位數（0 放百位），再用大數減小數。",
+                  [`1. 最大四位數 ＝ ${maxNum}；最小四位數 ＝ ${minNum}。`, `2. ${maxNum} － ${minNum} ＝ <b>${diff}</b>。`]
                 );
               }
             ]
@@ -417,77 +541,67 @@
             term: "midterm",
             termLabel: "期中範圍",
             points: [
-              "直式加減法一定要把「個位對齊個位、十位對齊十位、百位對齊百位、千位對齊千位」。",
-              "連續退位減法（如 5000 － 1234）：從千位借 1 當 10，一路往右借。",
+              "直式加減法一定要把「個位、十位、百位、千位」對齊。",
               "兩步驟加減應用題：先看題目是「合起來（加）」還是「找回／剩下（減）」。"
             ],
             tips: [
-              "【省時技巧】遇到 4000 － 1568 這類整千減法，可以把 4000 想成「3999 ＋ 1」，用 3999 去減不會借位出錯，最後再把 1 加回來！",
-              "估算「大約幾百元」時，先看十位數字決定最接近哪一個整百再加減。"
+              "整千減法（如 4000 － 1568）可想成「(3999 － 1568) ＋ 1」，不會借位出錯！"
             ],
-            generators: [
+            tf: [
+              () => makeTF(
+                "g3_u2", "U2 四位數的加減", "加減驗算觀念",
+                `計算「5000 － 1280 ＝ 3720」時，可以用「3720 ＋ 1280」是不是等於 5000 來驗算。`,
+                true,
+                "減法驗算方法：差 ＋ 減數 ＝ 被減數。",
+                ["1. 3720 ＋ 1280 ＝ 5000，驗算方法完全正確。"]
+              )
+            ],
+            choice: [
               () => {
-                const total = pick([3000, 4000, 5000]);
-                const item1 = randInt(1150, 1680);
-                const item2 = randInt(720, 1190);
-                const change = total - item1 - item2;
-                return buildQuestionObj(
-                  "g3_u2", "U2 四位數的加減", "兩步驟購物應用",
-                  `爸爸帶了 ${total} 元去買家電，買一台電風扇花了 ${item1} 元，買一個熱水瓶花了 ${item2} 元，爸爸還剩下多少元？`,
-                  `${change} 元`,
-                  [
-                    `${total - item1 + item2} 元`,
-                    `${change + 100} 元`,
-                    `${item1 + item2} 元`
-                  ],
-                  "先算出兩樣家電總共花了多少元，再用爸爸原本帶的錢扣掉總花費。",
-                  [
-                    `1. 兩樣家電共花費：${item1} ＋ ${item2} ＝ ${item1 + item2}（元）。`,
-                    `2. 剩下的錢：${total} － ${item1 + item2} ＝ <b>${change}（元）</b>。`
-                  ]
-                );
-              },
-              () => {
-                const a = randInt(1450, 2350);
-                const diff = randInt(480, 890);
-                const b = a + diff;
-                const sum = a + b;
-                return buildQuestionObj(
-                  "g3_u2", "U2 四位數的加減", "比多比少兩步驟",
-                  `果園昨天採收了 ${a} 顆橘子，今天比昨天「多採收」了 ${diff} 顆，這兩天一共採收了多少顆橘子？`,
-                  `${sum} 顆`,
-                  [
-                    `${b} 顆`,
-                    `${a + (a - diff)} 顆`,
-                    `${sum - 100} 顆`
-                  ],
-                  "題目問「兩天一共」，要先算出今天的數量，再把昨天和今天加起來。",
-                  [
-                    `1. 先算今天採收的數量：${a} ＋ ${diff} ＝ ${b}（顆）。`,
-                    `2. 再算兩天一共採收：${a} ＋ ${b} ＝ <b>${sum}（顆）</b>。`
-                  ]
-                );
-              },
-              () => {
-                const p1 = pick([398, 495, 589]);
-                const p2 = pick([205, 312, 408]);
-                const est1 = Math.round(p1 / 100) * 100;
-                const est2 = Math.round(p2 / 100) * 100;
-                const estSum = est1 + est2;
-                return buildQuestionObj(
+                const p1 = pick([398, 495, 589]), p2 = pick([205, 312, 408]);
+                const estSum = Math.round(p1 / 100) * 100 + Math.round(p2 / 100) * 100;
+                return makeChoice(
                   "g3_u2", "U2 四位數的加減", "生活估算",
                   `一件外套售價 ${p1} 元，一雙球鞋售價 ${p2} 元，買這兩樣東西「大約」要準備幾百元才夠？`,
-                  `${estSum} 元`,
-                  [
-                    `${estSum - 100} 元`,
-                    `${estSum + 200} 元`,
-                    `${est1 - est2} 元`
-                  ],
-                  "先判斷每個價錢最接近哪一個整百元，再把兩個整百元相加。",
-                  [
-                    `1. ${p1} 元最接近 ${est1} 元；${p2} 元最接近 ${est2} 元。`,
-                    `2. 合起來大約是：${est1} ＋ ${est2} ＝ <b>${estSum}（元）</b>。`
-                  ]
+                  `${estSum} 元`, [`${estSum - 100} 元`, `${estSum + 200} 元`, `${estSum - 200} 元`],
+                  "先判斷每個價錢最接近哪一個整百元，再相加。",
+                  [`1. ${Math.round(p1 / 100) * 100} ＋ ${Math.round(p2 / 100) * 100} ＝ <b>${estSum} 元</b>。`]
+                );
+              }
+            ],
+            compare: [
+              () => {
+                const a = randInt(2400, 3200), b = randInt(1100, 1500);
+                return makeCompare(
+                  "g3_u2", "U2 四位數的加減", "算式大小比較",
+                  `${a} － ${b}`, `${a} － ${b + 120}`, ">",
+                  "被減數相同時，減掉越少的數，剩下的結果會越大。",
+                  [`1. 左邊只減去 ${b}，右邊減去較多的 ${b + 120}，所以左邊 ＞ 右邊。`]
+                );
+              }
+            ],
+            fill: [
+              () => {
+                const total = pick([3000, 4000, 5000]), sub = randInt(1234, 2678);
+                return makeFill(
+                  "g3_u2", "U2 四位數的加減", "連續退位減法",
+                  `算算看：${total} － ${sub} ＝ （　　）。`,
+                  [{ label: "計算結果", answer: `${total - sub}`, unit: "", placeholder: "輸入答案" }],
+                  "注意連續退位借位計算。",
+                  [`1. ${total} － ${sub} ＝ <b>${total - sub}</b>。`]
+                );
+              }
+            ],
+            word: [
+              () => {
+                const total = pick([3000, 4000, 5000]), item1 = randInt(1150, 1680), item2 = randInt(720, 1190);
+                const change = total - item1 - item2;
+                return makeWord(
+                  "g3_u2", "U2 四位數的加減", "兩步驟購物應用",
+                  `爸爸帶了 ${total} 元去買家電，買一台電風扇花了 ${item1} 元，買一個熱水瓶花了 ${item2} 元，爸爸還剩下多少元？`,
+                  [{ label: "剩下金額", answer: `${change}`, unit: "元", placeholder: "輸入金額" }],
+                  "先算出兩樣家電總花費，再用原本帶的錢扣掉。",
+                  [`1. 共花費：${item1} ＋ ${item2} ＝ ${item1 + item2} 元。`, `2. 剩下：${total} － ${item1 + item2} ＝ <b>${change}（元）</b>。`]
                 );
               }
             ]
@@ -501,78 +615,72 @@
             termLabel: "期中範圍",
             points: [
               "1 公升（L）＝ 1000 毫升（mL）。",
-              "複名數換算：例如 2 公升 50 毫升 ＝ 2050 毫升（注意中間要補 0！）。",
-              "容量加減計算時，把「公升對齊公升、毫升對齊毫升」，滿 1000 毫升要進位成 1 公升。"
+              "複名數換算：2 公升 50 毫升 ＝ 2050 毫升（注意中間補 0）。"
             ],
             tips: [
-              "【常考陷阱】3 公升 8 毫升 ＝ 3008 毫升（百位和十位都要補 0，不能寫成 38 毫升或 380 毫升）。",
-              "比較大小時，先把單位全部統一換算成「毫升」再比較最不容易錯。"
+              "比較容量大小時，先全部統一換算成「毫升」再比最不易出錯。"
             ],
-            generators: [
+            tf: [
+              () => makeTF(
+                "g3_u3", "U3 公升和毫升", "補零陷阱判斷",
+                `「4 公升 5 毫升」合起來是「405 毫升」。`,
+                false,
+                "1 公升 ＝ 1000 毫升，4 公升 5 毫升應該是 4005 毫升（百位和十位都要補 0）。",
+                ["1. 4 公升 ＝ 4000 毫升，加上 5 毫升 ＝ 4005 毫升，故敘述錯誤。"]
+              )
+            ],
+            choice: [
+              () => {
+                const l = randInt(2, 6), ml = pick([5, 8, 30, 45]), ans = l * 1000 + ml;
+                return makeChoice(
+                  "g3_u3", "U3 公升和毫升", "單位換算",
+                  `水壺裡裝了 ${l} 公升 ${ml} 毫升的開水，也可以說是裝了多少毫升？`,
+                  `${ans} 毫升`, [`${l * 100 + ml} 毫升`, `${Number(`${l}${ml}`)} 毫升`, `${ans * 10} 毫升`],
+                  "1 公升 ＝ 1000 毫升。",
+                  [`1. ${l * 1000} ＋ ${ml} ＝ <b>${ans} 毫升</b>。`]
+                );
+              }
+            ],
+            compare: [
+              () => {
+                const l = randInt(2, 5), ml = pick([40, 60, 80]);
+                return makeCompare(
+                  "g3_u3", "U3 公升和毫升", "容量大小比較",
+                  `${l} 公升 ${ml} 毫升`, `${l * 1000 + ml * 10} 毫升`, "<",
+                  "先全部換算成毫升再比較。",
+                  [`1. ${l} 公升 ${ml} 毫升 ＝ ${l * 1000 + ml} 毫升，小於 ${l * 1000 + ml * 10} 毫升。`]
+                );
+              }
+            ],
+            fill: [
+              () => {
+                const totalMl = pick([2450, 3080, 4600, 5009]);
+                return makeFill(
+                  "g3_u3", "U3 公升和毫升", "單名數轉複名數",
+                  `一瓶家庭號飲料有 ${totalMl} 毫升，也可以說是（　　）公升（　　）毫升。`,
+                  [
+                    { label: "公升", answer: `${Math.floor(totalMl / 1000)}`, unit: "公升", placeholder: "公升" },
+                    { label: "毫升", answer: `${totalMl % 1000}`, unit: "毫升", placeholder: "毫升" }
+                  ],
+                  "千位數即為公升數。",
+                  [`1. ${totalMl} 毫升 ＝ <b>${Math.floor(totalMl / 1000)} 公升 ${totalMl % 1000} 毫升</b>。`]
+                );
+              }
+            ],
+            word: [
               () => {
                 const l1 = randInt(1, 2), ml1 = pick([350, 450, 650, 750]);
                 const l2 = randInt(1, 2), ml2 = pick([550, 650, 750, 850]);
                 const totalMl = (l1 + l2) * 1000 + ml1 + ml2;
-                const ansL = Math.floor(totalMl / 1000);
-                const ansMl = totalMl % 1000;
-                return buildQuestionObj(
+                return makeWord(
                   "g3_u3", "U3 公升和毫升", "複名數進位加法",
                   `媽媽做紅茶，第一鍋煮了 ${l1} 公升 ${ml1} 毫升，第二鍋煮了 ${l2} 公升 ${ml2} 毫升，兩鍋合起來共有多少公升多少毫升？`,
-                  `${ansL} 公升 ${ansMl} 毫升`,
                   [
-                    `${l1 + l2} 公升 ${ml1 + ml2} 毫升`,
-                    `${ansL - 1} 公升 ${ansMl} 毫升`,
-                    `${ansL} 公升 ${ansMl + 100} 毫升`
+                    { label: "公升", answer: `${Math.floor(totalMl / 1000)}`, unit: "公升", placeholder: "公升" },
+                    { label: "毫升", answer: `${totalMl % 1000}`, unit: "毫升", placeholder: "毫升" }
                   ],
-                  "毫升相加滿 1000 毫升時，要進位成 1 公升。",
-                  [
-                    `1. 毫升相加：${ml1} ＋ ${ml2} ＝ ${ml1 + ml2} 毫升 ＝ 1 公升 ${ansMl} 毫升。`,
-                    `2. 公升相加並加上進位：${l1} ＋ ${l2} ＋ 1 ＝ ${ansL} 公升。`,
-                    `3. 合起來是 <b>${ansL} 公升 ${ansMl} 毫升</b>。`
-                  ]
-                );
-              },
-              () => {
-                const bigL = randInt(3, 5);
-                const drinkMl = pick([650, 850, 1250, 1450]);
-                const remTotal = bigL * 1000 - drinkMl;
-                const remL = Math.floor(remTotal / 1000);
-                const remMl = remTotal % 1000;
-                return buildQuestionObj(
-                  "g3_u3", "U3 公升和毫升", "退位減法應用",
-                  `一桶家庭號鮮奶有 ${bigL} 公升，全家早餐喝掉了 ${drinkMl} 毫升後，還剩下多少公升多少毫升？`,
-                  `${remL} 公升 ${remMl} 毫升`,
-                  [
-                    `${remL + 1} 公升 ${remMl} 毫升`,
-                    `${bigL - 1} 公升 ${1000 - (drinkMl % 1000) - 100} 毫升`,
-                    `${remTotal} 公升`
-                  ],
-                  "先把所有容量都換算成「毫升」相減，最後再把千位數換回公升。",
-                  [
-                    `1. ${bigL} 公升 ＝ ${bigL * 1000} 毫升。`,
-                    `2. 相減：${bigL * 1000} － ${drinkMl} ＝ ${remTotal} 毫升。`,
-                    `3. 換回複名數：<b>${remL} 公升 ${remMl} 毫升</b>。`
-                  ]
-                );
-              },
-              () => {
-                const l = randInt(2, 6);
-                const ml = pick([5, 8, 30, 45]);
-                const ans = l * 1000 + ml;
-                return buildQuestionObj(
-                  "g3_u3", "U3 公升和毫升", "單位換算陷阱",
-                  `水壺裡裝了 ${l} 公升 ${ml} 毫升的開水，也可以說是裝了多少毫升？`,
-                  `${ans} 毫升`,
-                  [
-                    `${l * 100 + ml} 毫升`,
-                    `${Number(`${l}${ml}`)} 毫升`,
-                    `${ans * 10} 毫升`
-                  ],
-                  "1 公升 ＝ 1000 毫升，當毫升數不到三位數時，中間的位數要補 0！",
-                  [
-                    `1. ${l} 公升 ＝ ${l * 1000} 毫升。`,
-                    `2. ${l * 1000} ＋ ${ml} ＝ <b>${ans}（毫升）</b>。`
-                  ]
+                  "毫升相加滿 1000 毫升要進位成 1 公升。",
+                  [`1. 總毫升數 ＝ ${totalMl} 毫升 ＝ <b>${Math.floor(totalMl / 1000)} 公升 ${totalMl % 1000} 毫升</b>。`]
                 );
               }
             ]
@@ -585,79 +693,66 @@
             term: "midterm",
             termLabel: "期中範圍",
             points: [
-              "直式乘法順序：由右到左，先乘「個位」，再乘「十位」，最後乘「百位」。",
-              "進位數字要寫小字記在上一位，乘完下一位後「先乘再加進位」（千萬不能先加進位再乘！）。",
-              "連乘兩步驟問題：看清楚「一盒有幾個、買了幾盒、一顆多少元」。"
+              "直式乘法順序：先乘個位，再乘十位，最後乘百位。",
+              "進位數字要「先乘再加進位」。"
             ],
             tips: [
-              "遇到 205 × 4 這類十位是 0 的乘法，個位進位上來的數字直接寫在十位，0 乘任何數都得 0。",
-              "兩步驟乘法題，先算「總共有幾個」，再乘以「單價」最不容易搞混。"
+              "兩步驟乘法題，先算「總共有幾個」，再乘以「單價」。"
             ],
-            generators: [
+            tf: [
+              () => makeTF(
+                "g3_u4", "U4 乘法", "0的乘法性質",
+                `「305 × 6」的計算結果中，十位數字是 0。`,
+                false,
+                "個位 5 × 6 ＝ 30 會進位 3 到十位，十位 0 × 6 ＋ 3 ＝ 3，不是 0！",
+                ["1. 305 × 6 ＝ 1830，十位數字是 3，故敘述錯誤。"]
+              )
+            ],
+            choice: [
               () => {
-                const perBox = pick([6, 8, 12]);
-                const boxes = randInt(4, 7);
-                const price = pick([15, 20, 25]);
-                const totalItems = perBox * boxes;
-                const totalCost = totalItems * price;
-                return buildQuestionObj(
-                  "g3_u4", "U4 乘法", "兩步驟購物應用",
-                  `一盒鳳梨酥有 ${perBox} 個，每個賣 ${price} 元。媽媽買了 ${boxes} 盒，總共要付多少元？`,
-                  `${totalCost} 元`,
-                  [
-                    `${perBox * price + boxes} 元`,
-                    `${totalCost - price * 2} 元`,
-                    `${boxes * price} 元`
-                  ],
-                  "先算買了幾盒總共有幾個鳳梨酥，再乘以每個的價錢。",
-                  [
-                    `1. 先算總共有幾個：${perBox} × ${boxes} ＝ ${totalItems}（個）。`,
-                    `2. 再算總共要付多少元：${totalItems} × ${price} ＝ <b>${totalCost}（元）</b>。`
-                  ]
-                );
-              },
-              () => {
-                const h = randInt(2, 5);
-                const u = randInt(3, 8);
-                const num = h * 100 + u;
-                const mult = randInt(4, 8);
-                const ans = num * mult;
-                return buildQuestionObj(
+                const h = randInt(2, 5), u = randInt(3, 8), num = h * 100 + u, mult = randInt(4, 8);
+                return makeChoice(
                   "g3_u4", "U4 乘法", "中間有0的乘法",
                   `一張高鐵車票 ${num} 元，全家 ${mult} 個人一起搭高鐵，買車票總共需要多少元？`,
-                  `${ans} 元`,
-                  [
-                    `${(h * 10 + u) * mult} 元`,
-                    `${ans + 100} 元`,
-                    `${ans - 10} 元`
-                  ],
-                  "三位數中間是 0 的乘法，0 乘任何數都得 0，記得加上個位進位上來的數字。",
-                  [
-                    `1. 個位：${u} × ${mult} ＝ ${u * mult}（進位 ${Math.floor((u * mult) / 10)}）。`,
-                    `2. 十位：0 × ${mult} ＋ 進位 ＝ ${Math.floor((u * mult) / 10)}；百位：${h} × ${mult} ＝ ${h * mult}。`,
-                    `3. 總共需要 <b>${ans}（元）</b>。`
-                  ]
+                  `${num * mult} 元`, [`${(h * 10 + u) * mult} 元`, `${num * mult + 100} 元`, `${num * mult - 10} 元`],
+                  "0 乘任何數都得 0，記得加上個位進位。",
+                  [`1. ${num} × ${mult} ＝ <b>${num * mult}（元）</b>。`]
                 );
-              },
+              }
+            ],
+            compare: [
               () => {
-                const base = randInt(35, 68);
-                const mult = randInt(4, 7);
-                const extra = randInt(15, 45);
-                const ans = base * mult + extra;
-                return buildQuestionObj(
-                  "g3_u4", "U4 乘法", "倍數加減應用",
-                  `弟弟存了 ${base} 元，哥哥存的錢是弟弟的 ${mult} 倍又多 ${extra} 元，哥哥存了多少元？`,
-                  `${ans} 元`,
-                  [
-                    `${base * mult - extra} 元`,
-                    `${(base + extra) * mult} 元`,
-                    `${base * (mult + 1)} 元`
-                  ],
-                  "「幾倍又多多少」要先用乘法算出幾倍是多少，再加上多出來的數量。",
-                  [
-                    `1. 先算弟弟的 ${mult} 倍：${base} × ${mult} ＝ ${base * mult}（元）。`,
-                    `2. 再加上多出來的 ${extra} 元：${base * mult} ＋ ${extra} ＝ <b>${ans}（元）</b>。`
-                  ]
+                const a = randInt(140, 190);
+                return makeCompare(
+                  "g3_u4", "U4 乘法", "乘法積的大小比較",
+                  `${a} × 6`, `${a * 2} × 3`, "=",
+                  "把 6 拆成 2 × 3，兩邊乘積完全相等！",
+                  [`1. ${a} × 6 ＝ ${a * 6}；${a * 2} × 3 ＝ ${a * 6}，兩邊相等。`]
+                );
+              }
+            ],
+            fill: [
+              () => {
+                const a = randInt(125, 348), b = randInt(3, 7);
+                return makeFill(
+                  "g3_u4", "U4 乘法", "三位數乘一位數",
+                  `算算看：${a} × ${b} ＝ （　　）。`,
+                  [{ label: "乘積", answer: `${a * b}`, unit: "", placeholder: "輸入答案" }],
+                  "由右到左依序相乘並加上進位。",
+                  [`1. ${a} × ${b} ＝ <b>${a * b}</b>。`]
+                );
+              }
+            ],
+            word: [
+              () => {
+                const perBox = pick([6, 8, 12]), boxes = randInt(4, 7), price = pick([15, 20, 25]);
+                const totalCost = perBox * boxes * price;
+                return makeWord(
+                  "g3_u4", "U4 乘法", "連乘兩步驟購物",
+                  `一盒鳳梨酥有 ${perBox} 個，每個賣 ${price} 元。媽媽買了 ${boxes} 盒，總共要付多少元？`,
+                  [{ label: "總金額", answer: `${totalCost}`, unit: "元", placeholder: "輸入金額" }],
+                  "先算總共有幾個，再乘以單價。",
+                  [`1. ${perBox} × ${boxes} × ${price} ＝ <b>${totalCost}（元）</b>。`]
                 );
               }
             ]
@@ -670,72 +765,61 @@
             term: "midterm",
             termLabel: "期中範圍",
             points: [
-              "角是由「1 個頂點」和「2 條直直的邊」所組成的。",
               "角的大小與「兩邊張開的程度」有關，和「邊的長短」完全無關！",
-              "三角板上有 1 個「直角」和 2 個比直角小的「銳角」；比直角大的角叫「鈍角」。"
+              "比直角小叫「銳角」；比直角大叫「鈍角」。"
             ],
             tips: [
-              "【最常考觀念題】把角的兩條邊畫長 10 倍，角的大小「不會變」（因為張開程度沒變）。",
               "正方形和長方形的四個角都是「直角」。"
             ],
-            generators: [
-              () => {
-                return buildQuestionObj(
-                  "g3_u5", "U5 角", "核心觀念判斷",
-                  `老師在黑板上畫了一個角，小華把這個角的兩條邊都擦掉一半變短，請問這個角會變得怎麼樣？`,
-                  `一樣大（角的大小不變）`,
-                  [
-                    `變小了（變成原本的一半）`,
-                    `變大了`,
-                    `變成直角`
-                  ],
-                  "角的大小只看兩條邊「張開的程度」，跟邊畫得長或短完全沒有關係。",
-                  [
-                    `1. 把邊擦短只是改變邊的長度，兩條邊張開的開口大小並沒有改變。`,
-                    `2. 因此這個角的大小<b>一樣大（不變）</b>。`
-                  ]
-                );
-              },
-              () => {
-                const [shapes, totalRight] = pick([
-                  ["2 個正方形和 1 個長方形", 12],
-                  ["1 個正方形和 2 個長方形", 12],
-                  ["3 個正方形", 12],
-                  ["2 個長方形和 1 個直角三角形", 9]
-                ]);
-                return buildQuestionObj(
-                  "g3_u5", "U5 角", "圖形直角數量",
-                  `桌上有 ${shapes}，請問這些圖形合起來總共有幾個「直角」？`,
-                  `${totalRight} 個直角`,
-                  [
-                    `${totalRight - 4} 個直角`,
-                    `${totalRight + 2} 個直角`,
-                    `4 個直角`
-                  ],
-                  "每個正方形和長方形都有 4 個直角，每個直角三角形有 1 個直角。",
-                  [
-                    `1. 正方形與長方形各有 4 個直角，直角三角形有 1 個直角。`,
-                    `2. 全部加起來共有 <b>${totalRight} 個直角</b>。`
-                  ]
-                );
-              },
+            tf: [
+              () => makeTF(
+                "g3_u5", "U5 角", "邊長與角大小觀念",
+                `用放大鏡看一個直角時，這個直角會變成「鈍角」。`,
+                false,
+                "放大鏡只會讓邊變長，不會改變兩邊張開的角度，直角依然是直角！",
+                ["1. 角的大小與邊長無關，放大鏡下的直角仍然是直角，故敘述錯誤。"]
+              )
+            ],
+            choice: [
               () => {
                 const [desc, ans] = pick([
                   ["時鐘在 3 點整時，時針和分針形成的較小角是什麼角？", "直角"],
                   ["時鐘在 2 點整時，時針和分針形成的較小角是什麼角？", "銳角"],
-                  ["時鐘在 4 點整時，時針和分針形成的較小角是什麼角？", "鈍角"],
-                  ["時鐘在 9 點整時，時針和分針形成的較小角是什麼角？", "直角"]
+                  ["時鐘在 4 點整時，時針和分針形成的較小角是什麼角？", "鈍角"]
                 ]);
-                return buildQuestionObj(
-                  "g3_u5", "U5 角", "生活時鐘判別",
-                  desc,
-                  ans,
-                  ["直角", "銳角", "鈍角", "平角"].filter(x => x !== ans),
-                  "時鐘 3 點整和 9 點整時，兩針剛好垂直形成「直角」；張開比 3 點小的是「銳角」，比 3 點大的是「鈍角」。",
-                  [
-                    `1. 拿三角板的直角去比對時鐘上的夾角。`,
-                    `2. 可判斷出該夾角為 <b>${ans}</b>。`
-                  ]
+                return makeChoice("g3_u5", "U5 角", "時鐘夾角", desc, ans, ["直角", "銳角", "鈍角", "平角"].filter(x => x !== ans),
+                  "3 點與 9 點是直角，比 3 點小是銳角，比 3 點大是鈍角。", [`1. 該夾角為 <b>${ans}</b>。`]);
+              }
+            ],
+            compare: [
+              () => makeCompare(
+                "g3_u5", "U5 角", "三種角的大小比較",
+                `1 個鈍角`, `1 個直角`, ">",
+                "角度大小順序：鈍角 ＞ 直角 ＞ 銳角。",
+                ["1. 鈍角比直角大，故填入 ＞。"]
+              )
+            ],
+            fill: [
+              () => {
+                const sq = randInt(2, 4), rect = randInt(1, 3), total = (sq + rect) * 4;
+                return makeFill(
+                  "g3_u5", "U5 角", "直角點數",
+                  `桌上有 ${sq} 個正方形和 ${rect} 個長方形，這些圖形合起來總共有（　　）個直角。`,
+                  [{ label: "直角個數", answer: `${total}`, unit: "個", placeholder: "輸入個數" }],
+                  "每個正方形和長方形都有 4 個直角。",
+                  [`1. (${sq} ＋ ${rect}) × 4 ＝ <b>${total} 個直角</b>。`]
+                );
+              }
+            ],
+            word: [
+              () => {
+                const sq = randInt(2, 3), tri = randInt(2, 4), total = sq * 4 + tri;
+                return makeWord(
+                  "g3_u5", "U5 角", "複合圖形直角計算",
+                  `美術課時，小美剪了 ${sq} 個正方形和 ${tri} 個直角三角形，請問這些紙片合起來總共有幾個直角？`,
+                  [{ label: "直角總數", answer: `${total}`, unit: "個", placeholder: "輸入個數" }],
+                  "正方形有 4 個直角，直角三角形有 1 個直角。",
+                  [`1. ${sq} × 4 ＋ ${tri} × 1 ＝ <b>${total} 個</b>。`]
                 );
               }
             ]
@@ -748,54 +832,65 @@
             term: "final",
             termLabel: "期末範圍",
             points: [
-              "邊長 1 公分的正方形，面積是「1 平方公分（1 cm²）」。",
-              "長方形面積 ＝ 長 × 寬；正方形面積 ＝ 邊長 × 邊長。",
-              "兩個三角形拼成 1 個完整的方格時，這 2 個三角形合起來算「1 平方公分」。"
+              "邊長 1 公分的正方形，面積是「1 平方公分」。",
+              "兩個半格三角形合起來算「1 平方公分」。"
             ],
             tips: [
-              "在方格紙上數不規則圖形面積時，先數「完整的正方形有幾格」，再把「兩個半格」配對合成 1 格！",
-              "注意單位：「周長」用公分，「面積」要用「平方公分」。"
+              "先數「完整的正方形有幾格」，再把「兩個半格」配對合成 1 格！"
             ],
-            generators: [
+            tf: [
+              () => makeTF(
+                "g3_u6", "U6 面積", "周長與面積觀念",
+                `用 12 個 1 平方公分的正方形，不管拼成長方形或階梯形，只要沒有重疊，拼出來的圖形面積都是 12 平方公分。`,
+                true,
+                "圖形面積是所有小方格面積的總和，只要不重疊，無論怎麼拼面積都一樣。",
+                ["1. 12 個 1 平方公分拼成的圖形面積都是 12 平方公分，敘述正確。"]
+              )
+            ],
+            choice: [
               () => {
-                const full = randInt(6, 12);
-                const halfPairs = randInt(2, 4);
-                const halves = halfPairs * 2;
-                const area = full + halfPairs;
-                return buildQuestionObj(
+                const full = randInt(6, 12), pairs = randInt(2, 4), area = full + pairs;
+                return makeChoice(
                   "g3_u6", "U6 面積", "方格紙點數",
-                  `在每格 1 平方公分的方格紙上，一個圖形佔了 ${full} 個完整的方格和 ${halves} 個半格，這個圖形的面積是多少平方公分？`,
-                  `${area} 平方公分`,
-                  [
-                    `${full + halves} 平方公分`,
-                    `${full + halfPairs * 4} 平方公分`,
-                    `${full} 平方公分`
-                  ],
-                  "每 2 個半格可以拼成 1 個完整的 1 平方公分方格。",
-                  [
-                    `1. ${halves} 個半格可以合成：${halves} ÷ 2 ＝ ${halfPairs}（平方公分）。`,
-                    `2. 加上原本完整的 ${full} 格：${full} ＋ ${halfPairs} ＝ <b>${area}（平方公分）</b>。`
-                  ]
+                  `方格紙上，一個圖形佔了 ${full} 個完整方格和 ${pairs * 2} 個半格，面積是多少平方公分？`,
+                  `${area} 平方公分`, [`${full + pairs * 2} 平方公分`, `${full} 平方公分`, `${area + 2} 平方公分`],
+                  "每 2 個半格拼成 1 平方公分。",
+                  [`1. ${full} ＋ (${pairs * 2} ÷ 2) ＝ <b>${area} 平方公分</b>。`]
                 );
-              },
+              }
+            ],
+            compare: [
               () => {
-                const w = randInt(6, 10);
-                const h = randInt(3, 5);
-                const area = w * h;
-                return buildQuestionObj(
-                  "g3_u6", "U6 面積", "長方形面積",
-                  `用邊長 1 公分的白色小正方形排成一個長方形，橫排每排排 ${w} 個，總共排了 ${h} 排，這個長方形的面積是多少平方公分？`,
-                  `${area} 平方公分`,
-                  [
-                    `${(w + h) * 2} 平方公分`,
-                    `${w + h} 平方公分`,
-                    `${area * 2} 平方公分`
-                  ],
-                  "每排有幾個 × 排了幾排 ＝ 總共用了幾個 1 平方公分的正方形。",
-                  [
-                    `1. 總個數 ＝ ${w} × ${h} ＝ ${area}（個）。`,
-                    `2. 每個面積是 1 平方公分，所以面積為 <b>${area} 平方公分</b>。`
-                  ]
+                const a = randInt(12, 18);
+                return makeCompare(
+                  "g3_u6", "U6 面積", "圖形面積比較",
+                  `${a} 個完整方格`, `${a - 2} 個完整方格 ＋ 6 個半格`, "<",
+                  "6 個半格等於 3 個完整方格。",
+                  [`1. 右邊 ＝ ${a - 2} ＋ 3 ＝ ${a + 1} 格，大於左邊的 ${a} 格，故填 ＜。`]
+                );
+              }
+            ],
+            fill: [
+              () => {
+                const w = randInt(6, 10), h = randInt(3, 5);
+                return makeFill(
+                  "g3_u6", "U6 面積", "排方格算面積",
+                  `用 1 平方公分的方瓦排長方形，橫排每排排 ${w} 個，排了 ${h} 排，面積是（　　）平方公分。`,
+                  [{ label: "面積", answer: `${w * h}`, unit: "平方公分", placeholder: "輸入數字" }],
+                  "每排個數 × 排數 ＝ 總面積。",
+                  [`1. ${w} × ${h} ＝ <b>${w * h} 平方公分</b>。`]
+                );
+              }
+            ],
+            word: [
+              () => {
+                const full = randInt(8, 15), half = pick([4, 6, 8]), total = full + half / 2;
+                return makeWord(
+                  "g3_u6", "U6 面積", "不規則圖形面積計算",
+                  `在 1 平方公分的方格紙上畫了一艘帆船，船身有 ${full} 個完整方格，船帆有 ${half} 個半格三角形，這艘帆船的總面積是多少平方公分？`,
+                  [{ label: "總面積", answer: `${total}`, unit: "平方公分", placeholder: "輸入面積" }],
+                  "2 個半格合起來是 1 平方公分。",
+                  [`1. ${full} ＋ (${half} ÷ 2) ＝ <b>${total}（平方公分）</b>。`]
                 );
               }
             ]
@@ -808,75 +903,72 @@
             term: "final",
             termLabel: "期末範圍",
             points: [
-              "被除數 ÷ 除數 ＝ 商 ... 餘數。",
-              "【鐵律】「餘數」一定要比「除數」小！（例如除以 6，餘數最大只能是 5）。",
-              "驗算公式：除數 × 商 ＋ 餘數 ＝ 被除數。"
+              "「餘數」一定要比「除數」小！",
+              "驗算：除數 × 商 ＋ 餘數 ＝ 被除數。"
             ],
             tips: [
-              "【租車／裝箱全部裝完】只要有餘數，商要「加 1」（多派一輛車才載得完）。",
-              "【買東西／綁蝴蝶結最多做幾個】剩下的不夠做一個，餘數要「捨去」。"
+              "【租車／裝箱全部裝完】有餘數時，商要「加 1」。",
+              "【買東西／做禮盒最多幾個】剩下的不夠做一個，餘數要「捨去」。"
             ],
-            generators: [
+            tf: [
+              () => makeTF(
+                "g3_u7", "U7 除法", "餘數小於除數鐵律",
+                `計算「□ ÷ 6 ＝ 7 ... △」時，餘數 △ 最大可以是 6。`,
+                false,
+                "餘數一定要比除數小！除數是 6 時，餘數最大只能是 5（如果是 6 就可以再分一次）。",
+                ["1. 餘數必須小於除數 6，最大只能是 5，故敘述錯誤。"]
+              )
+            ],
+            choice: [
               () => {
-                const cap = pick([4, 6, 7, 8]);
-                const cars = randInt(5, 8);
-                const rem = randInt(1, cap - 1);
-                const people = cap * cars + rem;
-                const ansCars = cars + 1;
-                return buildQuestionObj(
-                  "g3_u7", "U7 除法", "餘數處理陷阱（要加1）",
-                  `三年級戶外教學有 ${people} 位小朋友，每輛計程車最多只能坐 ${cap} 個人，全部的小朋友都要上車，最少需要叫幾輛計程車？`,
-                  `${ansCars} 輛`,
-                  [
-                    `${cars} 輛`,
-                    `${ansCars + 1} 輛`,
-                    `${rem} 輛`
-                  ],
-                  `剩下的 ${rem} 個人也需要坐車，所以算出的商必須再「加 1 輛車」才能把全部人載完！`,
-                  [
-                    `1. 計算除法：${people} ÷ ${cap} ＝ ${cars}（輛）... 剩下 ${rem}（人）。`,
-                    `2. 剩下的 ${rem} 人還要再搭 1 輛車：${cars} ＋ 1 ＝ <b>${ansCars}（輛）</b>。`
-                  ]
-                );
-              },
-              () => {
-                const price = pick([6, 7, 8, 9]);
-                const count = randInt(6, 9);
-                const rem = randInt(1, price - 1);
-                const money = price * count + rem;
-                return buildQuestionObj(
-                  "g3_u7", "U7 除法", "餘數處理陷阱（捨去）",
-                  `一枝彩虹筆賣 ${price} 元，小美有 ${money} 元，她最多可以買幾枝彩虹筆？還剩下多少元？`,
-                  `買 ${count} 枝；剩下 ${rem} 元`,
-                  [
-                    `買 ${count + 1} 枝；剩下 ${rem} 元`,
-                    `買 ${count} 枝；剩下 ${price - rem} 元`,
-                    `買 ${count - 1} 枝；剩下 ${rem + price} 元`
-                  ],
-                  `剩下的 ${rem} 元不夠再買一枝 ${price} 元的筆，所以商就是最多能買的數量，餘數就是剩下的錢。`,
-                  [
-                    `1. 計算除法：${money} ÷ ${price} ＝ <b>${count}（枝）</b>... 剩下 <b>${rem}（元）</b>。`,
-                    `2. 剩下的 ${rem} 元不夠買 1 枝，因此最多買 <b>${count} 枝</b>。`
-                  ]
-                );
-              },
-              () => {
-                const num = randInt(41, 98);
-                const isEven = num % 2 === 0;
-                return buildQuestionObj(
+                const num = randInt(41, 98), isEven = num % 2 === 0;
+                return makeChoice(
                   "g3_u7", "U7 除法", "奇數與偶數",
-                  `下列關於數字「${num}」的敘述，哪一個是正確的？`,
+                  `關於數字「${num}」的敘述，哪一個是正確的？`,
                   isEven ? `它是偶數，除以 2 會剛好整除` : `它是奇數，除以 2 會餘 1`,
+                  [isEven ? `它是奇數，除以 2 會餘 1` : `它是偶數，除以 2 會剛好整除`, `它是奇數，除以 2 會餘 2`, `無法判斷`],
+                  "個位是 0、2、4、6、8 為偶數；1、3、5、7、9 為奇數。",
+                  [`1. ${num} ${isEven ? "可被 2 整除為偶數" : "除以 2 餘 1 為奇數"}。`]
+                );
+              }
+            ],
+            compare: [
+              () => {
+                const a = pick([36, 48, 60]);
+                return makeCompare(
+                  "g3_u7", "U7 除法", "除法商的大小比較",
+                  `${a} ÷ 4`, `${a} ÷ 6`, ">",
+                  "被除數相同時，平分給越少人，每個人分到的會越多！",
+                  [`1. ${a} ÷ 4 ＝ ${a / 4}，${a} ÷ 6 ＝ ${a / 6}，故左邊 ＞ 右邊。`]
+                );
+              }
+            ],
+            fill: [
+              () => {
+                const div = pick([6, 7, 8, 9]), q = randInt(6, 9), rem = randInt(1, div - 1);
+                const dividend = div * q + rem;
+                return makeFill(
+                  "g3_u7", "U7 除法", "有餘數除法",
+                  `算算看：${dividend} ÷ ${div} ＝ （　　）...（　　）`,
                   [
-                    isEven ? `它是奇數，除以 2 會餘 1` : `它是偶數，除以 2 會剛好整除`,
-                    `它是奇數，除以 2 會餘 2`,
-                    `個位數字是 ${num % 10}，所以無法判斷`
+                    { label: "商", answer: `${q}`, unit: "", placeholder: "商" },
+                    { label: "餘數", answer: `${rem}`, unit: "", placeholder: "餘數" }
                   ],
-                  "個位數字是 0、2、4、6、8 的數可以被 2 整除，叫做「偶數」；個位數字是 1、3、5、7、9 的數叫做「奇數」。",
-                  [
-                    `1. 觀察 ${num} 的個位數字是 ${num % 10}。`,
-                    `2. ${isEven ? "可被 2 整除，是偶數。" : "除以 2 會剩下 1，是奇數。"}`
-                  ]
+                  "餘數必須比除數小。",
+                  [`1. ${dividend} ÷ ${div} ＝ <b>${q} ... ${rem}</b>。`]
+                );
+              }
+            ],
+            word: [
+              () => {
+                const cap = pick([4, 6, 7, 8]), cars = randInt(5, 8), rem = randInt(1, cap - 1);
+                const people = cap * cars + rem;
+                return makeWord(
+                  "g3_u7", "U7 除法", "租車餘數加1陷阱",
+                  `三年級戶外教學有 ${people} 位小朋友，每輛計程車最多坐 ${cap} 個人，全部的小朋友都要上車，最少需要叫幾輛計程車？`,
+                  [{ label: "最少需要", answer: `${cars + 1}`, unit: "輛", placeholder: "輸入輛數" }],
+                  `剩下的 ${rem} 個人也要坐車，所以商必須加 1！`,
+                  [`1. ${people} ÷ ${cap} ＝ ${cars}（輛）... 剩下 ${rem}（人）。`, `2. ${cars} ＋ 1 ＝ <b>${cars + 1}（輛）</b>。`]
                 );
               }
             ]
@@ -890,56 +982,68 @@
             termLabel: "期末範圍",
             points: [
               "1 公斤（kg）＝ 1000 公克（g）。",
-              "讀秤面時，先看指針指到「幾公斤」，再數超過幾小格（常見 1 大格 100 公克，1 小格 10 公克或 50 公克）。",
-              "淨重（內容物重）＝ 總重（含容器） － 容器重。"
+              "淨重 ＝ 總重（含容器） － 容器重。"
             ],
             tips: [
-              "【生活應用必考】「連盒子一起秤重 1 公斤 200 公克，盒子重 150 公克，裡面餅乾重多少？」→ 一定要把盒子重量扣掉！",
-              "同樣體積的棉花和鐵塊比重量：1 公斤的棉花和 1 公斤的鐵「一樣重」！"
+              "算禮盒裡食物的重量時，一定要把空盒子的重量扣掉！"
             ],
-            generators: [
+            tf: [
+              () => makeTF(
+                "g3_u8", "U8 公斤和公克", "重量概念判斷",
+                `「1 公斤的鐵塊」和「1000 公克的棉花」放在天平兩端，它們一樣重。`,
+                true,
+                "1 公斤 ＝ 1000 公克，兩者重量完全相等，跟材質體積無關。",
+                ["1. 1 公斤 ＝ 1000 公克，兩者一樣重，敘述正確。"]
+              )
+            ],
+            choice: [
               () => {
-                const totalKg = 1;
-                const totalG = pick([250, 350, 420, 500]);
-                const boxG = pick([120, 150, 180, 200]);
-                const netG = totalKg * 1000 + totalG - boxG;
-                const ansKg = Math.floor(netG / 1000);
-                const ansG = netG % 1000;
-                return buildQuestionObj(
-                  "g3_u8", "U8 公斤和公克", "淨重與容器重應用",
-                  `一盒禮盒連同外包裝盒子一起秤重，共重 ${totalKg} 公斤 ${totalG} 公克。已知空盒子重 ${boxG} 公克，裡面的餅乾淨重是多少？`,
-                  ansKg > 0 ? `${ansKg} 公斤 ${ansG} 公克` : `${ansG} 公克`,
-                  [
-                    `${totalKg} 公斤 ${totalG + boxG} 公克`,
-                    `${netG + 100} 公克`,
-                    `1 公斤 ${boxG} 公克`
-                  ],
-                  "食物的淨重 ＝ 總重量 － 空盒子的重量。",
-                  [
-                    `1. 先換算成公克：${totalKg} 公斤 ${totalG} 公克 ＝ ${totalKg * 1000 + totalG} 公克。`,
-                    `2. 減去空盒子重：${totalKg * 1000 + totalG} － ${boxG} ＝ ${netG} 公克。`,
-                    `3. 整理為 <b>${ansKg > 0 ? `${ansKg} 公斤 ${ansG} 公克` : `${ansG} 公克`}</b>。`
-                  ]
-                );
-              },
-              () => {
-                const kg = randInt(2, 5);
-                const g = pick([40, 80, 250, 600]);
-                const totalG = kg * 1000 + g;
-                return buildQuestionObj(
-                  "g3_u8", "U8 公斤和公克", "重量單位換算",
+                const kg = randInt(2, 5), g = pick([40, 80, 250, 600]);
+                return makeChoice(
+                  "g3_u8", "U8 公斤和公克", "單位換算",
                   `小狗體重是 ${kg} 公斤 ${g} 公克，換算成公克是多少公克？`,
-                  `${totalG} 公克`,
+                  `${kg * 1000 + g} 公克`, [`${kg * 100 + g} 公克`, `${Number(`${kg}${g}`)} 公克`, `${kg * 1000 + g + 1000} 公克`],
+                  "1 公斤 ＝ 1000 公克。",
+                  [`1. ${kg} × 1000 ＋ ${g} ＝ <b>${kg * 1000 + g} 公克</b>。`]
+                );
+              }
+            ],
+            compare: [
+              () => {
+                const kg = randInt(2, 4), g = pick([50, 70]);
+                return makeCompare(
+                  "g3_u8", "U8 公斤和公克", "重量大小比較",
+                  `${kg} 公斤 ${g} 公克`, `${kg * 1000 + g * 10} 公克`, "<",
+                  "先統一換算成公克再比較。",
+                  [`1. 左邊 ＝ ${kg * 1000 + g} 公克，小於右邊的 ${kg * 1000 + g * 10} 公克。`]
+                );
+              }
+            ],
+            fill: [
+              () => {
+                const g = pick([1350, 2080, 3400, 4005]);
+                return makeFill(
+                  "g3_u8", "U8 公斤和公克", "公克轉公斤公克",
+                  `一顆大西瓜重 ${g} 公克，也可以說是（　　）公斤（　　）公克。`,
                   [
-                    `${kg * 100 + g} 公克`,
-                    `${Number(`${kg}${g}`)} 公克`,
-                    `${totalG + 1000} 公克`
+                    { label: "公斤", answer: `${Math.floor(g / 1000)}`, unit: "公斤", placeholder: "公斤" },
+                    { label: "公克", answer: `${g % 1000}`, unit: "公克", placeholder: "公克" }
                   ],
-                  "1 公斤 ＝ 1000 公克，把公斤乘以 1000 再加上公克數。",
-                  [
-                    `1. ${kg} 公斤 ＝ ${kg * 1000} 公克。`,
-                    `2. ${kg * 1000} ＋ ${g} ＝ <b>${totalG}（公克）</b>。`
-                  ]
+                  "千位數即為公斤數。",
+                  [`1. ${g} 公克 ＝ <b>${Math.floor(g / 1000)} 公斤 ${g % 1000} 公克</b>。`]
+                );
+              }
+            ],
+            word: [
+              () => {
+                const totalG = pick([250, 350, 420, 500]), boxG = pick([120, 150, 180, 200]);
+                const netG = 1000 + totalG - boxG;
+                return makeWord(
+                  "g3_u8", "U8 公斤和公克", "淨重減容器重應用",
+                  `一盒禮盒連同外包裝盒子一起秤重，共重 1 公斤 ${totalG} 公克。已知空盒子重 ${boxG} 公克，裡面的餅乾淨重是多少公克？`,
+                  [{ label: "餅乾淨重", answer: `${netG}`, unit: "公克", placeholder: "輸入公克數" }],
+                  "淨重 ＝ 總重 － 空盒子重。",
+                  [`1. ${1000 + totalG} － ${boxG} ＝ <b>${netG}（公克）</b>。`]
                 );
               }
             ]
@@ -952,54 +1056,66 @@
             term: "final",
             termLabel: "期末範圍",
             points: [
-              "分數的意義：把一個東西「平分」成幾份（分母），取其中的幾份（分子）。",
-              "當分子和分母一樣大時，等於「1」（例如 ${f(8, 8)} ＝ 1）。",
-              "同分母分數加減：分母不變，只要把「分子相加或相減」就好！"
+              "分子和分母一樣大時等於「1」。",
+              "同分母分數加減：分母不變，只把分子相加或相減！"
             ],
             tips: [
-              "【新手最常犯錯】${f(2, 7)} ＋ ${f(3, 7)} ＝ ${f(5, 7)}（分母維持 7 不變，千萬不能寫成 ${f(5, 14)}！）。",
-              "算「1 － ${f(3, 8)}」時，先把 1 變成 ${f(8, 8)} 再減分子。"
+              "算「1 － 幾分之幾」時，先把 1 變成「分母分之分母」再減分子。"
             ],
-            generators: [
+            tf: [
+              () => makeTF(
+                "g3_u9", "U9 分數", "同分母加法陷阱",
+                `計算「${f(2, 7)} ＋ ${f(3, 7)}」的結果是 ${f(5, 14)}。`,
+                false,
+                "同分母分數相加，分母維持 7 不變，分子相加，答案應該是 5/7！",
+                ["1. 分母不能相加，2/7 ＋ 3/7 ＝ 5/7，故敘述錯誤。"]
+              )
+            ],
+            choice: [
               () => {
-                const den = pick([6, 8, 9, 10, 12]);
-                const eat1 = randInt(2, 3);
-                const eat2 = randInt(2, 4);
-                const rem = den - eat1 - eat2;
-                return buildQuestionObj(
-                  "g3_u9", "U9 分數", "生活應用（1減去分數）",
-                  `一個大披薩平分成 ${den} 片，哥哥吃了 ${f(eat1, den)} 個披薩，妹妹吃了 ${f(eat2, den)} 個披薩，還剩下幾個披薩？`,
-                  `${f(rem, den)} 個`,
-                  [
-                    `${f(eat1 + eat2, den)} 個`,
-                    `${f(rem, den * 2)} 個`,
-                    `${f(rem + 1, den)} 個`
-                  ],
-                  `1 個完整的披薩平分成 ${den} 片就是 ${f(den, den)}。同分母分數加減時，分母保持不變，只算分子。`,
-                  [
-                    `1. 兄妹兩人一共吃了：${f(eat1, den)} ＋ ${f(eat2, den)} ＝ ${f(eat1 + eat2, den)}（個）。`,
-                    `2. 剩下的披薩：1 － ${f(eat1 + eat2, den)} ＝ ${f(den, den)} － ${f(eat1 + eat2, den)} ＝ <b>${f(rem, den)}（個）</b>。`
-                  ]
-                );
-              },
-              () => {
-                const den = pick([5, 7, 8, 9]);
-                const n1 = randInt(2, den - 2);
-                const n2 = randInt(1, n1 - 1);
-                return buildQuestionObj(
+                const den = pick([5, 7, 8, 9]), n1 = randInt(2, den - 2), n2 = randInt(1, n1 - 1);
+                return makeChoice(
                   "g3_u9", "U9 分數", "同分母大小比較",
                   `一盒巧克力有 ${den} 顆，小華吃了 ${f(n1, den)} 盒，小美吃了 ${n2} 顆，誰吃得比較多？`,
-                  `小華吃得比較多`,
-                  [
-                    `小美吃得比較多`,
-                    `兩人吃得一樣多`,
-                    `無法比較`
-                  ],
-                  `一盒有 ${den} 顆，所以 1 顆就是 ${f(1, den)} 盒，${n2} 顆就是 ${f(n2, den)} 盒。`,
-                  [
-                    `1. 小美吃了 ${n2} 顆 ＝ ${f(n2, den)} 盒。`,
-                    `2. 比較 ${f(n1, den)} 盒和 ${f(n2, den)} 盒，因為 ${n1} ＞ ${n2}，所以<b>小華吃得比較多</b>。`
-                  ]
+                  `小華吃得比較多`, [`小美吃得比較多`, `兩人吃得一樣多`, `無法比較`],
+                  `${n2} 顆就是 ${f(n2, den)} 盒。`,
+                  [`1. ${n1}/${den} ＞ ${n2}/${den}，故<b>小華吃得比較多</b>。`]
+                );
+              }
+            ],
+            compare: [
+              () => {
+                const den = pick([6, 8, 10]);
+                return makeCompare(
+                  "g3_u9", "U9 分數", "分數與1的大小比較",
+                  `${f(den, den)}`, `1`, "=",
+                  "當分子和分母一樣大時，等於 1 個完整個體。",
+                  [`1. ${den}/${den} ＝ 1，故填入 ＝。`]
+                );
+              }
+            ],
+            fill: [
+              () => {
+                const den = pick([7, 8, 9, 10]), a = randInt(2, 4), b = randInt(1, 3);
+                return makeFill(
+                  "g3_u9", "U9 分數", "同分母加法",
+                  `算算看：${f(a, den)} ＋ ${f(b, den)} ＝ （　　）（請用 a/b 格式輸入，例如 3/8）`,
+                  [{ label: "分數答案", answer: `${a + b}/${den}`, unit: "", placeholder: "例如 5/8" }],
+                  "分母維持不變，分子相加。",
+                  [`1. 答案為 <b>${a + b}/${den}</b>。`]
+                );
+              }
+            ],
+            word: [
+              () => {
+                const den = pick([6, 8, 9, 10, 12]), eat1 = randInt(2, 3), eat2 = randInt(2, 4);
+                const rem = den - eat1 - eat2;
+                return makeWord(
+                  "g3_u9", "U9 分數", "1減去分數應用題",
+                  `一個大披薩平分成 ${den} 片，哥哥吃了 ${f(eat1, den)} 個披薩，妹妹吃了 ${f(eat2, den)} 個披薩，還剩下幾個披薩？（請用 a/b 格式作答）`,
+                  [{ label: "剩下披薩", answer: `${rem}/${den}`, unit: "個", placeholder: "例如 3/8" }],
+                  `1 個披薩 ＝ ${f(den, den)} 個，扣掉兩人吃掉的份數即可。`,
+                  [`1. ${den}/${den} － ${eat1 + eat2}/${den} ＝ <b>${rem}/${den}（個）</b>。`]
                 );
               }
             ]
@@ -1007,15 +1123,17 @@
         ]
       },
 
-      // 六年級上學期（翰林版 8 大單元）
+      // ---------------------------------------------------------
+      // 六年級上學期（翰林版 8 大單元 - 含是非、選擇、比大小、填充、應用計算五大題型）
+      // ---------------------------------------------------------
       g6: {
-        title: "六上數學（翰林版）・分章節與模擬考",
-        subtitle: "全冊 8 單元重點技巧・無限動態生成應用題庫",
+        title: "六上數學（翰林版）・五大題型完整練習",
+        subtitle: "是非、選擇、比大小、填充、應用計算・全冊 8 單元動態出題",
         rangeHint: "U1–U4 期中｜U5–U8 期末",
         midtermBadge: "第 1～4 單元",
-        midtermDesc: "涵蓋：最大公因數與最小公倍數、分數除法、數量關係、小數除法。每次點擊都會重新生成全新應用考題。",
+        midtermDesc: "涵蓋：最大公因數與最小公倍數、分數除法、數量關係、小數除法。完整模擬真實段考五大題型。",
         finalBadge: "第 5～8 單元",
-        finalDesc: "涵蓋：比與比值、圓周長與扇形周長、圓面積與扇形面積、速率。每次點擊都會重新生成全新應用考題。",
+        finalDesc: "涵蓋：比與比值、圓周長與扇形周長、圓面積與扇形面積、速率。完整模擬真實段考五大題型。",
         units: [
           {
             id: "u1",
@@ -1031,104 +1149,93 @@
             ],
             tips: [
               "看到「平分、分裝、剪成一樣長、最大」→ 用【最大公因數】。",
-              "看到「同時相遇、排成正方形、分裝剩幾顆/不足幾顆」→ 用【最小公倍數】。",
-              "分裝「剩餘」要先求公倍數再「加」餘數；「不足」則要先求公倍數再「減」不足數。"
+              "看到「同時相遇、排成正方形、分裝剩幾顆/不足幾顆」→ 用【最小公倍數】。"
             ],
-            generators: [
+            tf: [
               () => {
-                const [n1, n2] = pick([[12, 18], [15, 20], [12, 16], [14, 21], [16, 24]]);
-                const baseLcm = lcm(n1, n2);
-                const mult = randInt(2, 3);
-                const targetBase = baseLcm * mult;
-                const isShort = Math.random() > 0.5;
-                const diff = randInt(2, 5);
-                const ans = isShort ? targetBase - diff : targetBase + diff;
-                const minRange = Math.floor((ans - 20) / 10) * 10;
-                const maxRange = minRange + 50;
-                return buildQuestionObj(
-                  "u1", "U1 最大公因數與最小公倍數", "分裝剩餘/不足應用",
-                  `有一箱糖果數量在 ${minRange} 到 ${maxRange} 顆之間，每 ${n1} 顆裝一袋或每 ${n2} 顆裝一袋，都剛好「${isShort ? "不足" : "剩下"} ${diff} 顆」，這箱糖果共有幾顆？`,
-                  `${ans} 顆`,
-                  [
-                    `${targetBase} 顆`,
-                    `${isShort ? targetBase + diff : targetBase - diff} 顆`,
-                    `${baseLcm * (mult - 1) + (isShort ? -diff : diff)} 顆`
-                  ],
-                  isShort
-                    ? `「不足 ${diff} 顆」代表再補 ${diff} 顆就能整除，所以先求公倍數再「減掉 ${diff}」。`
-                    : `「剩下 ${diff} 顆」代表先扣掉多出來的 ${diff} 顆就能整除，所以先求公倍數再「加上 ${diff}」。`,
-                  [
-                    `1. 先求 ${n1} 和 ${n2} 的最小公倍數：[${n1}, ${n2}] ＝ ${baseLcm}。`,
-                    `2. 找出 ${baseLcm} 在 ${minRange}～${maxRange} 之間的倍數：${baseLcm} × ${mult} ＝ ${targetBase}。`,
-                    `3. ${isShort ? `減去不足的 ${diff} 顆：${targetBase} － ${diff}` : `加上剩下的 ${diff} 顆：${targetBase} ＋ ${diff}`} ＝ <b>${ans}（顆）</b>。`
-                  ]
+                const isT = Math.random() > 0.5;
+                return makeTF(
+                  "u1", "U1 最大公因數與最小公倍數", "質數與互質觀念",
+                  isT
+                    ? `所有的偶數當中，只有「2」是質數，其他偶數都是合數。`
+                    : `因為 1 只有 1 個因數，所以「1」是最小的質數。`,
+                  isT,
+                  isT ? "2 除了 1 和 2 以外沒有其他因數，是唯一的偶數質數。" : "質數必須恰有「2 個因數」（1 和自己），1 不是質數也不是合數，最小的質數是 2。",
+                  [isT ? "1. 2 是唯一的偶數質數，敘述正確。" : "1. 1 不是質數，最小的質數是 2，故敘述錯誤。"]
                 );
-              },
+              }
+            ],
+            choice: [
               () => {
                 const [t1, t2] = pick([[12, 15], [15, 20], [10, 14], [12, 16], [18, 24]]);
                 const interval = lcm(t1, t2);
                 const startH = randInt(7, 9);
-                const addH = Math.floor(interval / 60);
+                const endH = startH + Math.floor(interval / 60);
                 const addM = interval % 60;
-                const endH = startH + addH;
                 const endM = addM < 10 ? `0${addM}` : `${addM}`;
-                return buildQuestionObj(
-                  "u1", "U1 最大公因數與最小公倍數", "週期相遇應用",
-                  `捷運站 A 線公車每 ${t1} 分鐘發一班車，B 線公車每 ${t2} 分鐘發一班車。早上 ${startH}:00 兩線公車同時發車後，下一次同時發車是幾點幾分？`,
-                  `${endH}:${endM}`,
+                return makeChoice(
+                  "u1", "U1 最大公因數與最小公倍數", "週期相遇觀念",
+                  `捷運站 A 線公車每 ${t1} 分鐘發一班車，B 線公車每 ${t2} 分鐘發一班車。早上 ${startH}:00 兩線同時發車後，下一次同時發車是幾點幾分？`,
+                  `${endH}:${endM}`, [`${startH}:${t1 + t2}`, `${startH + 1}:00`, `${endH}:${addM + 10 < 60 ? addM + 10 : "05"}`],
+                  "同時發車的間隔時間就是兩週期的「最小公倍數」。",
+                  [`1. [${t1}, ${t2}] ＝ ${interval} 分鐘，下一次同時發車是 <b>${endH}:${endM}</b>。`]
+                );
+              }
+            ],
+            compare: [
+              () => {
+                return makeCompare(
+                  "u1", "U1 最大公因數與最小公倍數", "公因數與公倍數比較",
+                  `24 和 36 的最大公因數`, `6 和 8 的最小公倍數`, "<",
+                  "分別算出最大公因數與最小公倍數再比較。",
+                  ["1. (24, 36) ＝ 12；[6, 8] ＝ 24，因為 12 ＜ 24，故填入 ＜。"]
+                );
+              }
+            ],
+            fill: [
+              () => {
+                const g = pick([6, 8, 9, 12, 14, 15, 18]);
+                const [m1, m2] = pick([[2, 3], [3, 4], [2, 5], [3, 5]]);
+                const a = g * m1, b = g * m2, l = g * m1 * m2;
+                return makeFill(
+                  "u1", "U1 最大公因數與最小公倍數", "短除法計算",
+                  `求 ${a} 和 ${b} 的最大公因數是（　　），最小公倍數是（　　）。`,
                   [
-                    `${startH}:${t1 + t2}`,
-                    `${startH + 1}:00`,
-                    `${endH}:${addM + 10 < 60 ? addM + 10 : "05"}`
+                    { label: "最大公因數", answer: `${g}`, unit: "", placeholder: "最大公因數" },
+                    { label: "最小公倍數", answer: `${l}`, unit: "", placeholder: "最小公倍數" }
                   ],
-                  "兩線公車同時發車的間隔時間，就是兩個發車週期的「最小公倍數」。",
-                  [
-                    `1. 求 ${t1} 和 ${t2} 的最小公倍數：[${t1}, ${t2}] ＝ ${interval}（分鐘）。`,
-                    `2. ${interval} 分鐘 ＝ ${addH} 小時 ${addM} 分鐘。`,
-                    `3. 從 ${startH}:00 往後推算，下一次同時發車是 <b>${endH}:${endM}</b>。`
-                  ]
+                  "左側公因數相乘為最大公因數；再乘底部互質數為最小公倍數。",
+                  [`1. 最大公因數 ＝ <b>${g}</b>；最小公倍數 ＝ <b>${l}</b>。`]
+                );
+              }
+            ],
+            word: [
+              () => {
+                const [n1, n2] = pick([[12, 18], [15, 20], [12, 16], [14, 21], [16, 24]]);
+                const baseLcm = lcm(n1, n2), mult = randInt(2, 3), targetBase = baseLcm * mult;
+                const isShort = Math.random() > 0.5, diff = randInt(2, 5);
+                const ans = isShort ? targetBase - diff : targetBase + diff;
+                const minRange = Math.floor((ans - 20) / 10) * 10, maxRange = minRange + 50;
+                return makeWord(
+                  "u1", "U1 最大公因數與最小公倍數", "分裝剩餘/不足應用題",
+                  `有一箱糖果數量在 ${minRange} 到 ${maxRange} 顆之間，每 ${n1} 顆裝一袋或每 ${n2} 顆裝一袋，都剛好「${isShort ? "不足" : "剩下"} ${diff} 顆」，這箱糖果共有幾顆？`,
+                  [{ label: "糖果總數", answer: `${ans}`, unit: "顆", placeholder: "輸入顆數" }],
+                  isShort ? `不足 ${diff} 顆要先求公倍數再減掉 ${diff}。` : `剩下 ${diff} 顆要先求公倍數再加上 ${diff}。`,
+                  [`1. [${n1}, ${n2}] ＝ ${baseLcm}；範圍內公倍數為 ${targetBase}。`, `2. ${isShort ? `${targetBase} － ${diff}` : `${targetBase} ＋ ${diff}`} ＝ <b>${ans}（顆）</b>。`]
                 );
               },
               () => {
-                const side = pick([6, 8, 9, 12, 15]);
-                const [wMult, hMult] = pick([[3, 4], [2, 5], [3, 5], [4, 5]]);
-                const w = side * wMult, h = side * hMult;
-                const count = wMult * hMult;
-                return buildQuestionObj(
-                  "u1", "U1 最大公因數與最小公倍數", "幾何裁切應用",
-                  `一張長 ${h} 公分、寬 ${w} 公分的長方形紙板，要全部剪成一樣大的正方形且沒有剩下，正方形的邊長「最大」是幾公分？共可剪成幾張？`,
-                  `邊長 ${side} 公分；共 ${count} 張`,
+                const side = pick([6, 8, 9, 12, 15]), [wMult, hMult] = pick([[3, 4], [2, 5], [3, 5], [4, 5]]);
+                const w = side * wMult, h = side * hMult, count = wMult * hMult;
+                return makeWord(
+                  "u1", "U1 最大公因數與最小公倍數", "長方形裁切正方形",
+                  `一張長 ${h} 公分、寬 ${w} 公分的長方形紙板，要全部剪成一樣大的正方形且沒有剩下，正方形邊長最大是幾公分？共可剪成幾張？`,
                   [
-                    `邊長 ${side} 公分；共 ${wMult + hMult} 張`,
-                    `邊長 ${side / 2 || 3} 公分；共 ${count * 4} 張`,
-                    `邊長 ${w} 公分；共 ${hMult} 張`
+                    { label: "最大邊長", answer: `${side}`, unit: "公分", placeholder: "邊長" },
+                    { label: "總張數", answer: `${count}`, unit: "張", placeholder: "張數" }
                   ],
-                  "正方形邊長必須是長和寬的「最大公因數」；張數則是（長÷邊長）×（寬÷邊長）。",
-                  [
-                    `1. 求 ${h} 和 ${w} 的最大公因數：(${h}, ${w}) ＝ <b>${side}（公分）</b>。`,
-                    `2. 長邊可剪 ${hMult} 份，寬邊可剪 ${wMult} 份，共 <b>${count} 張</b>。`
-                  ]
-                );
-              },
-              () => {
-                const [w, h] = pick([[6, 8], [8, 12], [9, 12], [10, 15]]);
-                const sqSide = lcm(w, h);
-                const count = (sqSide / w) * (sqSide / h);
-                return buildQuestionObj(
-                  "u1", "U1 最大公因數與最小公倍數", "拼排正方形應用",
-                  `用長 ${h} 公分、寬 ${w} 公分的長方形磁磚，同方向拼排成一個「最小的正方形」，最少需要幾塊長方形磁磚？`,
-                  `${count} 塊`,
-                  [
-                    `${sqSide} 塊`,
-                    `${(sqSide / w) + (sqSide / h)} 塊`,
-                    `${count * 2} 塊`
-                  ],
-                  "拼成最小正方形的邊長，是長和寬的「最小公倍數」；需要塊數則是（邊長÷長）×（邊長÷寬）。",
-                  [
-                    `1. 最小正方形的邊長 ＝ [${h}, ${w}] ＝ ${sqSide}（公分）。`,
-                    `2. 長邊需要 ${sqSide} ÷ ${h} ＝ ${sqSide / h} 塊，寬邊需要 ${sqSide} ÷ ${w} ＝ ${sqSide / w} 塊。`,
-                    `3. 總共需要：${sqSide / h} × ${sqSide / w} ＝ <b>${count}（塊）</b>。`
-                  ]
+                  "邊長為 (長, 寬) 的最大公因數。",
+                  [`1. (${h}, ${w}) ＝ <b>${side} 公分</b>；張數 ＝ <b>${count} 張</b>。`]
                 );
               }
             ]
@@ -1141,106 +1248,86 @@
             term: "midterm",
             termLabel: "期中範圍",
             points: [
-              "分數除法法則：除以一個分數 ＝ 乘以這個分數的「倒數」（帶分數要先化成假分數）。",
-              "商與被除數關係：除數 ＜ 1，商 ＞ 被除數；除數 ＞ 1，商 ＜ 被除數。",
-              "已知部分量求基準量（全部）：部分量 ÷ 對應的分數 ＝ 全部。"
+              "除以一個分數 ＝ 乘以這個分數的「倒數」（帶分數要先化成假分數）。",
+              "除數 ＜ 1，商 ＞ 被除數；除數 ＞ 1，商 ＜ 被除數。"
             ],
             tips: [
-              "看到「一桶油倒出幾分之幾後，還剩下多少」→ 先用「1 － 用掉的分數 ＝ 剩下的分數」，再用「剩下重量 ÷ 剩下分數」。",
-              "看到「A 是 B 的幾分之幾，已知 A 求 B」→ 用「A ÷ 分數 ＝ B」。"
+              "已知部分量求全部（基準量）→ 用【部分量 ÷ 對應的分數】。"
             ],
-            generators: [
+            tf: [
+              () => makeTF(
+                "u2", "U2 分數除法", "倒數與商的變化觀念",
+                `任何一個「真分數」除以它自己的倒數，算出來的商一定小於 1。`,
+                true,
+                "真分數小於 1，它的倒數（假分數）大於 1；小於 1 的數除以大於 1 的數，商一定小於 1。",
+                ["1. 例如 (2/3) ÷ (3/2) ＝ 4/9 ＜ 1，敘述完全正確。"]
+              )
+            ],
+            choice: [
               () => {
-                const den = pick([5, 7, 8, 9]);
-                const num = randInt(2, den - 2);
-                const remNum = den - num;
-                const mult = randInt(12, 25);
-                const remPages = remNum * mult;
-                const totalPages = den * mult;
-                return buildQuestionObj(
-                  "u2", "U2 分數除法", "基準量應用",
-                  `小華看一本故事書，已經看了全書的 ${f(num, den)}，還剩下 ${remPages} 頁沒看，這本故事書共有多少頁？`,
-                  `${totalPages} 頁`,
-                  [
-                    `${Math.round(remPages * num / den) + remPages} 頁`,
-                    `${num * mult} 頁`,
-                    `${totalPages + remPages} 頁`
-                  ],
-                  "先算出「剩下的頁數」佔全書的幾分之幾，再用「剩下頁數 ÷ 剩下比例」回推全書總頁數。",
-                  [
-                    `1. 剩下的頁數佔全書的：1 － ${f(num, den)} ＝ ${f(remNum, den)}。`,
-                    `2. 全書 ＝ ${remPages} ÷ ${f(remNum, den)} ＝ ${remPages} × ${f(den, remNum)} ＝ <b>${totalPages}（頁）</b>。`
-                  ]
-                );
-              },
-              () => {
-                const den = pick([4, 5, 6]);
-                const useNum = randInt(2, den - 1);
-                const waterUnit = randInt(3, 6);
-                const totalWater = den * waterUnit;
-                const bucketWeight = pick([1.5, 2, 2.5]);
-                const fullWeight = totalWater + bucketWeight;
-                const usedWater = useNum * waterUnit;
-                const afterWeight = fullWeight - usedWater;
-                return buildQuestionObj(
-                  "u2", "U2 分數除法", "經典水桶連桶重",
-                  `一桶沙拉油連桶子共重 ${fullWeight} 公斤，用掉全部油的 ${f(useNum, den)} 後，連桶子還剩下 ${afterWeight} 公斤，請問空桶子重多少公斤？`,
-                  `${bucketWeight} 公斤`,
-                  [
-                    `${totalWater} 公斤`,
-                    `${bucketWeight + 1} 公斤`,
-                    `${round2(afterWeight / 2)} 公斤`
-                  ],
-                  "前後總重量的差額，就是「用掉的油重」（桶子重量沒有變）。先用油重反推全部油重，再用總重減去油重！",
-                  [
-                    `1. 用掉的油重（佔全部油的 ${f(useNum, den)}）：${fullWeight} － ${afterWeight} ＝ ${usedWater}（公斤）。`,
-                    `2. 全部的油重：${usedWater} ÷ ${f(useNum, den)} ＝ ${totalWater}（公斤）。`,
-                    `3. 空桶子重：${fullWeight} － ${totalWater} ＝ <b>${bucketWeight}（公斤）</b>。`
-                  ]
-                );
-              },
-              () => {
-                const totalN = randInt(17, 23);
-                const bagN = 4;
-                const den = 5;
-                const bags = Math.floor(totalN / bagN);
-                const remN = totalN % bagN;
-                return buildQuestionObj(
+                const totalN = randInt(17, 23), bagN = 4, den = 5;
+                const bags = Math.floor(totalN / bagN), remN = totalN % bagN;
+                return makeChoice(
                   "u2", "U2 分數除法", "分裝剩餘量陷阱",
                   `有 ${mf(Math.floor(totalN / den), totalN % den, den)} 公升的紅茶，每 ${f(bagN, den)} 公升裝成一瓶，最多可以裝滿幾瓶？還剩下多少公升？`,
                   `裝滿 ${bags} 瓶；剩下 ${f(remN, den)} 公升`,
-                  [
-                    `裝滿 ${bags} 瓶；剩下 ${remN} 公升`,
-                    `裝滿 ${bags + 1} 瓶；剩下 ${f(remN, den)} 公升`,
-                    `裝滿 ${bags} 瓶；剩下 ${f(remN, bagN)} 公升`
-                  ],
-                  "用分數除法算出商（整數部分即為裝滿瓶數），剩下的分數部分要乘回「每瓶容量」才是剩下的公升數！",
-                  [
-                    `1. 計算 ${f(totalN, den)} ÷ ${f(bagN, den)} ＝ ${totalN} ÷ ${bagN} ＝ ${bags} ... 餘 ${remN} 份。`,
-                    `2. 最多裝滿 <b>${bags} 瓶</b>，每份是 ${f(1, den)} 公升，所以剩下 <b>${f(remN, den)} 公升</b>。`
-                  ]
+                  [`裝滿 ${bags} 瓶；剩下 ${remN} 公升`, `裝滿 ${bags + 1} 瓶；剩下 ${f(remN, den)} 公升`, `裝滿 ${bags} 瓶；剩下 ${f(remN, bagN)} 公升`],
+                  "剩下的份數要乘回「每瓶容量」才是剩下的公升數！",
+                  [`1. ${totalN} ÷ ${bagN} ＝ ${bags} 瓶 ... 餘 ${remN} 份（即 <b>${f(remN, den)} 公升</b>）。`]
+                );
+              }
+            ],
+            compare: [
+              () => {
+                const baseN = randInt(4, 7), baseD = randInt(8, 11);
+                const isSmaller = Math.random() > 0.5;
+                const divN = isSmaller ? randInt(3, 5) : randInt(7, 9);
+                return makeCompare(
+                  "u2", "U2 分數除法", "不計算比大小",
+                  `${f(baseN, baseD)} ÷ ${f(divN, 6)}`, `${f(baseN, baseD)}`,
+                  isSmaller ? ">" : "<",
+                  "除數小於 1 時商會變大；除數大於 1 時商會變小。",
+                  [`1. 除數 ${f(divN, 6)} ${isSmaller ? "＜ 1，商變大，故填 ＞" : "＞ 1，商變小，故填 ＜"}。`]
+                );
+              }
+            ],
+            fill: [
+              () => {
+                const d1 = pick([3, 4, 5]), w1 = randInt(1, 3), r1 = randInt(1, d1 - 1), n1 = w1 * d1 + r1;
+                const d2 = pick([3, 4, 6]), w2 = randInt(1, 2), r2 = randInt(1, d2 - 1), n2 = w2 * d2 + r2;
+                const plainAns = formatFracPlain(n1 * d2, d1 * n2);
+                const htmlAns = formatFracHtml(n1 * d2, d1 * n2);
+                return makeFill(
+                  "u2", "U2 分數除法", "帶分數除法計算",
+                  `計算並化成最簡分數：${mf(w1, r1, d1)} ÷ ${mf(w2, r2, d2)} ＝ （　　）（請用假分數格式 a/b 輸入，例如 9/4）`,
+                  [{ label: "最簡答案", answer: plainAns, unit: "", placeholder: "例如 9/4 或 2" }],
+                  "化為假分數後，除數變倒數相乘並約分。",
+                  [`1. ${f(n1, d1)} × ${f(d2, n2)} ＝ <b>${htmlAns}</b>（假分數寫為 ${plainAns}）。`]
+                );
+              }
+            ],
+            word: [
+              () => {
+                const den = pick([5, 7, 8, 9]), num = randInt(2, den - 2), remNum = den - num;
+                const mult = randInt(12, 25), remPages = remNum * mult, totalPages = den * mult;
+                return makeWord(
+                  "u2", "U2 分數除法", "基準量應用題",
+                  `小華看一本故事書，已經看了全書的 ${f(num, den)}，還剩下 ${remPages} 頁沒看，這本故事書共有多少頁？`,
+                  [{ label: "全書頁數", answer: `${totalPages}`, unit: "頁", placeholder: "輸入頁數" }],
+                  "先算剩下佔全書的幾分之幾，再用除法回推全書。",
+                  [`1. 剩下佔全書：1 － ${f(num, den)} ＝ ${f(remNum, den)}。`, `2. 全書 ＝ ${remPages} ÷ ${f(remNum, den)} ＝ <b>${totalPages}（頁）</b>。`]
                 );
               },
               () => {
-                const d1 = pick([3, 4, 5]), w1 = randInt(1, 3), r1 = randInt(1, d1 - 1);
-                const n1 = w1 * d1 + r1;
-                const d2 = pick([3, 4, 6]), w2 = randInt(1, 2), r2 = randInt(1, d2 - 1);
-                const n2 = w2 * d2 + r2;
-                const ansHtml = formatFrac(n1 * d2, d1 * n2);
-                return buildQuestionObj(
-                  "u2", "U2 分數除法", "基礎計算",
-                  `計算並化成最簡分數：${mf(w1, r1, d1)} ÷ ${mf(w2, r2, d2)} ＝ ？`,
-                  ansHtml,
-                  [
-                    formatFrac(n1 * n2, d1 * d2),
-                    formatFrac(d1 * n2, n1 * d2),
-                    formatFrac((n1 + d1) * d2, d1 * n2)
-                  ],
-                  "先將帶分數化成假分數，再將除號變乘號、除數變倒數後約分相乘。",
-                  [
-                    `1. 化為假分數：${f(n1, d1)} ÷ ${f(n2, d2)}。`,
-                    `2. 倒數相乘並約分得到 <b>${ansHtml}</b>。`
-                  ]
+                const den = pick([4, 5, 6]), useNum = randInt(2, den - 1), waterUnit = randInt(3, 6);
+                const totalWater = den * waterUnit, bucketWeight = pick([1.5, 2, 2.5]);
+                const fullWeight = totalWater + bucketWeight, afterWeight = fullWeight - useNum * waterUnit;
+                return makeWord(
+                  "u2", "U2 分數除法", "水桶連桶重應用題",
+                  `一桶沙拉油連桶子共重 ${fullWeight} 公斤，用掉全部油的 ${f(useNum, den)} 後，連桶子還剩下 ${afterWeight} 公斤，請問空桶子重多少公斤？`,
+                  [{ label: "空桶重量", answer: `${bucketWeight}`, unit: "公斤", placeholder: "輸入重量" }],
+                  "前後總重量的差額就是用掉的油重，先反推全部油重，再扣掉油重。",
+                  [`1. 全部油重 ＝ (${fullWeight} － ${afterWeight}) ÷ ${f(useNum, den)} ＝ ${totalWater} 公斤。`, `2. 空桶重 ＝ ${fullWeight} － ${totalWater} ＝ <b>${bucketWeight}（公斤）</b>。`]
                 );
               }
             ]
@@ -1249,82 +1336,72 @@
             id: "u3",
             code: "U3",
             shortName: "數量關係",
-            title: "第 3 單元：數量關係（規律、間隔與年齡問題）",
+            title: "第 3 單元：數量關係（規律、間隔與和差）",
             term: "midterm",
             termLabel: "期中範圍",
             points: [
-              "間隔問題（植樹）：兩端都種（樹 ＝ 間隔 ＋ 1）；一端種一端不種或封閉圓形（樹 ＝ 間隔）；兩端都不種（樹 ＝ 間隔 － 1）。",
-              "和差問題：大數 ＝ (和 ＋ 差) ÷ 2；小數 ＝ (和 － 差) ÷ 2。",
-              "年齡問題：兩人的「年齡差」永遠不變。"
+              "兩端都種（樹 ＝ 間隔 ＋ 1）；封閉圓形（樹 ＝ 間隔）；兩端都不種（樹 ＝ 間隔 － 1）。",
+              "和差問題：大數 ＝ (和 ＋ 差) ÷ 2；小數 ＝ (和 － 差) ÷ 2。"
             ],
             tips: [
-              "遇到「圓形池塘周圍種樹」或「封閉正方形花圃插旗子」，首尾相接，數量剛好等於間隔數！",
-              "排圖形找規律時，先看第 1 個圖用幾根，之後「每增加 1 個圖多幾根」。"
+              "兩人的「年齡差」永遠不會隨著時間改變。"
             ],
-            generators: [
+            tf: [
+              () => makeTF(
+                "u3", "U3 數量關係", "年齡差不變觀念",
+                `今年爸爸 40 歲、兒子 10 歲，爸爸的年齡是兒子的 4 倍；再過 10 年後，爸爸的年齡仍然是兒子的 4 倍。`,
+                false,
+                "兩人的「年齡差」永遠不變（相差 30 歲），但「倍數關係」每年都會改變！10 年後爸爸 50 歲、兒子 20 歲，變成 2.5 倍。",
+                ["1. 10 年後 50 ÷ 20 ＝ 2.5 倍，倍數會改變，故敘述錯誤。"]
+              )
+            ],
+            choice: [
               () => {
-                const gap = pick([6, 8, 10, 12, 15]);
-                const trees = randInt(15, 30);
-                const peri = gap * trees;
-                return buildQuestionObj(
+                const gap = pick([6, 8, 10, 12, 15]), trees = randInt(15, 30), peri = gap * trees;
+                return makeChoice(
                   "u3", "U3 數量關係", "封閉圖形間隔",
                   `在一個周長 ${peri} 公尺的「圓形池塘」周圍種樹，每隔 ${gap} 公尺種一棵，一共要種幾棵樹？`,
-                  `${trees} 棵`,
-                  [
-                    `${trees + 1} 棵`,
-                    `${trees - 1} 棵`,
-                    `${trees * 2} 棵`
-                  ],
-                  "圓形池塘是「封閉圖形」，起點和終點會接在一起，因此樹的棵數剛好等於間隔數（不用加 1 也不用減 1）。",
-                  [
-                    `1. 圓形周圍種樹：棵數 ＝ 間隔數。`,
-                    `2. ${peri} ÷ ${gap} ＝ <b>${trees}（棵）</b>。`
-                  ]
+                  `${trees} 棵`, [`${trees + 1} 棵`, `${trees - 1} 棵`, `${trees * 2} 棵`],
+                  "圓形封閉圖形，樹的棵數剛好等於間隔數。",
+                  [`1. ${peri} ÷ ${gap} ＝ <b>${trees} 棵</b>。`]
                 );
-              },
+              }
+            ],
+            compare: [
               () => {
-                const isTri = Math.random() > 0.5;
-                const n = randInt(18, 35);
-                const ans = isTri ? 1 + 2 * n : 1 + 3 * n;
-                return buildQuestionObj(
-                  "u3", "U3 數量關係", "圖形規律",
-                  isTri
-                    ? `用棉花棒橫向排出一排相連的正三角形：排 1 個需要 3 根，排 2 個需要 5 根，排 3 個需要 7 根。排 ${n} 個相連的正三角形需要幾根棉花棒？`
-                    : `用棉花棒橫向排出一排相連的正方形：排 1 個需要 4 根，排 2 個需要 7 根，排 3 個需要 10 根。排 ${n} 個相連的正方形需要幾根棉花棒？`,
-                  `${ans} 根`,
-                  [
-                    `${(isTri ? 3 : 4) * n} 根`,
-                    `${(isTri ? 2 : 3) * n} 根`,
-                    `${ans + 2} 根`
-                  ],
-                  isTri
-                    ? "把最左邊第 1 根獨立出來看，每多排 1 個三角形就會增加 2 根，公式為「1 ＋ 2 × 個數」。"
-                    : "把最左邊第 1 根獨立出來看，每多排 1 個正方形就會增加 3 根，公式為「1 ＋ 3 × 個數」。",
-                  [
-                    `1. 觀察規律：第 1 根固定，每增加 1 個圖形多 ${isTri ? 2 : 3} 根。`,
-                    `2. 排 ${n} 個需要：1 ＋ ${isTri ? 2 : 3} × ${n} ＝ <b>${ans}（根）</b>。`
-                  ]
+                const len = 100, gap = 10;
+                return makeCompare(
+                  "u3", "U3 數量關係", "兩端種樹數量比較",
+                  `100公尺道路「兩端都種」的樹`, `100公尺道路「兩端都不種」的樹`, ">",
+                  "兩端都種有 11 棵，兩端都不種只有 9 棵，相差 2 棵。",
+                  [`1. 兩端都種 ＝ 10＋1 ＝ 11 棵；兩端都不種 ＝ 10－1 ＝ 9 棵，故填 ＞。`]
                 );
-              },
+              }
+            ],
+            fill: [
               () => {
-                const diff = pick([14, 18, 22, 26]);
-                const small = randInt(25, 45);
-                const big = small + diff;
-                const sum = big + small;
-                return buildQuestionObj(
-                  "u3", "U3 數量關係", "和差問題應用",
-                  `六年甲班和六年乙班共有 ${sum} 位學生，已知甲班比乙班多 ${diff} 人，請問甲班有多少位學生？`,
-                  `${big} 人`,
+                const n = randInt(18, 35), ans = 1 + 3 * n;
+                return makeFill(
+                  "u3", "U3 數量關係", "火柴棒規律",
+                  `用棉花棒橫向排一排相連的正方形：排 1 個需要 4 根，排 2 個需要 7 根，排 3 個需要 10 根。排 ${n} 個需要（　　）根。`,
+                  [{ label: "棉花棒數量", answer: `${ans}`, unit: "根", placeholder: "輸入根數" }],
+                  "規律公式：1 ＋ 3 × 正方形個數。",
+                  [`1. 1 ＋ 3 × ${n} ＝ <b>${ans} 根</b>。`]
+                );
+              }
+            ],
+            word: [
+              () => {
+                const diff = pick([14, 18, 22, 26]), small = randInt(25, 45), big = small + diff, sum = big + small;
+                return makeWord(
+                  "u3", "U3 數量關係", "和差問題應用題",
+                  `六年甲班和六年乙班共有 ${sum} 位學生，已知甲班比乙班多 ${diff} 人，請問甲班和乙班各有多少人？`,
                   [
-                    `${small} 人`,
-                    `${sum / 2} 人`,
-                    `${big + 2} 人`
+                    { label: "甲班人數", answer: `${big}`, unit: "人", placeholder: "甲班" },
+                    { label: "乙班人數", answer: `${small}`, unit: "人", placeholder: "乙班" }
                   ],
-                  "和差問題公式：大數 ＝（和 ＋ 差）÷ 2；小數 ＝（和 － 差）÷ 2。",
-                  [
-                    `1. 甲班人數較多（大數），先把總人數加上相差人數：${sum} ＋ ${diff} ＝ ${sum + diff}。`,
-                    `2. 再除以 2：${sum + diff} ÷ 2 ＝ <b>${big}（人）</b>。`
-                  ]
+                  "大數 ＝ (和 ＋ 差) ÷ 2；小數 ＝ (和 － 差) ÷ 2。",
+                  [`1. 甲班：(${sum} ＋ ${diff}) ÷ 2 ＝ <b>${big}（人）</b>；乙班：<b>${small}（人）</b>。`]
                 );
               }
             ]
@@ -1333,80 +1410,74 @@
             id: "u4",
             code: "U4",
             shortName: "小數除法",
-            title: "第 4 單元：小數除法（含四捨五入概數）",
+            title: "第 4 單元：小數除法（含餘數與概數）",
             term: "midterm",
             termLabel: "期中範圍",
             points: [
-              "直式計算步驟：先把「除數」的小數點往右移變成整數，被除數的小數點也跟著往右移相同位數。",
-              "商的小數點要對齊被除數「移動後」的新小數點位置；餘數的小數點則要對齊「原本」的舊小數點位置！",
-              "用四捨五入法求商到小數第一位，直式必須算到「小數第二位」再判斷。"
+              "餘數的小數點要對齊被除數「原本」的舊小數點位置！",
+              "用四捨五入法求商到小數第一位，直式必須算到「小數第二位」。"
             ],
             tips: [
-              "【超級大陷阱】求「商到整數位，並寫出餘數」時，餘數一定要把原本的小數點垂直點下來！",
-              "看到「平均每公斤賣幾元」→ 用【總價錢 ÷ 總公斤數】；「1 元可以買幾公斤」→ 用【總公斤數 ÷ 總價錢】。"
+              "除數 ＜ 1 時，商會比被除數大。"
             ],
-            generators: [
+            tf: [
+              () => makeTF(
+                "u4", "U4 小數除法", "餘數小數點陷阱",
+                `計算「3.5 ÷ 1.2」求商到整數位時，商是 2，餘數是 1.1。`,
+                true,
+                "3.5 － (1.2 × 2) ＝ 3.5 － 2.4 ＝ 1.1，餘數小數點對齊原本被除數的小數點。",
+                ["1. 1.2 × 2 ＋ 1.1 ＝ 3.5，驗算正確，故敘述正確。"]
+              )
+            ],
+            choice: [
               () => {
-                const div = pick([1.2, 1.4, 1.5, 1.6, 2.4]);
-                const q = randInt(3, 6);
-                const rem = pick([0.2, 0.3, 0.4, 0.5]);
+                const a = pick([17, 19, 22, 23, 25]), b = pick([3, 6, 7]), exact = a / b, ans = Math.round(exact * 10) / 10;
+                return makeChoice(
+                  "u4", "U4 小數除法", "四捨五入概數",
+                  `把 ${a} 公斤的米平分裝成 ${b} 包，每包大約重多少公斤？（四捨五入到小數第一位）`,
+                  `${ans.toFixed(1)} 公斤`, [`${(ans + 0.1).toFixed(1)} 公斤`, `${(ans - 0.1).toFixed(1)} 公斤`, `${exact.toFixed(2)} 公斤`],
+                  "算到小數第二位再四捨五入。",
+                  [`1. ${a} ÷ ${b} ＝ ${exact.toFixed(3)}... ≈ <b>${ans.toFixed(1)} 公斤</b>。`]
+                );
+              }
+            ],
+            compare: [
+              () => {
+                const base = pick([12.6, 18.4, 24.5]);
+                return makeCompare(
+                  "u4", "U4 小數除法", "小數除數大小比較",
+                  `${base} ÷ 0.8`, `${base} ÷ 1.2`, ">",
+                  "除以小於 1 的數商變大；除以大於 1 的數商變小。",
+                  [`1. 左邊除數 0.8 ＜ 1（商變大），右邊除數 1.2 ＞ 1（商變小），故填 ＞。`]
+                );
+              }
+            ],
+            fill: [
+              () => {
+                const div = pick([0.25, 0.4, 0.8, 1.25]), ans = pick([2.4, 3.2, 3.6, 4.8]);
+                const dividend = round2(div * ans);
+                return makeFill(
+                  "u4", "U4 小數除法", "小數除法計算",
+                  `算算看：${dividend} ÷ ${div} ＝ （　　）。`,
+                  [{ label: "商", answer: `${ans}`, unit: "", placeholder: "輸入小數" }],
+                  "除數與被除數小數點同時往右移相同位數再除。",
+                  [`1. ${dividend} ÷ ${div} ＝ <b>${ans}</b>。`]
+                );
+              }
+            ],
+            word: [
+              () => {
+                const div = pick([1.2, 1.4, 1.5, 1.6, 2.4]), q = randInt(3, 6), rem = pick([0.2, 0.3, 0.4, 0.5]);
                 const dividend = round2(div * q + rem);
-                return buildQuestionObj(
-                  "u4", "U4 小數除法", "經典餘數陷阱",
+                return makeWord(
+                  "u4", "U4 小數除法", "小數除法餘數陷阱題",
                   `一桶果汁有 ${dividend} 公升，每 ${div} 公升裝成一瓶，最多可以裝滿幾瓶？還剩下多少公升？`,
-                  `裝滿 ${q} 瓶；剩下 ${rem} 公升`,
                   [
-                    `裝滿 ${q} 瓶；剩下 ${Math.round(rem * 10)} 公升`,
-                    `裝滿 ${q + 1} 瓶；剩下 ${rem} 公升`,
-                    `裝滿 ${q} 瓶；剩下 ${round2(rem / 10)} 公升`
+                    { label: "裝滿", answer: `${q}`, unit: "瓶", placeholder: "幾瓶" },
+                    { label: "剩下", answer: `${rem}`, unit: "公升", placeholder: "幾公升" }
                   ],
-                  "餘數的小數點必須對齊被除數「原本」的小數點位置！",
-                  [
-                    `1. 計算 ${dividend} ÷ ${div}，商為 <b>${q}（瓶）</b>。`,
-                    `2. 對齊原本被除數的小數點，餘數為 <b>${rem}（公升）</b>。`
-                  ]
-                );
-              },
-              () => {
-                const weight = pick([1.6, 2.4, 2.5, 3.2]);
-                const unitPrice = pick([45, 55, 65, 75]);
-                const totalCost = round2(weight * unitPrice);
-                return buildQuestionObj(
-                  "u4", "U4 小數除法", "生活單價應用",
-                  `媽媽在市場買了 ${weight} 公斤的豬肉，總共付了 ${totalCost} 元，平均 1 公斤豬肉賣多少元？`,
-                  `${unitPrice} 元`,
-                  [
-                    `${round2(unitPrice / 10)} 元`,
-                    `${round2(totalCost * weight)} 元`,
-                    `${unitPrice + 5} 元`
-                  ],
-                  "要求「1 公斤多少元」，就把「總價錢 ÷ 總公斤數」。",
-                  [
-                    `1. 列式：${totalCost} ÷ ${weight}。`,
-                    `2. 除數小數點右移一位變成 ${Math.round(weight * 10)}，被除數也右移一位變成 ${Math.round(totalCost * 10)}。`,
-                    `3. 計算得出 1 公斤 <b>${unitPrice} 元</b>。`
-                  ]
-                );
-              },
-              () => {
-                const a = pick([17, 19, 22, 23, 25]);
-                const b = pick([3, 6, 7]);
-                const exact = a / b;
-                const ans = Math.round(exact * 10) / 10;
-                return buildQuestionObj(
-                  "u4", "U4 小數除法", "概數應用",
-                  `把 ${a} 公斤的米平分裝成 ${b} 包，每包大約重多少公斤？（用四捨五入法求商到小數第一位）`,
-                  `${ans.toFixed(1)} 公斤`,
-                  [
-                    `${(ans + 0.1).toFixed(1)} 公斤`,
-                    `${(ans - 0.1).toFixed(1)} 公斤`,
-                    `${exact.toFixed(2)} 公斤`
-                  ],
-                  "題目要求「求商到小數第一位」，直式要算到小數第二位，再依四捨五入法進位或捨去。",
-                  [
-                    `1. 計算 ${a} ÷ ${b} ＝ ${exact.toFixed(3)}...`,
-                    `2. 看小數第二位數字四捨五入，得到 <b>${ans.toFixed(1)} 公斤</b>。`
-                  ]
+                  "餘數的小數點一定要對齊被除數原本的小數點位置！",
+                  [`1. ${dividend} ÷ ${div} ＝ <b>${q}（瓶）</b>... 剩下 <b>${rem}（公升）</b>。`]
                 );
               }
             ]
@@ -1419,79 +1490,68 @@
             term: "final",
             termLabel: "期末範圍",
             points: [
-              "比值 ＝ 前項 ÷ 後項（通常用最簡分數或整數表示）。",
-              "最簡單整數比：前項和後項都是整數，且兩數互質。",
-              "比例尺 ＝ 圖上距離 ÷ 實際距離（計算前「單位必須統一」，1 公里 ＝ 100,000 公分）。"
+              "比值 ＝ 前項 ÷ 後項。",
+              "比例尺 ＝ 圖上距離 ÷ 實際距離（1 公里 ＝ 100,000 公分）。"
             ],
             tips: [
-              "看到「按比例分配總數（例如兄弟按 3 : 2 分 500 元）」→ 先把比例相加求出「總份數（3＋2＝5份）」，再算每份佔全部的幾分之幾。",
-              "比例尺換算成公里時，直接把公分數「去掉 5 個 0（小數點往左移 5 位）」最快！"
+              "按比例分配總數時，先把比例相加求出「總份數」。"
             ],
-            generators: [
+            tf: [
+              () => makeTF(
+                "u5", "U5 比與比值", "比的性質判斷",
+                `把「3 : 5」的前項和後項同時加上 2，會變成「5 : 7」，這兩個比的比值相等。`,
+                false,
+                "比的前項與後項只能「同時乘以或除以」同一個非零的數，不能同時加上或減去同一個數！",
+                ["1. 3÷5 ＝ 0.6，5÷7 ≈ 0.714，比值不相等，故敘述錯誤。"]
+              )
+            ],
+            choice: [
               () => {
-                const [r1, r2] = pick([[3, 2], [4, 3], [5, 3], [5, 2]]);
-                const sumR = r1 + r2;
-                const unitVal = randInt(15, 30);
-                const total = sumR * unitVal;
-                const part1 = r1 * unitVal;
-                const part2 = r2 * unitVal;
-                return buildQuestionObj(
-                  "u5", "U5 比與比值", "按比例分配應用",
-                  `爸爸把 ${total} 元零用錢，依照哥哥和弟弟年齡的比 ${r1} : ${r2} 分給兩人，請問哥哥可以分到多少元？`,
-                  `${part1} 元`,
-                  [
-                    `${part2} 元`,
-                    `${Math.round(total / r1)} 元`,
-                    `${part1 + unitVal} 元`
-                  ],
-                  `把 ${r1} : ${r2} 看成總共分成 ${r1} ＋ ${r2} ＝ ${sumR} 等份，哥哥拿其中的 ${r1} 份（即佔全部的 ${f(r1, sumR)}）。`,
-                  [
-                    `1. 總份數 ＝ ${r1} ＋ ${r2} ＝ ${sumR}（份）。`,
-                    `2. 哥哥分到：${total} × ${f(r1, sumR)} ＝ <b>${part1}（元）</b>。`
-                  ]
-                );
-              },
-              () => {
-                const scale = pick([20000, 25000, 50000, 100000]);
-                const cm = randInt(3, 8);
+                const scale = pick([20000, 25000, 50000, 100000]), cm = randInt(3, 8);
                 const actualKm = (cm * scale) / 100000;
-                return buildQuestionObj(
-                  "u5", "U5 比與比值", "比例尺應用",
+                return makeChoice(
+                  "u5", "U5 比與比值", "比例尺換算",
                   `在比例尺 1 : ${scale} 的地圖上，一條步道長 ${cm} 公分，實際長度是多少公里？`,
-                  `${actualKm} 公里`,
-                  [
-                    `${actualKm * 10} 公里`,
-                    `${round2(actualKm / 10)} 公里`,
-                    `${cm * (scale / 1000)} 公里`
-                  ],
-                  "比例尺 1 : N 代表圖上 1 公分等於實際 N 公分。算出實際公分數後，除以 100,000（小數點左移 5 位）即為公里。",
-                  [
-                    `1. 實際公分數 ＝ ${cm} × ${scale} ＝ ${cm * scale}（公分）。`,
-                    `2. 換算成公里（÷ 100,000）：${cm * scale} ÷ 100000 ＝ <b>${actualKm}（公里）</b>。`
-                  ]
+                  `${actualKm} 公里`, [`${actualKm * 10} 公里`, `${round2(actualKm / 10)} 公里`, `${cm * (scale / 1000)} 公里`],
+                  "實際公分數除以 100,000（小數點左移 5 位）即為公里。",
+                  [`1. ${cm} × ${scale} ÷ 100000 ＝ <b>${actualKm} 公里</b>。`]
                 );
-              },
+              }
+            ],
+            compare: [
+              () => makeCompare(
+                "u5", "U5 比與比值", "比值大小比較",
+                `3 : 4 的比值`, `4 : 5 的比值`, "<",
+                "3÷4 ＝ 0.75，4÷5 ＝ 0.8。",
+                ["1. 0.75 ＜ 0.8，故填入 ＜。"]
+              )
+            ],
+            fill: [
               () => {
-                const [dec, w, n, d, ansRatio, ansVal] = pick([
-                  ["1.2", 1, 4, 5, "2 : 3", f(2, 3)],
-                  ["0.75", 1, 1, 8, "2 : 3", f(2, 3)],
-                  ["1.5", 2, 1, 4, "2 : 3", f(2, 3)],
-                  ["0.6", 1, 1, 5, "1 : 2", f(1, 2)]
-                ]);
-                return buildQuestionObj(
-                  "u5", "U5 比與比值", "基礎計算",
-                  `將 ${dec} : ${mf(w, n, d)} 化為「最簡單整數比」，並求出「比值」。`,
-                  `最簡單整數比 ${ansRatio}；比值 ${ansVal}`,
+                const [a, b] = pick([[2, 3], [3, 4], [3, 5], [4, 5]]);
+                const m1 = randInt(2, 4), m2 = randInt(5, 8);
+                return makeFill(
+                  "u5", "U5 比與比值", "比例式求未知數",
+                  `已知比例式 ${a * m1} : ${b * m1} ＝ x : ${b * m2}，則 x ＝ （　　）。`,
+                  [{ label: "x 的值", answer: `${a * m2}`, unit: "", placeholder: "輸入數字" }],
+                  "先化簡左側比，再觀察前後項倍數關係。",
+                  [`1. x ＝ ${a} × ${m2} ＝ <b>${a * m2}</b>。`]
+                );
+              }
+            ],
+            word: [
+              () => {
+                const [r1, r2] = pick([[3, 2], [4, 3], [5, 3], [5, 2]]), sumR = r1 + r2;
+                const unitVal = randInt(15, 30), total = sumR * unitVal;
+                return makeWord(
+                  "u5", "U5 比與比值", "按比例分配應用題",
+                  `爸爸把 ${total} 元零用錢，依照哥哥和弟弟年齡的比 ${r1} : ${r2} 分給兩人，請問哥哥和弟弟各分到多少元？`,
                   [
-                    `最簡單整數比 3 : 4；比值 ${f(3, 4)}`,
-                    `最簡單整數比 6 : 9；比值 ${f(2, 3)}`,
-                    `最簡單整數比 4 : 5；比值 ${f(4, 5)}`
+                    { label: "哥哥分到", answer: `${r1 * unitVal}`, unit: "元", placeholder: "哥哥" },
+                    { label: "弟弟分到", answer: `${r2 * unitVal}`, unit: "元", placeholder: "弟弟" }
                   ],
-                  "先將小數與帶分數統一化為假分數，同乘分母最小公倍數變成整數，再同除以最大公因數。",
-                  [
-                    `1. 統一化為假分數並同乘分母公倍數，約分至互質得到 <b>${ansRatio}</b>。`,
-                    `2. 前項 ÷ 後項得到比值 <b>${ansVal}</b>。`
-                  ]
+                  `總份數為 ${r1} ＋ ${r2} ＝ ${sumR} 份。`,
+                  [`1. 哥哥：<b>${r1 * unitVal} 元</b>；弟弟：<b>${r2 * unitVal} 元</b>。`]
                 );
               }
             ]
@@ -1504,76 +1564,64 @@
             term: "final",
             termLabel: "期末範圍",
             points: [
-              "圓周率（π）約為 3.14。",
-              "圓周長 ＝ 直徑 × 3.14 ＝ 半徑 × 2 × 3.14。",
-              "扇形周長 ＝ 圓周長 × 幾分之幾圓 ＋ 半徑 × 2。"
+              "圓周長 ＝ 直徑 × 3.14。",
+              "扇形周長 ＝ 弧長 ＋ 半徑 × 2。"
             ],
             tips: [
-              "【全冊第一大陷阱】算「扇形周長」時，算完彎曲的弧長後，千萬記得加上「兩條直直的半徑」！",
-              "看到「腳踏車輪子滾動幾圈前進多少公尺」→ 先算輪子一圈的「圓周長」，再乘以圈數（注意公分換公尺要除以 100）。"
+              "算「扇形周長」千萬記得加上「兩條半徑」！"
             ],
-            generators: [
+            tf: [
+              () => makeTF(
+                "u6", "U6 圓周長與扇形周長", "圓周率與周長關係",
+                `大圓的圓周率會比小圓的圓周率還要大。`,
+                false,
+                "無論圓形是大還是小，圓周長除以直徑的比率（圓周率）永遠固定約為 3.14！",
+                ["1. 任何圓形的圓周率都相同（約 3.14），故敘述錯誤。"]
+              )
+            ],
+            choice: [
               () => {
-                const [r, den] = pick([[10, 4], [12, 6], [8, 4], [15, 3], [20, 4]]);
-                const d = r * 2;
-                const arc = round2((d * 3.14) / den);
-                const peri = round2(arc + d);
-                return buildQuestionObj(
-                  "u6", "U6 圓周長與扇形周長", "經典必考題",
-                  `一個半徑 ${r} 公分的 ${f(1, den)} 圓扇形，它的「周長」大約是多少公分？（圓周率以 3.14 計算）`,
-                  `${peri} 公分`,
-                  [
-                    `${arc} 公分`,
-                    `${round2(arc + r)} 公分`,
-                    `${round2(r * r * 3.14 / den)} 公分`
-                  ],
-                  "扇形周長包含「彎曲的弧長」加上「兩條直直的半徑」，漏加半徑是考試最常見的失分原因。",
-                  [
-                    `1. 先算扇形弧長：(${r} × 2) × 3.14 × ${f(1, den)} ＝ ${arc}（公分）。`,
-                    `2. 再加上兩條半徑：${arc} ＋ ${r} ＋ ${r} ＝ <b>${peri}（公分）</b>。`
-                  ]
+                const r = pick([4, 5, 6, 8, 10]), d = r * 2, c = round2(d * 3.14);
+                return makeChoice(
+                  "u6", "U6 圓周長與扇形周長", "反求半徑",
+                  `用一條長 ${c} 公分的繩子剛好圍成一個圓形，這個圓形的「半徑」大約是多少公分？`,
+                  `${r} 公分`, [`${d} 公分`, `${r * 4} 公分`, `${round2(r / 2)} 公分`],
+                  "圓周長除以 3.14 是直徑，還要再除以 2 才是半徑！",
+                  [`1. ${c} ÷ 3.14 ÷ 2 ＝ <b>${r} 公分</b>。`]
                 );
-              },
+              }
+            ],
+            compare: [
+              () => makeCompare(
+                "u6", "U6 圓周長與扇形周長", "周長大小比較",
+                `直徑 10 公分的圓周長`, `邊長 10 公分的正方形周長`, "<",
+                "圓周長 ＝ 10 × 3.14 ＝ 31.4 公分；正方形周長 ＝ 10 × 4 ＝ 40 公分。",
+                ["1. 31.4 公分 ＜ 40 公分，故填入 ＜。"]
+              )
+            ],
+            fill: [
               () => {
-                const d = pick([40, 50, 60, 80]);
-                const turns = pick([25, 50, 100]);
-                const cmTotal = round2(d * 3.14 * turns);
-                const mTotal = round2(cmTotal / 100);
-                return buildQuestionObj(
-                  "u6", "U6 圓周長與扇形周長", "生活滾動應用",
-                  `腳踏車輪子的直徑是 ${d} 公分，輪子向前滾動 ${turns} 圈，大約前進了多少「公尺」？`,
-                  `${mTotal} 公尺`,
-                  [
-                    `${cmTotal} 公尺`,
-                    `${round2(mTotal / 2)} 公尺`,
-                    `${round2(mTotal * 2)} 公尺`
-                  ],
-                  "輪子滾動 1 圈的距離就是輪子的「圓周長」，乘以圈數後，記得把公分除以 100 換算成公尺！",
-                  [
-                    `1. 輪子 1 圈的圓周長：${d} × 3.14 ＝ ${round2(d * 3.14)}（公分）。`,
-                    `2. 滾動 ${turns} 圈共前進：${round2(d * 3.14)} × ${turns} ＝ ${cmTotal}（公分）。`,
-                    `3. 換算成公尺（÷ 100）：<b>${mTotal} 公尺</b>。`
-                  ]
+                const [r, den] = pick([[10, 4], [12, 6], [8, 4], [20, 4]]);
+                const arc = round2((r * 2 * 3.14) / den), peri = round2(arc + r * 2);
+                return makeFill(
+                  "u6", "U6 圓周長與扇形周長", "扇形周長計算",
+                  `一個半徑 ${r} 公分的 ${f(1, den)} 圓扇形，它的周長大約是（　　）公分。（圓周率以 3.14 計算）`,
+                  [{ label: "扇形周長", answer: `${peri}`, unit: "公分", placeholder: "輸入小數" }],
+                  "扇形周長 ＝ 弧長 ＋ 兩條半徑。",
+                  [`1. 弧長 ${arc} ＋ 半徑 ${r}×2 ＝ <b>${peri} 公分</b>。`]
                 );
-              },
+              }
+            ],
+            word: [
               () => {
-                const r = pick([4, 5, 6, 8, 10, 12]);
-                const d = r * 2;
-                const c = round2(d * 3.14);
-                return buildQuestionObj(
-                  "u6", "U6 圓周長與扇形周長", "逆推計算",
-                  `用一條長 ${c} 公分的繩子剛好圍成一個圓形，這個圓形的「半徑」大約是多少公分？（圓周率以 3.14 計算）`,
-                  `${r} 公分`,
-                  [
-                    `${d} 公分`,
-                    `${r * 4} 公分`,
-                    `${round2(r / 2)} 公分`
-                  ],
-                  "圓周長除以 3.14 得到的是「直徑」，題目問「半徑」時，記得最後還要再除以 2！",
-                  [
-                    `1. 先求直徑：${c} ÷ 3.14 ＝ ${d}（公分）。`,
-                    `2. 再求半徑：${d} ÷ 2 ＝ <b>${r}（公分）</b>。`
-                  ]
+                const d = pick([40, 50, 60, 80]), turns = pick([25, 50, 100]);
+                const cmTotal = round2(d * 3.14 * turns), mTotal = round2(cmTotal / 100);
+                return makeWord(
+                  "u6", "U6 圓周長與扇形周長", "車輪滾動距離應用題",
+                  `腳踏車輪子的直徑是 ${d} 公分，輪子向前滾動 ${turns} 圈，大約前進了多少「公尺」？（圓周率以 3.14 計算）`,
+                  [{ label: "前進距離", answer: `${mTotal}`, unit: "公尺", placeholder: "輸入公尺" }],
+                  "先算輪子 1 圈的圓周長，乘以圈數後再除以 100 換算成公尺。",
+                  [`1. ${d} × 3.14 × ${turns} ÷ 100 ＝ <b>${mTotal}（公尺）</b>。`]
                 );
               }
             ]
@@ -1587,81 +1635,64 @@
             termLabel: "期末範圍",
             points: [
               "圓面積 ＝ 半徑 × 半徑 × 3.14。",
-              "扇形面積 ＝ 圓面積 × 幾分之幾圓（或是圓心角 ÷ 360°）。",
-              "環形（甜甜圈形）面積 ＝ 大圓面積 － 小圓面積 ＝（大圓半徑² － 小圓半徑²）× 3.14。"
+              "環形面積 ＝（大圓半徑² － 小圓半徑²）× 3.14。"
             ],
             tips: [
-              "看清楚題目給的是「直徑」還是「半徑」，若是直徑要先除以 2 變成半徑才能代公式！",
-              "看到「牛或羊綁在牆角或草地吃草的最大面積」→ 繩長就是扇形的「半徑」，再看能轉動幾度！"
+              "題目給「直徑」要先除以 2 變成半徑才能代公式！"
             ],
-            generators: [
+            tf: [
+              () => makeTF(
+                "u7", "U7 圓面積與扇形面積", "半徑與面積倍數關係",
+                `當一個圓的半徑變成原來的 2 倍時，它的圓面積會變成原來的 4 倍。`,
+                true,
+                "面積公式是「半徑 × 半徑 × 3.14」，2 × 2 ＝ 4，所以面積會變成原來的 4 倍。",
+                ["1. 半徑變 2 倍，面積變 2×2 ＝ 4 倍，敘述正確。"]
+              )
+            ],
+            choice: [
               () => {
-                const side = pick([10, 20, 30, 40]);
-                const r = side / 2;
-                const sqArea = side * side;
-                const cirArea = round2(r * r * 3.14);
-                const remArea = round2(sqArea - cirArea);
-                return buildQuestionObj(
-                  "u7", "U7 圓面積與扇形面積", "複合圖形",
-                  `在一個邊長 ${side} 公分的正方形紙板上，剪下一個最大的圓，剩下的紙板面積大約是多少平方公分？`,
-                  `${remArea} 平方公分`,
-                  [
-                    `${cirArea} 平方公分`,
-                    `${round2(sqArea - side * side * 3.14)} 平方公分`,
-                    `${round2(sqArea - side * 3.14)} 平方公分`
-                  ],
-                  "正方形內最大圓的「直徑」等於正方形邊長，因此半徑是邊長的一半。",
-                  [
-                    `1. 正方形面積：${side} × ${side} ＝ ${sqArea}（平方公分）。`,
-                    `2. 最大圓半徑 ＝ ${r} 公分；圓面積 ＝ ${r} × ${r} × 3.14 ＝ ${cirArea}（平方公分）。`,
-                    `3. 剩下面積：${sqArea} － ${cirArea} ＝ <b>${remArea}（平方公分）</b>。`
-                  ]
+                const [angle, den] = pick([[60, 6], [90, 4], [120, 3], [72, 5]]);
+                const r = pick([6, 10, 12]), area = round2((r * r * 3.14) / den);
+                return makeChoice(
+                  "u7", "U7 圓面積與扇形面積", "扇形面積",
+                  `一個半徑 ${r} 公分、圓心角 ${angle}° 的扇形，面積大約是多少平方公分？`,
+                  `${area} 平方公分`, [`${round2(area * 2)} 平方公分`, `${round2((r * 2 * 3.14) / den)} 平方公分`, `${round2(r * r * 3.14)} 平方公分`],
+                  `${angle}° ÷ 360° ＝ ${f(1, den)} 圓。`,
+                  [`1. ${r} × ${r} × 3.14 × ${f(1, den)} ＝ <b>${area} 平方公分</b>。`]
                 );
-              },
+              }
+            ],
+            compare: [
+              () => makeCompare(
+                "u7", "U7 圓面積與扇形面積", "扇形面積大小比較",
+                `半徑 10 公分的 ${f(1, 2)} 圓面積`, `半徑 20 公分的 ${f(1, 4)} 圓面積`, "<",
+                "左邊 ＝ 10×10×3.14×(1/2) ＝ 157；右邊 ＝ 20×20×3.14×(1/4) ＝ 314。",
+                ["1. 157 平方公分 ＜ 314 平方公分，故填入 ＜。"]
+              )
+            ],
+            fill: [
               () => {
-                const rope = pick([6, 8, 10, 12]);
-                const [angle, den, place] = pick([
-                  [90, 4, "正方形倉庫的牆角外（牆角為 90°）"],
-                  [180, 2, "一面長圍牆的中間點"],
-                  [270, 4, "正方形倉庫的牆角外（倉庫擋住 90°，可活動 270°）"]
-                ]);
-                const fracNum = angle === 270 ? 3 : 1;
-                const area = round2((rope * rope * 3.14 * fracNum) / den);
-                return buildQuestionObj(
-                  "u7", "U7 圓面積與扇形面積", "生活情境扇形",
-                  `農夫用一條長 ${rope} 公尺的繩子，把一隻羊拴在${place}，這隻羊能吃到草的最大面積大約是多少平方公尺？`,
-                  `${area} 平方公尺`,
-                  [
-                    `${round2(rope * rope * 3.14)} 平方公尺`,
-                    `${round2((rope * 2 * 3.14 * fracNum) / den)} 平方公尺`,
-                    `${round2(area / 2)} 平方公尺`
-                  ],
-                  `繩長 ${rope} 公尺就是扇形的半徑，可活動的角度 ${angle}° 佔整圓的 ${f(fracNum, den)}。`,
-                  [
-                    `1. 扇形半徑 ＝ ${rope} 公尺，可活動範圍佔整圓的 ${angle}° ÷ 360° ＝ ${f(fracNum, den)}。`,
-                    `2. 吃草面積：${rope} × ${rope} × 3.14 × ${f(fracNum, den)} ＝ <b>${area}（平方公尺）</b>。`
-                  ]
+                const side = pick([10, 20, 30]), r = side / 2;
+                const remArea = round2(side * side - r * r * 3.14);
+                return makeFill(
+                  "u7", "U7 圓面積與扇形面積", "正方形剪最大圓",
+                  `在邊長 ${side} 公分的正方形紙板上剪下一個最大的圓，剩下的紙板面積大約是（　　）平方公分。`,
+                  [{ label: "剩餘面積", answer: `${remArea}`, unit: "平方公分", placeholder: "輸入面積" }],
+                  "最大圓的半徑等於正方形邊長的一半。",
+                  [`1. ${side}×${side} － ${r}×${r}×3.14 ＝ <b>${remArea} 平方公分</b>。`]
                 );
-              },
+              }
+            ],
+            word: [
               () => {
-                const innerR = pick([4, 5, 6, 8]);
-                const pathW = pick([2, 3]);
-                const outerR = innerR + pathW;
+                const innerR = pick([4, 5, 6, 8]), pathW = pick([2, 3]), outerR = innerR + pathW;
                 const area = round2((outerR * outerR - innerR * innerR) * 3.14);
-                return buildQuestionObj(
-                  "u7", "U7 圓面積與扇形面積", "環形面積應用",
+                return makeWord(
+                  "u7", "U7 圓面積與扇形面積", "環形步道面積應用題",
                   `一個半徑 ${innerR} 公尺的圓形噴水池，外面圍繞著一條寬 ${pathW} 公尺的環形步道，這條步道的面積大約是多少平方公尺？`,
-                  `${area} 平方公尺`,
-                  [
-                    `${round2(pathW * pathW * 3.14)} 平方公尺`,
-                    `${round2(outerR * outerR * 3.14)} 平方公尺`,
-                    `${round2((outerR - innerR) * 3.14)} 平方公尺`
-                  ],
-                  "步道面積 ＝「外圍大圓面積」減去「裡面噴水池小圓面積」。大圓半徑 ＝ 內圓半徑 ＋ 步道寬度。",
-                  [
-                    `1. 大圓半徑 ＝ ${innerR} ＋ ${pathW} ＝ ${outerR}（公尺）。`,
-                    `2. 大圓面積 － 小圓面積 ＝ (${outerR}×${outerR} － ${innerR}×${innerR}) × 3.14 ＝ ${outerR * outerR - innerR * innerR} × 3.14 ＝ <b>${area}（平方公尺）</b>。`
-                  ]
+                  [{ label: "步道面積", answer: `${area}`, unit: "平方公尺", placeholder: "輸入面積" }],
+                  "步道面積 ＝ 外圍大圓面積 － 裡面噴水池小圓面積。",
+                  [`1. 大圓半徑 ＝ ${outerR} 公尺；(${outerR}² － ${innerR}²) × 3.14 ＝ <b>${area}（平方公尺）</b>。`]
                 );
               }
             ]
@@ -1674,109 +1705,75 @@
             term: "final",
             termLabel: "期末範圍",
             points: [
-              "距離 ＝ 速率 × 時間；速率 ＝ 距離 ÷ 時間；時間 ＝ 距離 ÷ 速率。",
-              "單位換算：時速 → 分速（÷ 60）；分速 → 秒速（÷ 60）。",
-              "平均速率 ＝ 總距離 ÷ 總時間。"
+              "距離 ＝ 速率 × 時間；平均速率 ＝ 總距離 ÷ 總時間。",
+              "相向相遇時間 ＝ 總距離 ÷（甲速 ＋ 乙速）；同向追趕時間 ＝ 相差距離 ÷（快速 － 慢速）。"
             ],
             tips: [
-              "【經典陷阱】算來回「平均速率」時，絕對不能把去程速率跟回程速率直接相加除以 2，一定要用「來回總距離 ÷ 來回總時間」！",
-              "【相遇與追趕】兩人「相向而行（面對面走）」：相遇時間 ＝ 總距離 ÷（甲速 ＋ 乙速）；「同向追趕」：追上時間 ＝ 相差距離 ÷（快者速 － 慢者速）。"
+              "算來回「平均速率」一定要用「來回總距離 ÷ 來回總時間」，不可把兩速率直接相加除以 2！"
             ],
-            generators: [
+            tf: [
+              () => makeTF(
+                "u8", "U8 速率", "相同距離速率與時間關係",
+                `同一段 100 公尺賽跑，跑得越快的人，花的時間越少（速率與時間成反比）。`,
+                true,
+                "距離固定時，速率越快所需時間越短。",
+                ["1. 距離相同時，速率快則時間少，敘述正確。"]
+              )
+            ],
+            choice: [
               () => {
-                const [dist, t1, t2, avgSpd] = pick([
-                  [180, 2.5, 3.5, 60],
-                  [120, 2, 3, 48],
-                  [6, 3, 2, 2.4],
-                  [150, 2, 3, 60],
-                  [90, 1.5, 3, 40]
-                ]);
-                const totalDist = dist * 2;
-                const totalTime = t1 + t2;
-                return buildQuestionObj(
-                  "u8", "U8 速率", "經典平均速率陷阱",
-                  `甲、乙兩地相距 ${dist} 公里，爸爸開車去程花了 ${t1} 小時，回程因為塞車花了 ${t2} 小時，請問爸爸來回一趟的「平均時速」是多少公里？`,
-                  `${avgSpd} 公里`,
-                  [
-                    `${round2((dist / t1 + dist / t2) / 2)} 公里`,
-                    `${round2(dist / totalTime)} 公里`,
-                    `${round2(totalDist / t1)} 公里`
-                  ],
-                  "求平均速率必須使用「來回總距離 ÷ 來回總時間」，切勿將去程時速與回程時速直接平均。",
-                  [
-                    `1. 來回總距離：${dist} × 2 ＝ ${totalDist}（公里）。`,
-                    `2. 來回總時間：${t1} ＋ ${t2} ＝ ${totalTime}（小時）。`,
-                    `3. 平均時速：${totalDist} ÷ ${totalTime} ＝ <b>${avgSpd}（公里/小時）</b>。`
-                  ]
+                const [kmH, mMin, mSec] = pick([[72, 1200, 20], [54, 900, 15], [90, 1500, 25], [108, 1800, 30]]);
+                return makeChoice(
+                  "u8", "U8 速率", "速率單位換算",
+                  `汽車時速 ${kmH} 公里，換算成「分速」和「秒速」各是多少？`,
+                  `分速 ${mMin} 公尺；秒速 ${mSec} 公尺`,
+                  [`分速 ${mSec} 公尺；秒速 ${mMin} 公尺`, `分速 ${kmH * 100} 公尺；秒速 ${mMin} 公尺`, `分速 ${mMin} 公尺；秒速 ${mSec * 10} 公尺`],
+                  "公里乘 1000 換公尺；時速除 60 變分速，再除 60 變秒速。",
+                  [`1. ${kmH * 1000} ÷ 60 ＝ ${mMin} 公尺/分；${mMin} ÷ 60 ＝ <b>${mSec} 公尺/秒</b>。`]
                 );
-              },
+              }
+            ],
+            compare: [
+              () => makeCompare(
+                "u8", "U8 速率", "不同單位速率比較",
+                `分速 900 公尺`, `秒速 18 公尺`, "<",
+                "先統一換算成秒速或分速再比較：分速 900 公尺 ÷ 60 ＝ 秒速 15 公尺。",
+                ["1. 分速 900 公尺 ＝ 秒速 15 公尺，小於秒速 18 公尺，故填入 ＜。"]
+              )
+            ],
+            fill: [
               () => {
-                const v1 = pick([65, 70, 75, 80]);
-                const v2 = pick([55, 60, 65, 70]);
-                const mins = randInt(8, 15);
-                const totalDist = (v1 + v2) * mins;
-                return buildQuestionObj(
-                  "u8", "U8 速率", "相向相遇應用",
-                  `小華和小明兩人相距 ${totalDist} 公尺，同時出發面對面走過來。小華的分速是 ${v1} 公尺，小明的分速是 ${v2} 公尺，請問幾分鐘後兩人會相遇？`,
-                  `${mins} 分鐘`,
-                  [
-                    `${Math.round(totalDist / (v1 - v2 || 10))} 分鐘`,
-                    `${mins + 2} 分鐘`,
-                    `${mins * 2} 分鐘`
-                  ],
-                  "兩人面對面走過來，每分鐘兩人之間的距離會縮短「兩人速率的和」，因此相遇時間 ＝ 總距離 ÷（甲速 ＋ 乙速）。",
-                  [
-                    `1. 兩人每分鐘合計靠近：${v1} ＋ ${v2} ＝ ${v1 + v2}（公尺）。`,
-                    `2. 相遇時間：${totalDist} ÷ ${v1 + v2} ＝ <b>${mins}（分鐘）</b>。`
-                  ]
+                const [dist, t1, t2, avgSpd] = pick([[180, 2.5, 3.5, 60], [120, 2, 3, 48], [6, 3, 2, 2.4]]);
+                return makeFill(
+                  "u8", "U8 速率", "平均速率陷阱",
+                  `甲、乙兩地相距 ${dist} 公里，去程花 ${t1} 小時，回程花 ${t2} 小時，來回一趟的「平均時速」是（　　）公里。`,
+                  [{ label: "平均時速", answer: `${avgSpd}`, unit: "公里/時", placeholder: "輸入時速" }],
+                  "平均速率 ＝ 來回總距離 ÷ 來回總時間。",
+                  [`1. (${dist} × 2) ÷ (${t1} ＋ ${t2}) ＝ <b>${avgSpd} 公里/時</b>。`]
                 );
-              },
+              }
+            ],
+            word: [
               () => {
-                const slowV = pick([60, 70, 80]);
-                const fastV = slowV + pick([20, 25, 30]);
-                const headStartMins = pick([4, 5, 6]);
-                const headDist = slowV * headStartMins;
-                const catchMins = headDist / (fastV - slowV);
-                return buildQuestionObj(
-                  "u8", "U8 速率", "同向追趕應用",
+                const slowV = pick([60, 70, 80]), fastV = slowV + pick([20, 25, 30]), headStartMins = pick([4, 5, 6]);
+                const headDist = slowV * headStartMins, catchMins = headDist / (fastV - slowV);
+                return makeWord(
+                  "u8", "U8 速率", "同向追趕應用題",
                   `弟弟從家裡出發走路去公園，分速是 ${slowV} 公尺。走了 ${headStartMins} 分鐘後，哥哥發現弟弟忘了帶水壺，立刻以分速 ${fastV} 公尺追趕，哥哥幾分鐘後可以追上弟弟？`,
-                  `${catchMins} 分鐘`,
-                  [
-                    `${headStartMins} 分鐘`,
-                    `${Math.round(headDist / (fastV + slowV))} 分鐘`,
-                    `${catchMins + headStartMins} 分鐘`
-                  ],
-                  "先算出弟弟先走這段時間拉開了多少距離，再用「相差距離 ÷（哥哥速率 － 弟弟速率）」求出追上時間。",
-                  [
-                    `1. 弟弟先走的距離：${slowV} × ${headStartMins} ＝ ${headDist}（公尺）。`,
-                    `2. 哥哥每分鐘可追近：${fastV} － ${slowV} ＝ ${fastV - slowV}（公尺）。`,
-                    `3. 追上所需時間：${headDist} ÷ ${fastV - slowV} ＝ <b>${catchMins}（分鐘）</b>。`
-                  ]
+                  [{ label: "追上時間", answer: `${catchMins}`, unit: "分鐘", placeholder: "輸入分鐘數" }],
+                  "追趕時間 ＝ 弟弟先走的距離 ÷（哥哥速率 － 弟弟速率）。",
+                  [`1. ${headDist} ÷ (${fastV} － ${slowV}) ＝ <b>${catchMins}（分鐘）</b>。`]
                 );
               },
               () => {
-                const boat = pick([15, 18, 20, 24]);
-                const water = pick([3, 4, 5]);
-                const isUp = Math.random() > 0.5;
-                const effSpd = isUp ? boat - water : boat + water;
-                const hrs = randInt(2, 4);
-                const dist = effSpd * hrs;
-                return buildQuestionObj(
-                  "u8", "U8 速率", "流水問題",
-                  `一艘船在靜水中的時速是 ${boat} 公里，河流的水流時速是 ${water} 公里。這艘船在河中「${isUp ? "逆流" : "順流"}」行駛 ${hrs} 小時，共行駛了多少公里？`,
-                  `${dist} 公里`,
-                  [
-                    `${(isUp ? boat + water : boat - water) * hrs} 公里`,
-                    `${boat * hrs} 公里`,
-                    `${effSpd} 公里`
-                  ],
-                  isUp
-                    ? "逆流而上時水流會阻擋船前進，因此實際速率 ＝「船速 － 水速」。"
-                    : "順流而下時水流會推動船前進，因此實際速率 ＝「船速 ＋ 水速」。",
-                  [
-                    `1. ${isUp ? `逆流時速 ＝ ${boat} － ${water}` : `順流時速 ＝ ${boat} ＋ ${water}`} ＝ ${effSpd}（公里/小時）。`,
-                    `2. 行駛距離 ＝ ${effSpd} × ${hrs} ＝ <b>${dist}（公里）</b>。`
-                  ]
+                const v1 = pick([65, 70, 75, 80]), v2 = pick([55, 60, 65, 70]), mins = randInt(8, 15);
+                const totalDist = (v1 + v2) * mins;
+                return makeWord(
+                  "u8", "U8 速率", "相向相遇應用題",
+                  `小華和小明兩人相距 ${totalDist} 公尺，同時出發面對面走過來。小華的分速是 ${v1} 公尺，小明的分速是 ${v2} 公尺，請問幾分鐘後兩人會相遇？`,
+                  [{ label: "相遇時間", answer: `${mins}`, unit: "分鐘", placeholder: "輸入分鐘數" }],
+                  "相遇時間 ＝ 總距離 ÷（甲速 ＋ 乙速）。",
+                  [`1. ${totalDist} ÷ (${v1} ＋ ${v2}) ＝ <b>${mins}（分鐘）</b>。`]
                 );
               }
             ]
@@ -1785,17 +1782,47 @@
       }
     };
 
-    // 3. 測驗狀態與動態出題引擎
+    // =========================================================
+    // 3. 測驗狀態與五大題型動態配比引擎
+    // =========================================================
     let currentGrade = "g6";
     let topMode = "chapters";
     let currentUnitId = "u1";
     let currentExamType = "midterm";
+    let chapterQuestionCount = 10; // 6 | 10 | 15
+    let examQuestionCount = 20;    // 15 | 20 | 25
     let activeQuestions = [];
     let currentIndex = 0;
-    let userAnswers = {};
+    let userRecords = {};
 
     function getCurrentUnits() {
       return CURRICULUM[currentGrade].units;
+    }
+
+    function setChapterCount(cnt) {
+      chapterQuestionCount = cnt;
+      [6, 10, 15].forEach(n => {
+        const el = document.getElementById(`chap-cnt-${n}`);
+        if (el) {
+          el.className = n === cnt
+            ? "px-2.5 py-1 rounded-lg bg-white text-blue-700 shadow-sm"
+            : "px-2.5 py-1 rounded-lg text-slate-600 hover:text-slate-900";
+        }
+      });
+      selectUnit(currentUnitId);
+    }
+
+    function setExamCount(cnt) {
+      examQuestionCount = cnt;
+      [15, 20, 25].forEach(n => {
+        const el = document.getElementById(`exam-cnt-${n}`);
+        if (el) {
+          el.className = n === cnt
+            ? "px-3 py-1 rounded-lg bg-blue-600 text-white shadow-sm"
+            : "px-3 py-1 rounded-lg text-slate-600 hover:text-slate-900";
+        }
+      });
+      startExam(currentExamType);
     }
 
     function switchGrade(grade) {
@@ -1831,37 +1858,52 @@
       }
     }
 
-    function generateUnitQuestions(unitId, count) {
+    // 依總題數分配五大題型數量（是非、選擇、比大小、填充、應用計算）
+    function getFormatQuota(totalCount) {
+      if (totalCount === 6)  return { tf: 1, choice: 1, compare: 1, fill: 1, word: 2 };
+      if (totalCount === 10) return { tf: 2, choice: 2, compare: 2, fill: 2, word: 2 };
+      if (totalCount === 15) return { tf: 3, choice: 3, compare: 3, fill: 3, word: 3 };
+      if (totalCount === 20) return { tf: 4, choice: 4, compare: 4, fill: 4, word: 4 };
+      return { tf: 5, choice: 5, compare: 5, fill: 5, word: 5 }; // 25 題
+    }
+
+    // 生成單一單元題庫（依五大考卷大題順序排列）
+    function generateUnitQuestions(unitId, totalCount) {
       const unit = getCurrentUnits().find(u => u.id === unitId);
+      const q = getFormatQuota(totalCount);
       const list = [];
-      for (let i = 0; i < count; i++) {
-        const gen = unit.generators[i % unit.generators.length];
-        const q = gen();
-        q.id = i + 1;
-        list.push(q);
-      }
+      const order = ["tf", "choice", "compare", "fill", "word"];
+      order.forEach(fmt => {
+        const pool = unit[fmt];
+        for (let i = 0; i < q[fmt]; i++) {
+          list.push(pool[i % pool.length]());
+        }
+      });
+      list.forEach((item, idx) => { item.id = idx + 1; });
       return list;
     }
 
-    function generateExamQuestions(termType) {
+    // 生成期中/期末模擬考卷（跨單元平均抽取，並按五大考卷大題順序排列）
+    function generateExamQuestions(termType, totalCount) {
       const targetUnits = getCurrentUnits().filter(u => u.term === termType);
+      const q = getFormatQuota(totalCount);
       const list = [];
-      let qNum = 1;
-      let idx = 0;
-      while (list.length < 12) {
-        const u = targetUnits[idx % targetUnits.length];
-        const genIdx = Math.floor(idx / targetUnits.length) % u.generators.length;
-        const q = u.generators[genIdx]();
-        q.id = qNum++;
-        list.push(q);
-        idx++;
-      }
+      const order = ["tf", "choice", "compare", "fill", "word"];
+      order.forEach(fmt => {
+        for (let i = 0; i < q[fmt]; i++) {
+          const u = targetUnits[i % targetUnits.length];
+          const pool = u[fmt];
+          const genIdx = Math.floor(i / targetUnits.length) % pool.length;
+          list.push(pool[genIdx]());
+        }
+      });
+      list.forEach((item, idx) => { item.id = idx + 1; });
       return list;
     }
 
     function init() {
       switchGrade("g6");
-      initCanvas();
+      initCanvas("scratch-canvas");
     }
 
     function renderUnitButtons() {
@@ -1921,8 +1963,8 @@
       document.getElementById("guide-tips").innerHTML = unit.tips.map(t => `<li>${t}</li>`).join("");
 
       const gradeTag = currentGrade === "g3" ? "三上" : "六上";
-      document.getElementById("quiz-mode-label").textContent = `${gradeTag} ${unit.code} 練習`;
-      activeQuestions = generateUnitQuestions(unitId, 6);
+      document.getElementById("quiz-mode-label").textContent = `${gradeTag} ${unit.code} 練習（${chapterQuestionCount}題）`;
+      activeQuestions = generateUnitQuestions(unitId, chapterQuestionCount);
       resetQuizView();
     }
 
@@ -1936,14 +1978,14 @@
       if (termType === "midterm") {
         cardMid.classList.replace("border-slate-200", "border-indigo-500");
         cardFin.classList.replace("border-rose-500", "border-slate-200");
-        document.getElementById("quiz-mode-label").textContent = `${gradeTag}期中模擬卷 (${data.midtermBadge})`;
+        document.getElementById("quiz-mode-label").textContent = `${gradeTag}期中模擬卷 (${examQuestionCount}題)`;
       } else {
         cardFin.classList.replace("border-slate-200", "border-rose-500");
         cardMid.classList.replace("border-indigo-500", "border-slate-200");
-        document.getElementById("quiz-mode-label").textContent = `${gradeTag}期末模擬卷 (${data.finalBadge})`;
+        document.getElementById("quiz-mode-label").textContent = `${gradeTag}期末模擬卷 (${examQuestionCount}題)`;
       }
 
-      activeQuestions = generateExamQuestions(termType);
+      activeQuestions = generateExamQuestions(termType, examQuestionCount);
       resetQuizView();
     }
 
@@ -1956,7 +1998,7 @@
     }
 
     function resetQuizView() {
-      userAnswers = {};
+      userRecords = {};
       currentIndex = 0;
       document.getElementById("result-card").classList.add("hidden");
       document.getElementById("question-card").classList.remove("hidden");
@@ -1964,17 +2006,27 @@
       renderQuestion();
     }
 
-    // 4. 作答渲染與互動邏輯
+    // =========================================================
+    // 4. 五大題型（是非 / 選擇 / 比大小 / 填充 / 應用計算）渲染與批改
+    // =========================================================
+    const FORMAT_META = {
+      tf:      { label: "一、是非題",     badgeClass: "bg-purple-600 text-white" },
+      choice:  { label: "二、選擇題",     badgeClass: "bg-indigo-600 text-white" },
+      compare: { label: "三、比大小",     badgeClass: "bg-cyan-600 text-white" },
+      fill:    { label: "四、填充題",     badgeClass: "bg-teal-600 text-white" },
+      word:    { label: "五、應用計算題", badgeClass: "bg-amber-600 text-white" }
+    };
+
     function renderDots() {
       const container = document.getElementById("question-dots");
       container.innerHTML = "";
       activeQuestions.forEach((q, idx) => {
         const btn = document.createElement("button");
         btn.type = "button";
-        const ans = userAnswers[q.id];
+        const rec = userRecords[q.id];
         let style = "bg-slate-100 text-slate-600 border-slate-200";
-        if (ans !== undefined) {
-          style = ans === q.answer
+        if (rec) {
+          style = rec.isCorrect
             ? "bg-emerald-500 text-white border-emerald-600"
             : "bg-rose-500 text-white border-rose-600";
         }
@@ -1995,60 +2047,48 @@
     function renderQuestion() {
       const q = activeQuestions[currentIndex];
       const total = activeQuestions.length;
-      const selected = userAnswers[q.id];
+      const rec = userRecords[q.id];
 
       document.getElementById("progress-label").textContent = `第 ${currentIndex + 1} 題 / 共 ${total} 題`;
-      const correctCount = activeQuestions.filter(item => userAnswers[item.id] === item.answer).length;
+      const correctCount = activeQuestions.filter(item => userRecords[item.id]?.isCorrect).length;
       document.getElementById("score-label").textContent = `目前答對：${correctCount} 題`;
       document.getElementById("progress-bar").style.width = `${((currentIndex + 1) / total) * 100}%`;
 
+      const fMeta = FORMAT_META[q.format];
+      const fBadge = document.getElementById("q-format-badge");
+      fBadge.textContent = fMeta.label;
+      fBadge.className = `text-xs font-extrabold px-2.5 py-1 rounded-lg ${fMeta.badgeClass}`;
+
       document.getElementById("q-unit-badge").textContent = q.unit;
-      document.getElementById("q-type-badge").textContent = q.type;
+      document.getElementById("q-type-badge").textContent = q.subType;
       document.getElementById("q-text").innerHTML = `${q.id}. ${q.question}`;
 
-      const optContainer = document.getElementById("options-container");
-      optContainer.innerHTML = "";
-      const labels = ["A", "B", "C", "D"];
+      const area = document.getElementById("answer-area");
+      area.innerHTML = "";
 
-      q.options.forEach((optText, idx) => {
-        const btn = document.createElement("button");
-        btn.type = "button";
-        btn.disabled = selected !== undefined;
-
-        let cardStyle = "bg-white border-slate-200 hover:border-blue-400 hover:bg-blue-50/30 text-slate-800";
-        let badgeStyle = "bg-slate-100 text-slate-600";
-
-        if (selected !== undefined) {
-          if (idx === q.answer) {
-            cardStyle = "bg-emerald-50 border-emerald-500 text-emerald-950 font-semibold";
-            badgeStyle = "bg-emerald-600 text-white";
-          } else if (idx === selected) {
-            cardStyle = "bg-rose-50 border-rose-500 text-rose-950";
-            badgeStyle = "bg-rose-600 text-white";
-          } else {
-            cardStyle = "bg-slate-50 border-slate-200 text-slate-400 opacity-70";
-          }
-        }
-
-        btn.className = `btn-press w-full text-left p-4 rounded-xl border-2 transition flex items-center gap-3.5 ${cardStyle}`;
-        btn.innerHTML = `
-          <span class="w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold shrink-0 ${badgeStyle}">${labels[idx]}</span>
-          <span class="text-base leading-snug">${optText}</span>
-        `;
-        btn.onclick = () => selectOption(idx);
-        optContainer.appendChild(btn);
-      });
+      if (q.format === "tf" || q.format === "choice" || q.format === "compare") {
+        renderOptionBasedArea(q, rec, area);
+      } else {
+        renderInputArea(q, rec, area);
+      }
 
       const expBox = document.getElementById("explanation-box");
-      if (selected !== undefined) {
-        const isCorrect = selected === q.answer;
+      if (rec) {
         expBox.classList.remove("hidden", "bg-emerald-50/80", "border-emerald-200", "bg-rose-50/80", "border-rose-200");
-        if (isCorrect) {
+        if (rec.isCorrect) {
           expBox.classList.add("bg-emerald-50/80", "border-emerald-200");
-          document.getElementById("feedback-header").innerHTML = `<span class="text-emerald-700">✅ 答對了！觀念非常清楚！</span>`;
+          document.getElementById("feedback-header").innerHTML = `<span class="text-emerald-700">✅ 答對了！觀念與算式完全正確！</span>`;
         } else {
           expBox.classList.add("bg-rose-50/80", "border-rose-200");
-          document.getElementById("feedback-header").innerHTML = `<span class="text-rose-700">❌ 再想一下喔！正確答案是 (${labels[q.answer]})</span>`;
+          let ansSummary = "";
+          if (q.format === "tf" || q.format === "compare") {
+            ansSummary = `正確答案為：${q.options[q.answer]}`;
+          } else if (q.format === "choice") {
+            ansSummary = `正確選項為 (${["A", "B", "C", "D"][q.answer]})`;
+          } else {
+            ansSummary = "正確答案：" + q.fields.map(fld => `${fld.label} ${fld.answer.split("|")[0]} ${fld.unit}`).join("、");
+          }
+          document.getElementById("feedback-header").innerHTML = `<span class="text-rose-700">❌ 再核對一下喔！${ansSummary}</span>`;
         }
         document.getElementById("exp-concept").innerHTML = q.concept;
         document.getElementById("exp-steps").innerHTML = q.steps.map(s => `<p>${s}</p>`).join("");
@@ -2061,9 +2101,154 @@
       nextBtn.textContent = currentIndex === total - 1 ? "查看測驗成績 →" : "下一題 →";
     }
 
-    function selectOption(optionIdx) {
-      const q = activeQuestions[currentIndex];
-      userAnswers[q.id] = optionIdx;
+    // 渲染【是非題】、【選擇題】、【比大小題】
+    function renderOptionBasedArea(q, rec, container) {
+      const wrap = document.createElement("div");
+      wrap.className = q.format === "choice" ? "space-y-3" : "grid grid-cols-1 sm:grid-cols-3 gap-3";
+      const labels = q.format === "choice" ? ["A", "B", "C", "D"] : (q.format === "tf" ? ["○", "✕"] : ["＞", "＜", "＝"]);
+
+      q.options.forEach((optText, idx) => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.disabled = !!rec;
+
+        let cardStyle = "bg-white border-slate-200 hover:border-blue-400 hover:bg-blue-50/30 text-slate-800";
+        let badgeStyle = "bg-slate-100 text-slate-600";
+
+        if (rec) {
+          if (idx === q.answer) {
+            cardStyle = "bg-emerald-50 border-emerald-500 text-emerald-950 font-semibold";
+            badgeStyle = "bg-emerald-600 text-white";
+          } else if (idx === rec.selectedOpt) {
+            cardStyle = "bg-rose-50 border-rose-500 text-rose-950";
+            badgeStyle = "bg-rose-600 text-white";
+          } else {
+            cardStyle = "bg-slate-50 border-slate-200 text-slate-400 opacity-70";
+          }
+        }
+
+        btn.className = `btn-press w-full text-left p-4 rounded-xl border-2 transition flex items-center gap-3.5 ${cardStyle}`;
+        btn.innerHTML = `
+          <span class="w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold shrink-0 ${badgeStyle}">${labels[idx]}</span>
+          <span class="text-base leading-snug">${optText}</span>
+        `;
+        btn.onclick = () => {
+          userRecords[q.id] = {
+            isCorrect: idx === q.answer,
+            selectedOpt: idx
+          };
+          renderDots();
+          renderQuestion();
+        };
+        wrap.appendChild(btn);
+      });
+      container.appendChild(wrap);
+    }
+
+    // 渲染【填充題】與【應用計算題】
+    function renderInputArea(q, rec, container) {
+      const wrap = document.createElement("div");
+      wrap.className = "space-y-4";
+
+      if (q.format === "word") {
+        const workBox = document.createElement("div");
+        workBox.className = "rounded-2xl border border-amber-200 bg-amber-50/40 p-3.5";
+        workBox.innerHTML = `
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-bold text-amber-800">✍️ 算式計算過程區（可用手指、Apple Pencil 或滑鼠寫出算式）</span>
+            <button type="button" onclick="clearCanvas('inline-word-canvas')" class="px-2.5 py-1 text-xs font-semibold bg-white text-slate-600 border border-slate-300 rounded-lg hover:bg-slate-50">清除算式</button>
+          </div>
+          <div class="w-full overflow-hidden rounded-xl border border-slate-300 bg-white">
+            <canvas id="inline-word-canvas" class="grid-paper w-full h-44 block cursor-crosshair"></canvas>
+          </div>
+        `;
+        wrap.appendChild(workBox);
+      }
+
+      const inputsGrid = document.createElement("div");
+      inputsGrid.className = "grid grid-cols-1 sm:grid-cols-2 gap-3 bg-slate-50 p-4 rounded-2xl border border-slate-200";
+
+      q.fields.forEach((fld, idx) => {
+        const savedVal = rec ? (rec.inputValues[idx] || "") : "";
+        const isFieldRight = rec ? checkFieldMatch(savedVal, fld.answer) : null;
+
+        let borderClass = "border-slate-300 focus:border-blue-500 bg-white";
+        if (rec) {
+          borderClass = isFieldRight
+            ? "border-emerald-500 bg-emerald-50 text-emerald-900 font-bold"
+            : "border-rose-500 bg-rose-50 text-rose-900 font-bold";
+        }
+
+        const fieldDiv = document.createElement("div");
+        fieldDiv.innerHTML = `
+          <label class="block text-xs font-bold text-slate-600 mb-1">${fld.label}：</label>
+          <div class="flex items-center gap-2">
+            <input
+              type="text"
+              inputmode="decimal"
+              id="fill-input-${idx}"
+              value="${savedVal}"
+              ${rec ? "disabled" : ""}
+              placeholder="${fld.placeholder || "請輸入答案"}"
+              class="w-full px-3.5 py-2.5 rounded-xl border-2 text-base outline-none transition ${borderClass}"
+            />
+            ${fld.unit ? `<span class="text-sm font-bold text-slate-700 shrink-0">${fld.unit}</span>` : ""}
+          </div>
+        `;
+        inputsGrid.appendChild(fieldDiv);
+      });
+
+      wrap.appendChild(inputsGrid);
+
+      if (!rec) {
+        const submitBtn = document.createElement("button");
+        submitBtn.type = "button";
+        submitBtn.className = "btn-press w-full sm:w-auto px-6 py-3 rounded-xl text-sm font-bold bg-blue-600 text-white hover:bg-blue-700 shadow-sm transition";
+        submitBtn.textContent = "✓ 送出答案並批改";
+        submitBtn.onclick = () => submitInputAnswer(q);
+        wrap.appendChild(submitBtn);
+      }
+
+      container.appendChild(wrap);
+
+      setTimeout(() => {
+        q.fields.forEach((_, idx) => {
+          const inp = document.getElementById(`fill-input-${idx}`);
+          if (inp && !rec) {
+            inp.addEventListener("keydown", (e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                submitInputAnswer(q);
+              }
+            });
+          }
+        });
+        if (q.format === "word") {
+          initCanvas("inline-word-canvas");
+        }
+      }, 0);
+    }
+
+    function submitInputAnswer(q) {
+      const vals = [];
+      let allFilled = true;
+      q.fields.forEach((_, idx) => {
+        const el = document.getElementById(`fill-input-${idx}`);
+        const v = el ? el.value.trim() : "";
+        if (!v) allFilled = false;
+        vals.push(v);
+      });
+
+      if (!allFilled) {
+        alert("請先將所有答案空格填寫完成再送出喔！");
+        return;
+      }
+
+      const isAllCorrect = q.fields.every((fld, idx) => checkFieldMatch(vals[idx], fld.answer));
+      userRecords[q.id] = {
+        isCorrect: isAllCorrect,
+        inputValues: vals
+      };
       renderDots();
       renderQuestion();
     }
@@ -2092,17 +2277,41 @@
       resultCard.classList.remove("hidden");
 
       const total = activeQuestions.length;
-      const correctCount = activeQuestions.filter(q => userAnswers[q.id] === q.answer).length;
+      const correctCount = activeQuestions.filter(q => userRecords[q.id]?.isCorrect).length;
       const wrongCount = total - correctCount;
 
       document.getElementById("final-score-text").textContent =
-        `本次共練習 ${total} 題，答對 ${correctCount} 題（正確率 ${Math.round((correctCount / total) * 100)}%）`;
+        `本次共測驗 ${total} 題，答對 ${correctCount} 題（總得分率 ${Math.round((correctCount / total) * 100)}%）`;
+
+      const fmtStats = {
+        tf:      { name: "一、是非題",     total: 0, correct: 0 },
+        choice:  { name: "二、選擇題",     total: 0, correct: 0 },
+        compare: { name: "三、比大小",     total: 0, correct: 0 },
+        fill:    { name: "四、填充題",     total: 0, correct: 0 },
+        word:    { name: "五、應用計算題", total: 0, correct: 0 }
+      };
+      activeQuestions.forEach(q => {
+        fmtStats[q.format].total++;
+        if (userRecords[q.id]?.isCorrect) fmtStats[q.format].correct++;
+      });
+
+      const fmtBox = document.getElementById("format-breakdown");
+      fmtBox.innerHTML = `<div class="text-xs font-bold text-slate-500 uppercase mb-2">考卷五大題型得分分析</div>`;
+      Object.values(fmtStats).forEach(st => {
+        if (st.total === 0) return;
+        fmtBox.innerHTML += `
+          <div class="flex items-center justify-between text-sm py-1 border-b border-slate-200/60 last:border-0">
+            <span class="font-medium text-slate-700">${st.name}</span>
+            <span class="font-bold ${st.correct === st.total ? "text-emerald-600" : "text-amber-600"}">${st.correct} / ${st.total} 題</span>
+          </div>
+        `;
+      });
 
       const unitStats = {};
       activeQuestions.forEach(q => {
         if (!unitStats[q.unit]) unitStats[q.unit] = { total: 0, correct: 0 };
         unitStats[q.unit].total++;
-        if (userAnswers[q.id] === q.answer) unitStats[q.unit].correct++;
+        if (userRecords[q.id]?.isCorrect) unitStats[q.unit].correct++;
       });
 
       const breakdown = document.getElementById("unit-breakdown");
@@ -2127,9 +2336,9 @@
     }
 
     function retryWrongOnly() {
-      const wrongList = activeQuestions.filter(q => userAnswers[q.id] !== q.answer);
+      const wrongList = activeQuestions.filter(q => !userRecords[q.id]?.isCorrect);
       if (wrongList.length === 0) return;
-      wrongList.forEach(q => delete userAnswers[q.id]);
+      wrongList.forEach(q => delete userRecords[q.id]);
       activeQuestions = wrongList;
       currentIndex = 0;
       document.getElementById("result-card").classList.add("hidden");
@@ -2138,54 +2347,72 @@
       renderQuestion();
     }
 
-    // 5. 手寫草稿紙（Canvas）
-    let canvas, ctx, isDrawing = false, penColor = "#1e293b";
+    // =========================================================
+    // 5. 多畫布手寫計算紙引擎
+    // =========================================================
+    let penColor = "#1e293b";
 
     function toggleScratchpad() {
       const panel = document.getElementById("scratchpad-panel");
       panel.classList.toggle("hidden");
-      if (!panel.classList.contains("hidden")) resizeCanvas();
+      if (!panel.classList.contains("hidden")) {
+        resizeCanvas("scratch-canvas");
+      }
     }
 
-    function setPenColor(color) { penColor = color; }
-
-    function clearCanvas() {
-      if (!canvas || !ctx) return;
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    function setPenColor(color) {
+      penColor = color;
     }
 
-    function resizeCanvas() {
-      if (!canvas) return;
-      const rect = canvas.getBoundingClientRect();
+    function clearCanvas(canvasId) {
+      const c = document.getElementById(canvasId);
+      if (!c) return;
+      const ctx = c.getContext("2d");
+      ctx.clearRect(0, 0, c.width, c.height);
+    }
+
+    function resizeCanvas(canvasId) {
+      const c = document.getElementById(canvasId);
+      if (!c) return;
+      const ctx = c.getContext("2d");
+      const rect = c.getBoundingClientRect();
+      if (rect.width === 0 || rect.height === 0) return;
       const dpr = window.devicePixelRatio || 1;
-      canvas.width = rect.width * dpr;
-      canvas.height = rect.height * dpr;
+      c.width = rect.width * dpr;
+      c.height = rect.height * dpr;
       ctx.scale(dpr, dpr);
       ctx.lineCap = "round";
       ctx.lineJoin = "round";
       ctx.lineWidth = 2.5;
     }
 
-    function initCanvas() {
-      canvas = document.getElementById("scratch-canvas");
-      ctx = canvas.getContext("2d");
+    function initCanvas(canvasId) {
+      const c = document.getElementById(canvasId);
+      if (!c || c.dataset.bound === "true") {
+        resizeCanvas(canvasId);
+        return;
+      }
+      c.dataset.bound = "true";
+      resizeCanvas(canvasId);
+      const ctx = c.getContext("2d");
+      let drawing = false;
 
       const getPos = (e) => {
-        const rect = canvas.getBoundingClientRect();
+        const rect = c.getBoundingClientRect();
         const clientX = e.touches ? e.touches[0].clientX : e.clientX;
         const clientY = e.touches ? e.touches[0].clientY : e.clientY;
         return { x: clientX - rect.left, y: clientY - rect.top };
       };
 
       const startDraw = (e) => {
-        isDrawing = true;
+        drawing = true;
         const pos = getPos(e);
         ctx.beginPath();
         ctx.moveTo(pos.x, pos.y);
       };
 
       const draw = (e) => {
-        if (!isDrawing) return;
+        if (!drawing) return;
         e.preventDefault();
         const pos = getPos(e);
         ctx.strokeStyle = penColor;
@@ -2193,14 +2420,16 @@
         ctx.stroke();
       };
 
-      const endDraw = () => { isDrawing = false; };
+      const endDraw = () => {
+        drawing = false;
+      };
 
-      canvas.addEventListener("mousedown", startDraw);
-      canvas.addEventListener("mousemove", draw);
+      c.addEventListener("mousedown", startDraw);
+      c.addEventListener("mousemove", draw);
       window.addEventListener("mouseup", endDraw);
 
-      canvas.addEventListener("touchstart", startDraw, { passive: false });
-      canvas.addEventListener("touchmove", draw, { passive: false });
+      c.addEventListener("touchstart", startDraw, { passive: false });
+      c.addEventListener("touchmove", draw, { passive: false });
       window.addEventListener("touchend", endDraw);
     }
 
