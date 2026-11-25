@@ -63,17 +63,17 @@
       </div>
 
       <div class="flex items-center gap-2 flex-wrap">
-        <!-- 年級切換器（對齊英文練習本雙年級體驗） -->
+        <!-- 年級切換器 -->
         <div class="inline-flex bg-slate-100 p-1 rounded-xl border border-slate-200" role="group" aria-label="選擇年級">
-          <button id="grade-g3" onclick="switchGrade('g3')" class="px-2.5 py-1 rounded-lg text-xs sm:text-sm font-bold transition text-slate-600 hover:text-slate-900">
+          <button type="button" id="grade-g3" onclick="switchGrade('g3')" class="px-2.5 py-1 rounded-lg text-xs sm:text-sm font-bold transition text-slate-600 hover:text-slate-900">
             三上康軒
           </button>
-          <button id="grade-g6" onclick="switchGrade('g6')" class="px-2.5 py-1 rounded-lg text-xs sm:text-sm font-bold transition bg-blue-600 text-white shadow-sm">
+          <button type="button" id="grade-g6" onclick="switchGrade('g6')" class="px-2.5 py-1 rounded-lg text-xs sm:text-sm font-bold transition bg-blue-600 text-white shadow-sm">
             六上翰林
           </button>
         </div>
 
-        <button onclick="toggleScratchpad()" class="btn-press inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs sm:text-sm font-semibold bg-amber-50 text-amber-700 border border-amber-200 hover:bg-amber-100 transition">
+        <button type="button" onclick="toggleScratchpad()" class="btn-press inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs sm:text-sm font-semibold bg-amber-50 text-amber-700 border border-amber-200 hover:bg-amber-100 transition">
           <span>✏️</span>
           <span>草稿紙</span>
         </button>
@@ -88,27 +88,27 @@
     <!-- 主模式切換列 -->
     <div class="bg-slate-50 border-t border-slate-200/80">
       <div class="max-w-4xl mx-auto px-4 py-2 flex gap-2">
-        <button id="tab-chapters" onclick="switchTopMode('chapters')" class="flex-1 py-2 px-3 rounded-xl text-xs sm:text-sm font-bold transition bg-blue-600 text-white shadow-sm">
+        <button type="button" id="tab-chapters" onclick="switchTopMode('chapters')" class="flex-1 py-2 px-3 rounded-xl text-xs sm:text-sm font-bold transition bg-blue-600 text-white shadow-sm">
           📚 分章節重點與練習
         </button>
-        <button id="tab-exams" onclick="switchTopMode('exams')" class="flex-1 py-2 px-3 rounded-xl text-xs sm:text-sm font-bold transition bg-white text-slate-600 border border-slate-200 hover:bg-slate-100">
+        <button type="button" id="tab-exams" onclick="switchTopMode('exams')" class="flex-1 py-2 px-3 rounded-xl text-xs sm:text-sm font-bold transition bg-white text-slate-600 border border-slate-200 hover:bg-slate-100">
           📝 期中／期末考總複習
         </button>
       </div>
     </div>
   </header>
 
-  <!-- 可收合手寫草稿紙（支援 iPad Apple Pencil） -->
+  <!-- 可收合手寫草稿紙 -->
   <section id="scratchpad-panel" class="hidden bg-slate-100 border-b border-slate-300 shadow-inner">
     <div class="max-w-4xl mx-auto px-4 py-3">
       <div class="flex items-center justify-between mb-2">
         <span class="text-xs font-semibold text-slate-600">📝 手寫計算草稿區（支援手指、Apple Pencil 與滑鼠）</span>
         <div class="flex items-center gap-2">
-          <button onclick="setPenColor('#1e293b')" class="w-5 h-5 rounded-full bg-slate-800 border-2 border-white shadow" title="黑色筆"></button>
-          <button onclick="setPenColor('#2563eb')" class="w-5 h-5 rounded-full bg-blue-600 border-2 border-white shadow" title="藍色筆"></button>
-          <button onclick="setPenColor('#dc2626')" class="w-5 h-5 rounded-full bg-red-600 border-2 border-white shadow" title="紅色筆"></button>
-          <button onclick="clearCanvas()" class="ml-2 px-2.5 py-1 text-xs font-semibold bg-white text-slate-700 border border-slate-300 rounded-lg hover:bg-slate-50">清除</button>
-          <button onclick="toggleScratchpad()" class="px-2.5 py-1 text-xs font-semibold bg-slate-700 text-white rounded-lg hover:bg-slate-800">收起</button>
+          <button type="button" onclick="setPenColor('#1e293b')" class="w-5 h-5 rounded-full bg-slate-800 border-2 border-white shadow" title="黑色筆"></button>
+          <button type="button" onclick="setPenColor('#2563eb')" class="w-5 h-5 rounded-full bg-blue-600 border-2 border-white shadow" title="藍色筆"></button>
+          <button type="button" onclick="setPenColor('#dc2626')" class="w-5 h-5 rounded-full bg-red-600 border-2 border-white shadow" title="紅色筆"></button>
+          <button type="button" onclick="clearCanvas()" class="ml-2 px-2.5 py-1 text-xs font-semibold bg-white text-slate-700 border border-slate-300 rounded-lg hover:bg-slate-50">清除</button>
+          <button type="button" onclick="toggleScratchpad()" class="px-2.5 py-1 text-xs font-semibold bg-slate-700 text-white rounded-lg hover:bg-slate-800">收起</button>
         </div>
       </div>
       <div class="w-full overflow-hidden rounded-xl border border-slate-300 bg-white shadow-sm">
@@ -137,7 +137,7 @@
             <span id="guide-term-badge" class="text-xs font-bold px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-700 mr-1.5">期中範圍</span>
             <h2 id="guide-title" class="inline text-lg font-bold text-slate-900">單元標題</h2>
           </div>
-          <button onclick="regenerateCurrentQuiz()" class="btn-press inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold bg-emerald-600 text-white hover:bg-emerald-700 shadow-sm transition">
+          <button type="button" onclick="regenerateCurrentQuiz()" class="btn-press inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold bg-emerald-600 text-white hover:bg-emerald-700 shadow-sm transition">
             <span>🔄</span>
             <span>重新生成本單元 6 題新題目</span>
           </button>
@@ -175,7 +175,7 @@
             <h2 class="text-lg font-bold text-slate-900 mb-1">期中考總複習模擬卷</h2>
             <p id="midterm-desc" class="text-xs sm:text-sm text-slate-500 mb-4 leading-relaxed"></p>
           </div>
-          <button onclick="startExam('midterm')" class="btn-press w-full py-2.5 px-4 rounded-xl text-sm font-bold bg-indigo-600 text-white hover:bg-indigo-700 shadow-sm transition">
+          <button type="button" onclick="startExam('midterm')" class="btn-press w-full py-2.5 px-4 rounded-xl text-sm font-bold bg-indigo-600 text-white hover:bg-indigo-700 shadow-sm transition">
             🔄 生成期中考新試卷（12 題）
           </button>
         </div>
@@ -189,7 +189,7 @@
             <h2 class="text-lg font-bold text-slate-900 mb-1">期末考總複習模擬卷</h2>
             <p id="final-desc" class="text-xs sm:text-sm text-slate-500 mb-4 leading-relaxed"></p>
           </div>
-          <button onclick="startExam('final')" class="btn-press w-full py-2.5 px-4 rounded-xl text-sm font-bold bg-rose-600 text-white hover:bg-rose-700 shadow-sm transition">
+          <button type="button" onclick="startExam('final')" class="btn-press w-full py-2.5 px-4 rounded-xl text-sm font-bold bg-rose-600 text-white hover:bg-rose-700 shadow-sm transition">
             🔄 生成期末考新試卷（12 題）
           </button>
         </div>
@@ -238,10 +238,10 @@
         </div>
 
         <div class="mt-6 pt-5 border-t border-slate-100 flex items-center justify-between">
-          <button id="prev-btn" onclick="prevQuestion()" class="btn-press px-4 py-2.5 rounded-xl text-sm font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 disabled:opacity-40 disabled:pointer-events-none transition">
+          <button type="button" id="prev-btn" onclick="prevQuestion()" class="btn-press px-4 py-2.5 rounded-xl text-sm font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 disabled:opacity-40 disabled:pointer-events-none transition">
             ← 上一題
           </button>
-          <button id="next-btn" onclick="nextQuestion()" class="btn-press px-5 py-2.5 rounded-xl text-sm font-semibold bg-blue-600 text-white hover:bg-blue-700 shadow-sm transition">
+          <button type="button" id="next-btn" onclick="nextQuestion()" class="btn-press px-5 py-2.5 rounded-xl text-sm font-semibold bg-blue-600 text-white hover:bg-blue-700 shadow-sm transition">
             下一題 →
           </button>
         </div>
@@ -256,10 +256,10 @@
         <div id="unit-breakdown" class="text-left max-w-lg mx-auto bg-slate-50 rounded-2xl p-4 border border-slate-200 mb-6 space-y-2"></div>
 
         <div class="flex flex-wrap justify-center gap-3">
-          <button id="retry-wrong-btn" onclick="retryWrongOnly()" class="btn-press px-5 py-2.5 rounded-xl text-sm font-bold bg-amber-500 text-white hover:bg-amber-600 shadow-sm transition">
+          <button type="button" id="retry-wrong-btn" onclick="retryWrongOnly()" class="btn-press px-5 py-2.5 rounded-xl text-sm font-bold bg-amber-500 text-white hover:bg-amber-600 shadow-sm transition">
             針對錯題重新練習
           </button>
-          <button onclick="regenerateCurrentQuiz()" class="btn-press px-5 py-2.5 rounded-xl text-sm font-bold bg-emerald-600 text-white hover:bg-emerald-700 shadow-sm transition">
+          <button type="button" onclick="regenerateCurrentQuiz()" class="btn-press px-5 py-2.5 rounded-xl text-sm font-bold bg-emerald-600 text-white hover:bg-emerald-700 shadow-sm transition">
             🔄 生成全新數字再練一次
           </button>
         </div>
@@ -269,9 +269,7 @@
   </main>
 
   <script>
-    // =========================================================
     // 1. 數學排版與運算工具函式
-    // =========================================================
     const f = (n, d) => `<span class="frac"><span class="frac-num">${n}</span><span class="frac-den">${d}</span></span>`;
     const mf = (w, n, d) => `<span class="mixed-num"><span>${w}</span>${f(n, d)}</span>`;
     const randInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
@@ -317,13 +315,8 @@
       };
     }
 
-    // =========================================================
     // 2. 雙年級完整教材庫：三年級上學期（康軒版） & 六年級上學期（翰林版）
-    // =========================================================
     const CURRICULUM = {
-      // ---------------------------------------------------------
-      // 三年級上學期（康軒版 9 大單元）
-      // ---------------------------------------------------------
       g3: {
         title: "三上數學（康軒版）・分章節與模擬考",
         subtitle: "全冊 9 單元重點技巧・無限動態生成應用題庫",
@@ -397,11 +390,10 @@
               },
               () => {
                 const start = pick([2980, 3970, 5990, 7960]);
-                const step = 10;
-                const ans = start + step * 3;
+                const ans = start + 30;
                 return buildQuestionObj(
                   "g3_u1", "U1 10000以內的數", "數線與進位",
-                  `數數看，10 個一數：${start} → ${start + 10} → ${start + 20} → （　　），括號裡應該填多少？`,
+                  `數數看，10 個一數：${start} → ${start + 10} → ${start + 20} → （  ），括號裡應該填多少？`,
                   `${ans}`,
                   [
                     `${start + 21}`,
@@ -448,7 +440,7 @@
                     `${change + 100} 元`,
                     `${item1 + item2} 元`
                   ],
-                  "先算出兩樣家電總共花了多少元，再用爸爸原本帶的錢扣掉總花費（或連續減去兩樣花費）。",
+                  "先算出兩樣家電總共花了多少元，再用爸爸原本帶的錢扣掉總花費。",
                   [
                     `1. 兩樣家電共花費：${item1} ＋ ${item2} ＝ ${item1 + item2}（元）。`,
                     `2. 剩下的錢：${total} － ${item1 + item2} ＝ <b>${change}（元）</b>。`
@@ -469,7 +461,7 @@
                     `${a + (a - diff)} 顆`,
                     `${sum - 100} 顆`
                   ],
-                  "題目問「兩天一共」，不能只算出今天的數量就停下來！要先算今天，再把昨天和今天加起來。",
+                  "題目問「兩天一共」，要先算出今天的數量，再把昨天和今天加起來。",
                   [
                     `1. 先算今天採收的數量：${a} ＋ ${diff} ＝ ${b}（顆）。`,
                     `2. 再算兩天一共採收：${a} ＋ ${b} ＝ <b>${sum}（顆）</b>。`
@@ -617,7 +609,7 @@
                     `${totalCost - price * 2} 元`,
                     `${boxes * price} 元`
                   ],
-                  "先算買了幾盒總共有幾個鳳梨酥，再乘以每個的價錢（也可以先算一盒多少元，再乘以幾盒）。",
+                  "先算買了幾盒總共有幾個鳳梨酥，再乘以每個的價錢。",
                   [
                     `1. 先算總共有幾個：${perBox} × ${boxes} ＝ ${totalItems}（個）。`,
                     `2. 再算總共要付多少元：${totalItems} × ${price} ＝ <b>${totalCost}（元）</b>。`
@@ -627,7 +619,7 @@
               () => {
                 const h = randInt(2, 5);
                 const u = randInt(3, 8);
-                const num = h * 100 + u; // 百位與個位有數字，十位為 0
+                const num = h * 100 + u;
                 const mult = randInt(4, 8);
                 const ans = num * mult;
                 return buildQuestionObj(
@@ -653,7 +645,7 @@
                 const extra = randInt(15, 45);
                 const ans = base * mult + extra;
                 return buildQuestionObj(
-                  "g3_u4", "U4 乘法", "倍數加加減應用",
+                  "g3_u4", "U4 乘法", "倍數加減應用",
                   `弟弟存了 ${base} 元，哥哥存的錢是弟弟的 ${mult} 倍又多 ${extra} 元，哥哥存了多少元？`,
                   `${ans} 元`,
                   [
@@ -821,12 +813,10 @@
               "驗算公式：除數 × 商 ＋ 餘數 ＝ 被除數。"
             ],
             tips: [
-              "【應用題兩大經典陷阱】
-1.「租帳篷／搭計程車／裝箱全部裝完」：只要有餘數，商要「加 1」（多派一輛車才載得完）。
-2.「買東西／綁蝴蝶結最多做幾個」：剩下的不夠做一個，餘數要「捨去」。"
+              "【租車／裝箱全部裝完】只要有餘數，商要「加 1」（多派一輛車才載得完）。",
+              "【買東西／綁蝴蝶結最多做幾個】剩下的不夠做一個，餘數要「捨去」。"
             ],
             generators: [
-              // 題型 1：餘數進一（租車／裝箱問題）
               () => {
                 const cap = pick([4, 6, 7, 8]);
                 const cars = randInt(5, 8);
@@ -849,7 +839,6 @@
                   ]
                 );
               },
-              // 題型 2：餘數捨去（買東西／做禮盒問題）
               () => {
                 const price = pick([6, 7, 8, 9]);
                 const count = randInt(6, 9);
@@ -871,7 +860,6 @@
                   ]
                 );
               },
-              // 題型 3：奇數與偶數判斷
               () => {
                 const num = randInt(41, 98);
                 const isEven = num % 2 === 0;
@@ -987,7 +975,7 @@
                     `${f(rem, den * 2)} 個`,
                     `${f(rem + 1, den)} 個`
                   ],
-                  "1 個完整的披薩平分成 " + den + " 片就是 " + f(den, den) + "。同分母分數加減時，分母保持不變，只算分子。",
+                  `1 個完整的披薩平分成 ${den} 片就是 ${f(den, den)}。同分母分數加減時，分母保持不變，只算分子。`,
                   [
                     `1. 兄妹兩人一共吃了：${f(eat1, den)} ＋ ${f(eat2, den)} ＝ ${f(eat1 + eat2, den)}（個）。`,
                     `2. 剩下的披薩：1 － ${f(eat1 + eat2, den)} ＝ ${f(den, den)} － ${f(eat1 + eat2, den)} ＝ <b>${f(rem, den)}（個）</b>。`
@@ -1019,9 +1007,7 @@
         ]
       },
 
-      // ---------------------------------------------------------
-      // 六年級上學期（翰林版 8 大單元 - 擴充豐富應用題型）
-      // ---------------------------------------------------------
+      // 六年級上學期（翰林版 8 大單元）
       g6: {
         title: "六上數學（翰林版）・分章節與模擬考",
         subtitle: "全冊 8 單元重點技巧・無限動態生成應用題庫",
@@ -1049,7 +1035,6 @@
               "分裝「剩餘」要先求公倍數再「加」餘數；「不足」則要先求公倍數再「減」不足數。"
             ],
             generators: [
-              // 題型 1：公倍數分裝剩餘/不足
               () => {
                 const [n1, n2] = pick([[12, 18], [15, 20], [12, 16], [14, 21], [16, 24]]);
                 const baseLcm = lcm(n1, n2);
@@ -1079,7 +1064,6 @@
                   ]
                 );
               },
-              // 題型 2：週期同時相遇應用（公車/燈號）
               () => {
                 const [t1, t2] = pick([[12, 15], [15, 20], [10, 14], [12, 16], [18, 24]]);
                 const interval = lcm(t1, t2);
@@ -1105,7 +1089,6 @@
                   ]
                 );
               },
-              // 題型 3：長方形剪成最大正方形
               () => {
                 const side = pick([6, 8, 9, 12, 15]);
                 const [wMult, hMult] = pick([[3, 4], [2, 5], [3, 5], [4, 5]]);
@@ -1127,7 +1110,6 @@
                   ]
                 );
               },
-              // 題型 4：用小長方形排成最小正方形（公倍數反向應用）
               () => {
                 const [w, h] = pick([[6, 8], [8, 12], [9, 12], [10, 15]]);
                 const sqSide = lcm(w, h);
@@ -1168,7 +1150,6 @@
               "看到「A 是 B 的幾分之幾，已知 A 求 B」→ 用「A ÷ 分數 ＝ B」。"
             ],
             generators: [
-              // 題型 1：基準量應用（剩下頁數）
               () => {
                 const den = pick([5, 7, 8, 9]);
                 const num = randInt(2, den - 2);
@@ -1192,7 +1173,6 @@
                   ]
                 );
               },
-              // 題型 2：水桶連桶重問題（分數版）
               () => {
                 const den = pick([4, 5, 6]);
                 const useNum = randInt(2, den - 1);
@@ -1219,7 +1199,6 @@
                   ]
                 );
               },
-              // 題型 3：分數分裝與剩下多少（帶餘數概念）
               () => {
                 const totalN = randInt(17, 23);
                 const bagN = 4;
@@ -1242,7 +1221,6 @@
                   ]
                 );
               },
-              // 題型 4：帶分數除法基礎計算
               () => {
                 const d1 = pick([3, 4, 5]), w1 = randInt(1, 3), r1 = randInt(1, d1 - 1);
                 const n1 = w1 * d1 + r1;
@@ -1284,7 +1262,6 @@
               "排圖形找規律時，先看第 1 個圖用幾根，之後「每增加 1 個圖多幾根」。"
             ],
             generators: [
-              // 題型 1：封閉圓形池塘植樹問題
               () => {
                 const gap = pick([6, 8, 10, 12, 15]);
                 const trees = randInt(15, 30);
@@ -1305,7 +1282,6 @@
                   ]
                 );
               },
-              // 題型 2：相連三角形或正方形火柴棒規律
               () => {
                 const isTri = Math.random() > 0.5;
                 const n = randInt(18, 35);
@@ -1330,7 +1306,6 @@
                   ]
                 );
               },
-              // 題型 3：和差問題應用
               () => {
                 const diff = pick([14, 18, 22, 26]);
                 const small = randInt(25, 45);
@@ -1371,7 +1346,6 @@
               "看到「平均每公斤賣幾元」→ 用【總價錢 ÷ 總公斤數】；「1 元可以買幾公斤」→ 用【總公斤數 ÷ 總價錢】。"
             ],
             generators: [
-              // 題型 1：有餘數的小數除法
               () => {
                 const div = pick([1.2, 1.4, 1.5, 1.6, 2.4]);
                 const q = randInt(3, 6);
@@ -1393,7 +1367,6 @@
                   ]
                 );
               },
-              // 題型 2：單價與單位量反推應用
               () => {
                 const weight = pick([1.6, 2.4, 2.5, 3.2]);
                 const unitPrice = pick([45, 55, 65, 75]);
@@ -1415,7 +1388,6 @@
                   ]
                 );
               },
-              // 題型 3：四捨五入求概數
               () => {
                 const a = pick([17, 19, 22, 23, 25]);
                 const b = pick([3, 6, 7]);
@@ -1456,7 +1428,6 @@
               "比例尺換算成公里時，直接把公分數「去掉 5 個 0（小數點往左移 5 位）」最快！"
             ],
             generators: [
-              // 題型 1：按比例分配應用題
               () => {
                 const [r1, r2] = pick([[3, 2], [4, 3], [5, 3], [5, 2]]);
                 const sumR = r1 + r2;
@@ -1480,7 +1451,6 @@
                   ]
                 );
               },
-              // 題型 2：比例尺換算實際距離
               () => {
                 const scale = pick([20000, 25000, 50000, 100000]);
                 const cm = randInt(3, 8);
@@ -1501,7 +1471,6 @@
                   ]
                 );
               },
-              // 題型 3：小數與分數化為最簡單整數比
               () => {
                 const [dec, w, n, d, ansRatio, ansVal] = pick([
                   ["1.2", 1, 4, 5, "2 : 3", f(2, 3)],
@@ -1544,7 +1513,6 @@
               "看到「腳踏車輪子滾動幾圈前進多少公尺」→ 先算輪子一圈的「圓周長」，再乘以圈數（注意公分換公尺要除以 100）。"
             ],
             generators: [
-              // 題型 1：扇形周長
               () => {
                 const [r, den] = pick([[10, 4], [12, 6], [8, 4], [15, 3], [20, 4]]);
                 const d = r * 2;
@@ -1566,7 +1534,6 @@
                   ]
                 );
               },
-              // 題型 2：車輪滾動前進距離（生活應用）
               () => {
                 const d = pick([40, 50, 60, 80]);
                 const turns = pick([25, 50, 100]);
@@ -1589,7 +1556,6 @@
                   ]
                 );
               },
-              // 題型 3：已知圓周長反求半徑
               () => {
                 const r = pick([4, 5, 6, 8, 10, 12]);
                 const d = r * 2;
@@ -1629,7 +1595,6 @@
               "看到「牛或羊綁在牆角或草地吃草的最大面積」→ 繩長就是扇形的「半徑」，再看能轉動幾度！"
             ],
             generators: [
-              // 題型 1：正方形內剪最大圓的剩餘面積
               () => {
                 const side = pick([10, 20, 30, 40]);
                 const r = side / 2;
@@ -1653,7 +1618,6 @@
                   ]
                 );
               },
-              // 題型 2：羊綁在草地吃草面積（扇形應用）
               () => {
                 const rope = pick([6, 8, 10, 12]);
                 const [angle, den, place] = pick([
@@ -1679,7 +1643,6 @@
                   ]
                 );
               },
-              // 題型 3：環形步道面積（大圓減小圓）
               () => {
                 const innerR = pick([4, 5, 6, 8]);
                 const pathW = pick([2, 3]);
@@ -1720,7 +1683,6 @@
               "【相遇與追趕】兩人「相向而行（面對面走）」：相遇時間 ＝ 總距離 ÷（甲速 ＋ 乙速）；「同向追趕」：追上時間 ＝ 相差距離 ÷（快者速 － 慢者速）。"
             ],
             generators: [
-              // 題型 1：來回平均速率陷阱題
               () => {
                 const [dist, t1, t2, avgSpd] = pick([
                   [180, 2.5, 3.5, 60],
@@ -1748,7 +1710,6 @@
                   ]
                 );
               },
-              // 題型 2：相向而行（相遇問題）
               () => {
                 const v1 = pick([65, 70, 75, 80]);
                 const v2 = pick([55, 60, 65, 70]);
@@ -1770,7 +1731,6 @@
                   ]
                 );
               },
-              // 題型 3：同向追趕問題
               () => {
                 const slowV = pick([60, 70, 80]);
                 const fastV = slowV + pick([20, 25, 30]);
@@ -1794,7 +1754,6 @@
                   ]
                 );
               },
-              // 題型 4：順流與逆流問題
               () => {
                 const boat = pick([15, 18, 20, 24]);
                 const water = pick([3, 4, 5]);
@@ -1826,13 +1785,11 @@
       }
     };
 
-    // =========================================================
     // 3. 測驗狀態與動態出題引擎
-    // =========================================================
-    let currentGrade = "g6"; // 'g3' | 'g6'
-    let topMode = "chapters"; // 'chapters' | 'exams'
+    let currentGrade = "g6";
+    let topMode = "chapters";
     let currentUnitId = "u1";
-    let currentExamType = "midterm"; // 'midterm' | 'final'
+    let currentExamType = "midterm";
     let activeQuestions = [];
     let currentIndex = 0;
     let userAnswers = {};
@@ -1874,7 +1831,6 @@
       }
     }
 
-    // 針對單一單元生成 N 題（輪流抽用該單元所有應用題生成器）
     function generateUnitQuestions(unitId, count) {
       const unit = getCurrentUnits().find(u => u.id === unitId);
       const list = [];
@@ -1887,7 +1843,6 @@
       return list;
     }
 
-    // 生成期中或期末 12 題綜合模擬卷（平均分配到該學期各單元）
     function generateExamQuestions(termType) {
       const targetUnits = getCurrentUnits().filter(u => u.term === termType);
       const list = [];
@@ -1918,6 +1873,7 @@
         const activeSub = currentGrade === "g3" ? "text-emerald-100" : "text-blue-100";
         const inactiveSub = currentGrade === "g3" ? "text-emerald-600" : "text-blue-600";
         const btn = document.createElement("button");
+        btn.type = "button";
         btn.className = `btn-press text-left p-2.5 rounded-xl border transition ${
           isActive
             ? `${activeBg} text-white shadow-sm`
@@ -2008,14 +1964,13 @@
       renderQuestion();
     }
 
-    // =========================================================
     // 4. 作答渲染與互動邏輯
-    // =========================================================
     function renderDots() {
       const container = document.getElementById("question-dots");
       container.innerHTML = "";
       activeQuestions.forEach((q, idx) => {
         const btn = document.createElement("button");
+        btn.type = "button";
         const ans = userAnswers[q.id];
         let style = "bg-slate-100 text-slate-600 border-slate-200";
         if (ans !== undefined) {
@@ -2057,6 +2012,7 @@
 
       q.options.forEach((optText, idx) => {
         const btn = document.createElement("button");
+        btn.type = "button";
         btn.disabled = selected !== undefined;
 
         let cardStyle = "bg-white border-slate-200 hover:border-blue-400 hover:bg-blue-50/30 text-slate-800";
@@ -2182,9 +2138,7 @@
       renderQuestion();
     }
 
-    // =========================================================
     // 5. 手寫草稿紙（Canvas）
-    // =========================================================
     let canvas, ctx, isDrawing = false, penColor = "#1e293b";
 
     function toggleScratchpad() {
@@ -2250,7 +2204,11 @@
       window.addEventListener("touchend", endDraw);
     }
 
-    window.addEventListener("load", init);
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", init);
+    } else {
+      init();
+    }
   </script>
 </body>
 </html>
