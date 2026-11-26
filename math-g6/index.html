@@ -239,16 +239,17 @@
         <div id="scratchpad-panel" class="hidden mt-5 rounded-2xl border border-amber-200 bg-amber-50/50 p-3.5">
           <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
             <span class="text-xs font-bold text-amber-800">✍️ 算式計算草稿區（支援手指、Apple Pencil 與滑鼠）</span>
-            <div class="flex items-center gap-2">
+            <div class="flex items-center gap-2 flex-wrap">
               <button type="button" onclick="setPenColor('#1e293b')" class="w-5 h-5 rounded-full bg-slate-800 border-2 border-white shadow" title="黑色筆"></button>
               <button type="button" onclick="setPenColor('#2563eb')" class="w-5 h-5 rounded-full bg-blue-600 border-2 border-white shadow" title="藍色筆"></button>
               <button type="button" onclick="setPenColor('#dc2626')" class="w-5 h-5 rounded-full bg-red-600 border-2 border-white shadow" title="紅色筆"></button>
-              <button type="button" onclick="clearCanvas('scratch-canvas')" class="ml-1 px-2.5 py-1 text-xs font-semibold bg-white text-slate-700 border border-slate-300 rounded-lg hover:bg-slate-50">清除重寫</button>
+              <button type="button" id="canvas-size-btn" onclick="toggleCanvasSize()" class="ml-1 px-2.5 py-1 text-xs font-semibold bg-amber-100 text-amber-900 border border-amber-300 rounded-lg hover:bg-amber-200">↕️ 加大畫布</button>
+              <button type="button" onclick="clearCanvas('scratch-canvas')" class="px-2.5 py-1 text-xs font-semibold bg-white text-slate-700 border border-slate-300 rounded-lg hover:bg-slate-50">清除重寫</button>
               <button type="button" onclick="toggleScratchpad(false)" class="px-2.5 py-1 text-xs font-semibold bg-slate-700 text-white rounded-lg hover:bg-slate-800">收起</button>
             </div>
           </div>
           <div class="w-full overflow-hidden rounded-xl border border-slate-300 bg-white shadow-xs">
-            <canvas id="scratch-canvas" class="grid-paper w-full h-48 block cursor-crosshair"></canvas>
+            <canvas id="scratch-canvas" class="grid-paper w-full h-64 block cursor-crosshair transition-[height] duration-150"></canvas>
           </div>
         </div>
 
@@ -2608,7 +2609,27 @@
       ctx.restore();
     }
 
-    function resizeCanvas(canvasId) {
+    let isLargeCanvas = false;
+
+    function toggleCanvasSize() {
+      const c = document.getElementById("scratch-canvas");
+      const btn = document.getElementById("canvas-size-btn");
+      if (!c || !btn) return;
+      isLargeCanvas = !isLargeCanvas;
+      if (isLargeCanvas) {
+        c.classList.remove("h-64");
+        c.classList.add("h-96");
+        btn.textContent = "↕️ 縮小畫布";
+      } else {
+        c.classList.remove("h-96");
+        c.classList.add("h-64");
+        btn.textContent = "↕️ 加大畫布";
+      }
+      // 等待 CSS 高度切換完成後再同步調整內部畫素尺寸並保留原本筆跡
+      setTimeout(() => resizeCanvas("scratch-canvas", true), 160);
+    }
+
+    function resizeCanvas(canvasId, preserveContent = false) {
       const c = document.getElementById(canvasId);
       if (!c) return;
       const rect = c.getBoundingClientRect();
@@ -2618,8 +2639,18 @@
       const targetW = Math.round(rect.width * dpr);
       const targetH = Math.round(rect.height * dpr);
       if (c.width !== targetW || c.height !== targetH) {
+        let backup = null;
+        if (preserveContent && c.width > 0 && c.height > 0) {
+          backup = document.createElement("canvas");
+          backup.width = c.width;
+          backup.height = c.height;
+          backup.getContext("2d").drawImage(c, 0, 0);
+        }
         c.width = targetW;
         c.height = targetH;
+        if (backup) {
+          c.getContext("2d").drawImage(backup, 0, 0);
+        }
       }
       const ctx = c.getContext("2d");
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
